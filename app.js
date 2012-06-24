@@ -11,6 +11,7 @@ var auth = require('./auth')
     , routes = require('./routes')
     , middleware = require('./middleware')
     , http = require('http')
+    , querystring = require('querystring')
     ;
 
 var HOUR_IN_MILLISECONDS = 3600000;
@@ -74,12 +75,13 @@ req.on('error', function(e) {
 });
 
 // write data to request body
-req.write(  {
+req.write(  querystring.stringify({
       "docs": [ {"_id":"house_1", "sample":true}
          , {"_id":"house_2", "sample":true}
          , {"_id":"house_3", "sample":true}
          ]
-    } );
+    })
+);
 req.end();
 
   });
