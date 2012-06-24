@@ -10,7 +10,6 @@ var auth = require('./auth')
     , mongoStore = require('connect-mongo')(express)
     , routes = require('./routes')
     , middleware = require('./middleware')
-    , querystring = require('querystring')
     , http = require('http')
     ;
 
@@ -53,34 +52,36 @@ var init = exports.init = function (config) {
   
   // Routes
   app.get('/sendstuff', function(req,res){
-    var post_data = querystring.stringify({
+
+var options = {
+   host: 'nickd.iriscouch.com',
+   port: 6984,
+   path: '/housing',
+   method: 'POST'
+};
+
+var req = http.request(options, function(res) {
+  console.log('STATUS: ' + res.statusCode);
+  console.log('HEADERS: ' + JSON.stringify(res.headers));
+  res.setEncoding('utf8');
+  res.on('data', function (chunk) {
+    console.log('BODY: ' + chunk);
+  });
+});
+
+req.on('error', function(e) {
+  console.log('problem with request: ' + e.message);
+});
+
+// write data to request body
+req.write(  {
       "docs": [ {"_id":"house_1", "sample":true}
          , {"_id":"house_2", "sample":true}
          , {"_id":"house_3", "sample":true}
          ]
-    });
-    var post_options = {
-      host: 'nickd.iriscouch.com',
-      port: '6984',
-      path: '/housing',
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Content-Length': post_data.length
-      }
-    };
-    
-    // Set up the request
-    var post_req = http.request(post_options, function(res) {
-      res.setEncoding('utf8');
-      res.on('data', function (chunk) {
-          console.log('Response: ' + chunk);
-      });
-    });
+    } );
+req.end();
 
-    // post the data
-    post_req.write(post_data);
-    post_req.end();
   });
 
   app.get('/auth', middleware.require_auth_browser, routes.index);
