@@ -75,13 +75,7 @@ req.on('error', function(e) {
 });
 
 // write data to request body
-req.write(  querystring.stringify({
-      "docs": [ {"_id":"house_1", "sample":true}
-         , {"_id":"house_2", "sample":true}
-         , {"_id":"house_3", "sample":true}
-         ]
-    })
-);
+req.write(  '"docs": [ {"_id":"house_1", "sample":true}, {"_id":"house_2", "sample":true}, {"_id":"house_3", "sample":true}]' );
 req.end();
 
   });
