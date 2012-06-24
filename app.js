@@ -104,10 +104,7 @@ var urlReq = function(reqUrl, options, cb){
     urlReq("http://nickd.iriscouch.com:5984/housing", {
       method: 'POST',
       params: {
-        "docs": [ {"_id":"house_1", "sample":true}
-         , {"_id":"house_2", "sample":true}
-         , {"_id":"house_3", "sample":true}
-         ]
+        {"_id":"house_1", "sample":true}
       }
     }, function(body, info){
       res.send( body );
