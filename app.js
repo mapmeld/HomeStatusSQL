@@ -60,7 +60,7 @@ var init = exports.init = function (config) {
          ]
     });
     var post_options = {
-      host: 'https://nickd.iriscouch.com',
+      host: 'https://nickd.iriscouch.com:6984',
       port: '6984',
       path: '/housing',
       method: 'POST',
