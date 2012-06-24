@@ -101,7 +101,7 @@ var urlReq = function(reqUrl, options, cb){
   
   // Routes
   app.get('/sendstuff', function(req,res){
-    urlReq("http://nickd.iriscouch.com:6984/housing", {
+    urlReq("http://nickd.iriscouch.com:5984/housing", {
       method: 'POST',
       params: {
         "docs": [ {"_id":"house_1", "sample":true}
