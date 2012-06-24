@@ -11,7 +11,7 @@ var auth = require('./auth')
     , routes = require('./routes')
     , middleware = require('./middleware')
     , http = require('http')
-    , querystring = require('querystring')
+    , url = require('url')
     ;
 
 var HOUR_IN_MILLISECONDS = 3600000;
@@ -50,34 +50,68 @@ var init = exports.init = function (config) {
     app.use(express.errorHandler({ dumpExceptions: true, showStack: false}));
   });
   
+
+var urlReq = function(reqUrl, options, cb){
+    if(typeof options === "function"){ cb = options; options = {}; }// incase no options passed in
+
+    // parse url to chunks
+    reqUrl = url.parse(reqUrl);
+
+    // http.request settings
+    var settings = {
+        host: reqUrl.hostname,
+        port: reqUrl.port || 80,
+        path: reqUrl.pathname,
+        headers: options.headers || {},
+        method: options.method || 'GET'
+    };
+
+    // if there are params:
+    if(options.params){
+        options.params = JSON.stringify(options.params);
+        settings.headers['Content-Type'] = 'application/json';
+        settings.headers['Content-Length'] = options.params.length;
+    };
+
+    // MAKE THE REQUEST
+    var req = http.request(settings);
+
+    // if there are params: write them to the request
+    if(options.params){ req.write(options.params) };
+
+    // when the response comes back
+    req.on('response', function(res){
+        res.body = '';
+        res.setEncoding('utf-8');
+
+        // concat chunks
+        res.on('data', function(chunk){ res.body += chunk });
+
+        // when the response has finished
+        res.on('end', function(){
+            
+            // fire callback
+            cb(res.body, res);
+        });
+    });
+
+    // end the request
+    req.end();
+}
   
   // Routes
   app.get('/sendstuff', function(req,res){
-
-var options = {
-   host: 'nickd.iriscouch.com',
-   port: 6984,
-   path: '/housing',
-   method: 'POST'
-};
-
-var req = http.request(options, function(res) {
-  console.log('STATUS: ' + res.statusCode);
-  console.log('HEADERS: ' + JSON.stringify(res.headers));
-  res.setEncoding('utf8');
-  res.on('data', function (chunk) {
-    console.log('BODY: ' + chunk);
-  });
-});
-
-req.on('error', function(e) {
-  console.log('problem with request: ' + e.message);
-});
-
-// write data to request body
-req.write(  '"docs": [ {"_id":"house_1", "sample":true}, {"_id":"house_2", "sample":true}, {"_id":"house_3", "sample":true}]' );
-req.end();
-
+    urlReq("http://nickd.iriscouch.com:6984/housing", {
+      method: 'POST',
+      params: {
+        "docs": [ {"_id":"house_1", "sample":true}
+         , {"_id":"house_2", "sample":true}
+         , {"_id":"house_3", "sample":true}
+         ]
+      }
+    }, function(body, info){
+      res.send( body );
+    });
   });
 
   app.get('/auth', middleware.require_auth_browser, routes.index);
