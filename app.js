@@ -60,7 +60,7 @@ var init = exports.init = function (config) {
          ]
     });
     var post_options = {
-      host: 'https://nickd.iriscouch.com:6984',
+      host: 'nickd.iriscouch.com',
       port: '6984',
       path: '/housing',
       method: 'POST',
@@ -70,13 +70,15 @@ var init = exports.init = function (config) {
       }
     };
     
-    var post_req = http.request(post_options, function(res){
+    // Set up the request
+    var post_req = http.request(post_options, function(res) {
       res.setEncoding('utf8');
-      res.on('data', function(chunk){
-        console.log('Response: ' + chunk);
+      res.on('data', function (chunk) {
+          console.log('Response: ' + chunk);
       });
     });
-    
+
+    // post the data
     post_req.write(post_data);
     post_req.end();
   });
