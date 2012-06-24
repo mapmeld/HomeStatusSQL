@@ -10,6 +10,8 @@ var auth = require('./auth')
     , mongoStore = require('connect-mongo')(express)
     , routes = require('./routes')
     , middleware = require('./middleware')
+    , querystring = require('querystring')
+    , http = require('http')
     ;
 
 var HOUR_IN_MILLISECONDS = 3600000;
@@ -50,9 +52,37 @@ var init = exports.init = function (config) {
   
   
   // Routes
+  app.get('/sendstuff', function(req,res){
+    var post_data = querystring.stringify({
+      "docs": [ {"_id":"house_1", "sample":true}
+         , {"_id":"house_2", "sample":true}
+         , {"_id":"house_3", "sample":true}
+         ]
+    });
+    var post_options = {
+      host: 'https://nickd.iriscouch.com/',
+      port: '6984',
+      path: '/my_db/_bulk_docs',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Length': post_data.length
+      }
+    };
+    
+    var post_req = http.request(post_options, function(res){
+      res.setEncoding('utf8');
+      res.on('data', function(chunk){
+        console.log('Response: ' + chunk);
+      });
+    });
+    
+    post_req.write(post_data);
+    post_req.end();
+  });
 
-  app.get('/', middleware.require_auth_browser, routes.index);
-  app.post('/add_comment',middleware.require_auth_browser, routes.add_comment);
+  app.get('/auth', middleware.require_auth_browser, routes.index);
+  app.post('/auth/add_comment',middleware.require_auth_browser, routes.add_comment);
   
   // redirect all non-existent URLs to doesnotexist
   app.get('*', function onNonexistentURL(req,res) {
