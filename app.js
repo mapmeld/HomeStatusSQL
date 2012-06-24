@@ -60,9 +60,9 @@ var init = exports.init = function (config) {
          ]
     });
     var post_options = {
-      host: 'https://nickd.iriscouch.com/',
+      host: 'https://nickd.iriscouch.com',
       port: '6984',
-      path: '/my_db/_bulk_docs',
+      path: '/housing',
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
