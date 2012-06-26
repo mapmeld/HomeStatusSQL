@@ -17,18 +17,17 @@ function initMe(){
 		function(a){
 			var b=window.location.toString().replace("/statusstreet.html?","/searchdb?");
 			jQuery.getJSON(b,function(b){
-				if(b.length){
+				if(b.rows.length){
 					var c=(new L.Map("map")).addLayer(new wax.leaf.connector(a)),
 					d=new L.Popup,
-					e=29.95,
-					f=-90.05,
+					e=32.840943,
+					f=-83.62587,
 					g=12;
-					for(i=0;i<b.length;i++){
-						var h=b[i].point.substring(7,b[i].point.length-1).split(" "),
-						e=h[1],
-						f=h[0],
-						j='<h3><a href="/addresses/'+b[i].id+'">'+b[i].address_long+"</a></h3><h4>"+b[i].most_recent_status_preview.type+" on "+b[i].most_recent_status_preview.date+"</h4>";
-						c.addLayer((new L.Marker(new L.LatLng(h[1],h[0]))).bindPopup(j)),
+					for(i=0;i<b.rows.length;i++){
+						var e=b.rows[i].value.loc[0] * 1.0,
+						f=b.rows[i].value.loc[1] * 1.0,
+						j='<h3><a href="/statusone.html?id='+b.rows[i].id+'">'+b.rows[i].id+"</a></h3><h4>"+b.rows[i].value.inspector + " inspected on "+b.rows[i].value.inspdate +"</h4>";
+						c.addLayer((new L.Marker(new L.LatLng(e,f))).bindPopup(j)),
 						g=14
 					}
 					c.setView(new L.LatLng(e,f),g)
