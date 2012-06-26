@@ -129,6 +129,7 @@ var urlReq = function(reqUrl, options, cb){
       break;
     }
   }
+  res.send(street);
     var sendurl = 'http://nickd.iriscouch.com:5984/housing/_design/streetname/_view/streetname?startkey=' + encodeURIComponent( '"' + street + '"') + '&endkey=' + encodeURIComponent( '"' + street + '0"' );
 
     var requestOptions = {
