@@ -100,7 +100,12 @@ var urlReq = function(reqUrl, options, cb){
     req.end();
 }
   
+  
   // Routes
+  app.get('/', function(req, res){
+    res.redirect('/statushome.html');
+  });
+  
   app.get('/sendstuff', function(req,res){
     urlReq("http://nickd.iriscouch.com:5984/housing", {
       method: 'POST',
