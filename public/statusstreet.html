@@ -31,7 +31,11 @@ function initMe(){
 				f=b.rows[i].value.loc[1] * 1.0,
 				j='<h3><a href="/statusone.html?id='+b.rows[i].id+'">'+b.rows[i].id+"</a></h3><h4>"+b.rows[i].value.inspector + " inspected on "+b.rows[i].value.inspdate +"</h4>";
 				c.addLayer((new L.Marker(new L.LatLng(e,f))).bindPopup(j)),
-				g=14
+				g=14;
+				var li = document.createElement("li");
+				li.className="active address result";
+				li.innerHTML="<a href='#'><img src='http://code.leafletjs.com/leaflet-0.3.1/images/marker.png' width='10px'><i class='home'></i><a href='/statusone.html?id=" + b.rows[i].id + "'>" + b.rows[i].id.substring(b.rows[i].id.indexOf(',')) + "</a></a>";
+				document.getElementById("resultbar").appendChild(li);
 			}
 			c.setView(new L.LatLng(e,f),g)
 		}
@@ -70,16 +74,8 @@ function initMe(){
 <div class='search-results'>
 <div class='left-bar'>
 <div class='well' style='padding: 8px 0;'>
-<ul class='nav list'>
+<ul id='resultbar' class='nav list'>
 <li class='nav-header'>Search Results</li>
-
-<li class='active address result'>
-<a href='#'>
-<img src='http://code.leafletjs.com/leaflet-0.3.1/images/marker.png' width='10px'>
-<i class='home'></i>
-<a href="/addresses/89391">2113 perdido street</a>
-</a>
-</li>
 
 </ul>
 <div class='clearfix'></div>
