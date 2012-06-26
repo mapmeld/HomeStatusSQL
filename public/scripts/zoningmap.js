@@ -52,6 +52,8 @@ function mapReport(report){
     var address = report.address.split(' Macon, GA')[0];
     address = address.replace("Street","st").replace("street","st");
     address = address.replace("Avenue","ave").replace("avenue","ave");
+    address = address.replace("Drive","dr").replace("drive","dr");
+    address = address.replace("Road","rd").replace("road","rd");
     s.src = "http://gis.co.bibb.ga.us/arcgisbibb/rest/services/AG4LG/TaxParcelQuery/MapServer/find?f=json&searchText=" + address + "&contains=true&returnGeometry=true&layers=0&searchFields=PARCELID%2CSITEADDRESS%2CCNVYNAME&callback=gotParcel&sr=4326";
     document.body.appendChild(s);
     
