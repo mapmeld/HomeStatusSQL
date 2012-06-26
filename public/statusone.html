@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<head>
+<title>blightSTATUS</title>
+<link href="http://blightstatus-dev.herokuapp.com/assets/application-5318d9981d2d48136b210cb2b397f14f.css" media="all" rel="stylesheet" type="text/css" />
+<link href='http://code.leafletjs.com/leaflet-0.3.1/leaflet.css' rel='stylesheet'>
+<meta charset='utf-8'/>
+<meta content='' name='description'/>
+<!-- Mobile viewport optimized: h5bp.com/viewport -->
+<meta content='width=device-width' name='viewport'>
+<script type="text/javascript">
+function gup(nm){nm=nm.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");var rxS="[\\?&]"+nm+"=([^&#]*)";var rx=new RegExp(rxS);var rs=rx.exec(window.location.href);if(!rs){return null;}else{return rs[1];}}
+function initMe(){
+	var b="/keydb?address=" + gup("id");
+	
+	jQuery.getJSON(b,function(b){
+		if(b.rows.length){
+  var tileURL = "http://otile1.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png";
+  var attribution = "Map data &copy; 2012 OpenStreetMap contributors, Tiles by MapQuest";
+  var baseMapLayer = new L.TileLayer(tileURL, {maxZoom: 18, attribution: attribution});
+			var c=(new L.Map("map")).addLayer( baseMapLayer ),
+			d=new L.Popup,
+			e=32.840943,
+			f=-83.62587,
+			g=12;
+			for(i=0;i<b.rows.length;i++){
+				var e=b.rows[i].value.loc[0] * 1.0,
+				f=b.rows[i].value.loc[1] * 1.0,
+				j='<h3><a href="/statusone.html?id='+b.rows[i].id+'">'+b.rows[i].id+"</a></h3><h4>"+b.rows[i].value.inspector + " inspected on "+b.rows[i].value.inspdate +"</h4>";
+				c.addLayer((new L.Marker(new L.LatLng(e,f))).bindPopup(j)),
+				g=14;
+				//var li = document.createElement("li");
+				//li.className="active address result";
+				//li.innerHTML="<a href='#'><img src='http://code.leafletjs.com/leaflet-0.3.1/images/marker.png' width='10px'><i class='home'></i><a href='/statusone.html?id=" + b.rows[i].id + "'>" + b.rows[i].id.split(',')[0] + "</a></a>";
+				if(b.rows[i].major){
+				  var li = document.createElement("li");
+				  li.className="active address result";
+				  li.innerHTML="<a href='#'>Major Damage</a>";
+				  document.getElementById("resultbar").appendChild(li);  
+				}
+				if(b.rows[i].secure){
+				  var li = document.createElement("li");
+				  li.className="active address result";
+				  li.innerHTML="<a href='#'>Secure</a>";
+				  document.getElementById("resultbar").appendChild(li);  
+				}
+				else{
+				  var li = document.createElement("li");
+				  li.className="active address result";
+				  li.innerHTML="<a href='#'>Not Secure</a>";
+				  document.getElementById("resultbar").appendChild(li);  
+				}
+				if(b.rows[i].burned){
+				  var li = document.createElement("li");
+				  li.className="active address result";
+				  li.innerHTML="<a href='#'>Burned</a>";
+				  document.getElementById("resultbar").appendChild(li);  
+				}
+				if(b.rows[i].boarded){
+				  var li = document.createElement("li");
+				  li.className="active address result";
+				  li.innerHTML="<a href='#'>Boarded</a>";
+				  document.getElementById("resultbar").appendChild(li);  
+				}
+				if(b.rows[i].minor){
+				  var li = document.createElement("li");
+				  li.className="active address result";
+				  li.innerHTML="<a href='#'>Minor Damage</a>";
+				  document.getElementById("resultbar").appendChild(li);  
+				}
+			}
+			c.setView(new L.LatLng(e,f),g)
+		}
+	})
+}
+</script>
+</head>
+<body data-action='search' data-controller='addresses' onload='initMe()'>
+<div class='container-addresses container-addresses-search' id='wrapper'>
+<div class='navbar'>
+<div class='navbar-inner'>
+<div class='container'>
+<p><img height='20px' src='http://blightstatus-dev.herokuapp.com/assets/code_flag.png'>Created by Code for America in partnership with the City of Macon.
+<a href='http://www.codeforamerica.org' target='_blank'>Learn more</a>.
+</p>
+</div>
+</div>
+</div>
+<header class='page-header'>
+<h1 id='logo'><a href="/">blightSTATUS</a></h1>
+<div class='top-search-bar'>
+<div class='search-form'>
+<form accept-charset="UTF-8" action="/addresses/search" method="get"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /></div>
+<div class='search-field'>
+<input id="main-search-field" name="address" placeholder="Example: Adams Ave" type="text" value="" />
+</div>
+<div class='search-button'>
+<input class="btn" name="commit" type="submit" value="Map Addresses" />
+</div>
+</form>
+
+</div>
+
+</div>
+</header>
+<div class='search-results'>
+<div class='left-bar'>
+<div class='well' style='padding: 8px 0;'>
+<ul id='resultbar' class='nav list'>
+<li class='nav-header'>Search Results</li>
+
+</ul>
+<div class='clearfix'></div>
+</div>
+</div>
+<div class='right-bar'>
+<h3>Results show only properties with cases:</h3>
+<div id='map' style='height: 400px;'></div>
+</div>
+<div class='row'></div>
+<div class='btn-toolbar'>
+<div class='btn-group'>
+
+</div>
+</div>
+</div>
+
+<footer>
+<div class='footer'>
+<p>
+<a href='/about'>About</a>
+-
+<a href='/terms-of-service'>Terms of Service</a>
+-
+<a href='/stats'>Statistics</a>
+-
+<a href='/feedback'>Send feedback</a>
+</p>
+</div>
+</footer>
+<script src='http://code.leafletjs.com/leaflet-0.3.1/leaflet.js' type='text/javascript'></script>
+<script src='https://raw.github.com/mapbox/wax/master/dist/wax.leaf.min.js' type='text/javascript'></script>
+<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js' type='text/javascript'></script>
+<!--[if lte IE 8]>
+<link rel="stylesheet" href="http://code.leafletjs.com/leaflet-0.3.1/leaflet.ie.css" />
+<![endif]-->
+<script src="http://blightstatus-dev.herokuapp.com/assets/application-ec3470b333558cb33de8c1d03613e7f0.js" type="text/javascript"></script>
+</div>
+</html>
