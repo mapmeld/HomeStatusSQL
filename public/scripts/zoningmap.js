@@ -65,6 +65,8 @@ function mapReport(report){
 		  iContent += "<a href='#'><img src='http://code.leafletjs.com/leaflet-0.3.1/images/marker.png' width='10px'><i class='home'></i><a href='/statusone.html?id=" + b.rows[i].id + "'>" + b.rows[i].id.split(',')[0] + "</a></a><br/>";
         }
       }
+      infoWindow.setContent( infoWindow.getContent() + iContent);
+      infoWindow.open(map,activeMarker);
     });
     
   });
