@@ -12,8 +12,10 @@
 <!-- Mobile viewport optimized: h5bp.com/viewport -->
 <meta content='width=device-width' name='viewport'>
 <script type="text/javascript">
+function gup(nm){nm=nm.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");var rxS="[\\?&]"+nm+"=([^&#]*)";var rx=new RegExp(rxS);var rs=rx.exec(window.location.href);if(!rs){return null;}else{return rs[1];}}
 function initMe(){
-	var b=window.location.toString().replace("/statusstreet.html?","/searchdb?");
+	var b="/searchdb?streetname=" + gup("streetname");
+	
 	jQuery.getJSON(b,function(b){
 		if(b.rows.length){
   var tileURL = "http://otile1.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png";
