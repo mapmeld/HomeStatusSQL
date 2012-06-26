@@ -7,7 +7,7 @@ var auth = require('./auth')
     , express = require('express')
     //, mongoose = require('mongoose')
     //, mongoose_auth = require('mongoose-auth')
-    , mongoStore = require('connect-mongo')(express)
+    //, mongoStore = require('connect-mongo')(express)
     , routes = require('./routes')
     , middleware = require('./middleware')
     , http = require('http')
@@ -19,10 +19,10 @@ var session_store;
 
 var init = exports.init = function (config) {
   
-  var db_uri = process.env.MONGOLAB_URI || process.env.MONGODB_URI || config.default_db_uri;
+  //var db_uri = process.env.MONGOLAB_URI || process.env.MONGODB_URI || config.default_db_uri;
 
   //mongoose.connect(db_uri);
-  session_store = new mongoStore({url: db_uri});
+  //session_store = new mongoStore({url: db_uri});
 
   var app = express.createServer();
 
@@ -118,8 +118,8 @@ var urlReq = function(reqUrl, options, cb){
     urlReq("http://nickd.iriscouch.com:5984/housing/_design/streetname/_view/streetname", {
       method: 'GET',
       params: {
-        "startkey": req.query["streetname"],
-        "endkey": req.query["streetname"] + "0"
+        "startkey": '"' + req.query["streetname"] + '"',
+        "endkey": '"' + req.query["streetname"] + '0"'
       }
     }, function(body, info){
       res.send( body );
