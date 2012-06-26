@@ -49,7 +49,8 @@ function mapReport(report){
     }
     var s = document.createElement("script");
     s.type = "text/javascript";
-    s.src = "http://gis.co.bibb.ga.us/arcgisbibb/rest/services/AG4LG/TaxParcelQuery/MapServer/0/query?f=json&where=&returnGeometry=true&spatialRel=esriSpatialRelWithin&geometry={x:" + report.lng + ",y:" + report.lat + "}&geometryType=esriGeometryPoint&inSR=4326&outSR=4326&callback=gotParcel";
+    var address = report.address.split(' Macon, GA')[0];
+    s.src = "http://gis.co.bibb.ga.us/arcgisbibb/rest/services/AG4LG/TaxParcelQuery/MapServer/find?f=json&searchText=" + address + "&contains=true&returnGeometry=true&layers=0&searchFields=PARCELID%2CSITEADDRESS%2CCNVYNAME&callback=gotParcel&sr=4326";
     document.body.appendChild(s);
   });
 }
