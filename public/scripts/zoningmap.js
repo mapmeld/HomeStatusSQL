@@ -38,7 +38,7 @@ function mapReport(report){
   });
   google.maps.event.addListener(reportMarker, "click", function(){
     activeMarker = reportMarker;
-    var iContent = "<h4>SeeClickFix</h4><small>" + report.description + "</small><br/>Status: " + report.status + "<br/>Updated " + report.updated_at;
+    var iContent = "<h4>SeeClickFix: " + report.address.split(' Macon, GA')[0] + "</h4><small>" + report.description + "</small><br/>Status: " + report.status + "<br/>Updated " + report.updated_at;
     infoWindow.setContent(iContent);
     infoWindow.open(map,reportMarker);
     if(parcelPoly){
