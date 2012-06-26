@@ -71,6 +71,36 @@ function searchAddress(){
   s.type = "text/javascript";
   s.src = "http://gis.co.bibb.ga.us/arcgisbibb/rest/services/AG4LG/TaxParcelQuery/MapServer/find?f=json&searchText=" + address + "&contains=true&returnGeometry=true&layers=0&searchFields=PARCELID%2CSITEADDRESS%2CCNVYNAME&callback=gotParcel&sr=4326";
   document.body.appendChild(s);
+  
+  jQuery.getJSON("/keydb?address=" + address.toUpperCase() + ", Macon, GA",function(b){
+    var iContent = "<h4>2008 Survey</h4>";
+    if(b.rows.length == 0){
+      iContent += "No Results";
+    }
+    else{
+      var i = 0;
+		if(b.rows[i].value.major){
+		 iContent += "Major Damage<br/>";
+		}
+		if(b.rows[i].value.secure){
+		  iContent += "Secure<br/>";  
+		}
+		else{
+		  iContent += "Not Secure<br/>"; 
+		}
+		if(b.rows[i].value.burned){
+		  iContent += "Burnt<br/>"; 
+		}
+		if(b.rows[i].value.boarded){
+		  iContent += "Boarded<br/>"; 
+		}
+		if(b.rows[i].value.minor){
+		  iContent += "Minor Damage<br/>";
+		}
+    }
+    infoWindow.setContent( infoWindow.getContent() + iContent);
+    infoWindow.open(map,activeMarker);
+  });
 }
 var zoneLink = {
 	"SC": "CH5PECODI.html",
