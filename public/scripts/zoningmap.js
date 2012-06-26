@@ -50,6 +50,8 @@ function mapReport(report){
     var s = document.createElement("script");
     s.type = "text/javascript";
     var address = report.address.split(' Macon, GA')[0];
+    address = address.replace("Street","st").replace("street","st");
+    address = address.replace("Avenue","ave").replace("avenue","ave");
     s.src = "http://gis.co.bibb.ga.us/arcgisbibb/rest/services/AG4LG/TaxParcelQuery/MapServer/find?f=json&searchText=" + address + "&contains=true&returnGeometry=true&layers=0&searchFields=PARCELID%2CSITEADDRESS%2CCNVYNAME&callback=gotParcel&sr=4326";
     document.body.appendChild(s);
   });
