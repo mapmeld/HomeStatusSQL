@@ -5,9 +5,9 @@
  */
 var auth = require('./auth')
     , express = require('express')
-    , mongoose = require('mongoose')
-    , mongoose_auth = require('mongoose-auth')
-    , mongoStore = require('connect-mongo')(express)
+    //, mongoose = require('mongoose')
+    //, mongoose_auth = require('mongoose-auth')
+    //, mongoStore = require('connect-mongo')(express)
     , routes = require('./routes')
     , middleware = require('./middleware')
     , http = require('http')
