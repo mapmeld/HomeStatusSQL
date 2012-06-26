@@ -118,6 +118,10 @@ var urlReq = function(reqUrl, options, cb){
     });
   });
   
+  app.get('/seeclickfix', function(req, res){
+    res.render('seeclickfix');
+  });
+  
   app.get('/keydb', function(req, res){
     // http://nickd.iriscouch.com:5984/housing/_design/poll1/_view/Poll1?key="ADDRESS, Macon, GA"
     
