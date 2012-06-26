@@ -145,7 +145,7 @@ function gotParcel(parcels){
   });
   
   // move the map and draggable marker
-  parcelMarker.setPosition(new google.maps.LatLng( ((ymin + ymax)/2), ((xmin + xmax)/2) ));
+  //parcelMarker.setPosition(new google.maps.LatLng( ((ymin + ymax)/2), ((xmin + xmax)/2) ));
   map.panTo(new google.maps.LatLng( ((ymin + ymax)/2), ((xmin + xmax)/2) ));
   
   // add key parcel attributes
