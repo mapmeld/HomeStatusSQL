@@ -7,7 +7,7 @@ var auth = require('./auth')
     , express = require('express')
     //, mongoose = require('mongoose')
     //, mongoose_auth = require('mongoose-auth')
-    //, mongoStore = require('connect-mongo')(express)
+    , mongoStore = require('connect-mongo')(express)
     , routes = require('./routes')
     , middleware = require('./middleware')
     , http = require('http')
@@ -21,7 +21,7 @@ var init = exports.init = function (config) {
   
   var db_uri = process.env.MONGOLAB_URI || process.env.MONGODB_URI || config.default_db_uri;
 
-  mongoose.connect(db_uri);
+  //mongoose.connect(db_uri);
   session_store = new mongoStore({url: db_uri});
 
   var app = express.createServer();
@@ -36,7 +36,7 @@ var init = exports.init = function (config) {
     app.use(express.methodOverride());
     app.use(express.session({secret: 'top secret', store: session_store,
       cookie: {maxAge: HOUR_IN_MILLISECONDS}}));
-    app.use(mongoose_auth.middleware());
+    //app.use(mongoose_auth.middleware());
     app.use(express.static(__dirname + '/public'));
     app.use(app.router);
 
@@ -135,7 +135,7 @@ var urlReq = function(reqUrl, options, cb){
     res.render('doesnotexist',404);
   });
 
-  mongoose_auth.helpExpress(app);
+  //mongoose_auth.helpExpress(app);
 
   return app;
 };
