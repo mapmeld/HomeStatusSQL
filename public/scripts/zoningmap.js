@@ -188,7 +188,7 @@ function gotParcel(parcels){
   }
 
   // Show Information
-  var iContent = "<h4>County</h4><ul id='parcelInfo'><li><a href='http://www.co.bibb.ga.us/TaxAssessors/PropertyCard/PropertyCard.asp?P=" + parcel.attributes["Parcel Identification Number"] + "' target='_blank'>Parcel Tax Record</a></li>" + myAttributes + "</ul>";
+  var iContent = "<h4>County</h4><ul id='parcelInfo'><li><a href='http://www.co.bibb.ga.us/TaxAssessors/PropertyCard/PropertyCard.asp?P=" + parcel.attributes["PARCELID"] + "' target='_blank'>Parcel Tax Record</a></li>" + myAttributes + "</ul>";
   infoWindow.setContent( infoWindow.getContent() + iContent);
   infoWindow.open(map,activeMarker);
 }
