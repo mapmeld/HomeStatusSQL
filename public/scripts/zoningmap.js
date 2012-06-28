@@ -54,7 +54,7 @@ function mapReport(report){
     address = address.replace("Avenue","ave").replace("avenue","ave");
     address = address.replace("Drive","dr").replace("drive","dr");
     address = address.replace("Road","rd").replace("road","rd");
-    s.src = "http://gis.co.bibb.ga.us/arcgisbibb/rest/services/AG4LG/TaxParcelQuery/MapServer/find?f=json&searchText=" + address + "&contains=true&returnGeometry=true&layers=0&searchFields=PARCELID%2CSITEADDRESS%2CCNVYNAME&callback=gotParcel&sr=4326";
+    //s.src = "http://gis.co.bibb.ga.us/arcgisbibb/rest/services/AG4LG/TaxParcelQuery/MapServer/find?f=json&searchText=" + address + "&contains=true&returnGeometry=true&layers=0&searchFields=PARCELID%2CSITEADDRESS%2CCNVYNAME&callback=gotParcel&sr=4326";
     document.body.appendChild(s);
     
     jQuery.getJSON("/searchdb?streetname=" + address.toUpperCase(),function(b){
@@ -86,7 +86,7 @@ function searchAddress(){
   }
   var s = document.createElement("script");
   s.type = "text/javascript";
-  s.src = "http://gis.co.bibb.ga.us/arcgisbibb/rest/services/AG4LG/TaxParcelQuery/MapServer/find?f=json&searchText=" + address + "&contains=true&returnGeometry=true&layers=0&searchFields=PARCELID%2CSITEADDRESS%2CCNVYNAME&callback=gotParcel&sr=4326";
+  //s.src = "http://gis.co.bibb.ga.us/arcgisbibb/rest/services/AG4LG/TaxParcelQuery/MapServer/find?f=json&searchText=" + address + "&contains=true&returnGeometry=true&layers=0&searchFields=PARCELID%2CSITEADDRESS%2CCNVYNAME&callback=gotParcel&sr=4326";
   document.body.appendChild(s);
 }
 var zoneLink = {
@@ -188,9 +188,9 @@ function gotParcel(parcels){
   }
 
   // Show Information
-  var iContent = "<h4>County</h4><ul id='parcelInfo'><li><a href='http://www.co.bibb.ga.us/TaxAssessors/PropertyCard/PropertyCard.asp?P=" + (parcel.attributes["PARCELID"] || parcel.attributes["Parcel Identification Number"]) + "' target='_blank'>Parcel Tax Record</a></li>" + myAttributes + "</ul>";
-  infoWindow.setContent( infoWindow.getContent() + iContent);
-  infoWindow.open(map,activeMarker);
+  //var iContent = "<h4>County</h4><ul id='parcelInfo'><li><a href='http://www.co.bibb.ga.us/TaxAssessors/PropertyCard/PropertyCard.asp?P=" + (parcel.attributes["PARCELID"] || parcel.attributes["Parcel Identification Number"]) + "' target='_blank'>Parcel Tax Record</a></li>" + myAttributes + "</ul>";
+  //infoWindow.setContent( infoWindow.getContent() + iContent);
+  //infoWindow.open(map,activeMarker);
 }
 function $(id){
   return document.getElementById(id);
