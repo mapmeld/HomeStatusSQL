@@ -27,6 +27,7 @@ function initMe(){
 			f=-83.62587,
 			g=12,
 			prevAddresses = { };
+			c.setView(new L.LatLng(e,f),g);
 			for(i=0;i<b.rows.length;i++){
 				var e=b.rows[i].value.loc[0] * 1.0,
 				f=b.rows[i].value.loc[1] * 1.0;
@@ -74,7 +75,6 @@ function initMe(){
 				li.innerHTML="<a href='#'><img src='http://code.leafletjs.com/leaflet-0.3.1/images/marker.png' width='10px'><i class='home'></i><a href='/statusone.html?id=" + b.rows[i].value.address + "'>" + b.rows[i].value.address.split(',')[0] + "</a></a>";
 				document.getElementById("resultbar").appendChild(li);
 			}
-			c.setView(new L.LatLng(e,f),g)
 		}
 	})
 }
