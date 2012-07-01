@@ -34,7 +34,7 @@ function initMe(){
   				  j='<h3><a href="/statusone.html?id='+b.rows[i].id+'">'+b.rows[i].id+"</a></h3><h4>"+b.rows[i].value.inspector + " inspected on "+ b.rows[i].value.inspdate +"</h4>";
   				}
   				else{
-  				  j='<h3><a href="/statusone.html?id='+b.rows[i].id+'">'+b.rows[i].id+"</a></h3><h4>"+b.rows[i].value.inspector + " inspected. Case opened "+ b.rows[i].value.opendate + ", resolved with " + b.rows[i].value.action + " on " + b.rows[i].value.closedate + "</h4>";  				
+  				  j='<h3>'+b.rows[i].value.address+"</h3><h4>"+b.rows[i].value.inspector + " inspected. Case opened "+ b.rows[i].value.opendate + ", resolved with " + b.rows[i].value.action + " on " + b.rows[i].value.closedate + "</h4>";  				
   				}
   				c.addLayer((new L.Marker(new L.LatLng(e,f))).bindPopup(j)),
 				g=14;

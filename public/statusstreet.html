@@ -25,22 +25,53 @@ function initMe(){
 			d=new L.Popup,
 			e=32.840943,
 			f=-83.62587,
-			g=12;
+			g=12,
+			prevAddresses = { };
 			for(i=0;i<b.rows.length;i++){
 				var e=b.rows[i].value.loc[0] * 1.0,
-				f=b.rows[i].value.loc[1] * 1.0,
-				j="";
-				if(b.rows[i].value.inspdate){
+				f=b.rows[i].value.loc[1] * 1.0;
+				if(prevAddresses[b.rows[i].value.address]){
+				  // already thinking about this address
+				  prevAddresses[b.rows[i].value.address].cases.push({
+				  	id: b.rows[i].value.caseid,
+				  	inspector: b.rows[i].value.inspector,
+				  	opendate: b.rows[i].value.opendate,
+				  	action: b.rows[i].value.action,
+				  	closedate: b.rows[i].value.closedate
+				  });
+				}
+				else{
+				  prevAddresses[b.rows[i].value.address] = {
+				    lat: b.rows[i].value.loc[0] * 1.0,
+				    lng: b.rows[i].value.loc[1] * 1.0
+  				  };
+				  prevAddresses[b.rows[i].value.address].cases = [{
+				  	id: b.rows[i].value.caseid,
+				  	inspector: b.rows[i].value.inspector,
+				  	opendate: b.rows[i].value.opendate,
+				  	action: b.rows[i].value.action,
+				  	closedate: b.rows[i].value.closedate
+				  }];
+				}
+			}
+			for(address in prevAddresses){
+				var j="";
+				if(prevAddresses[address].inspdate){
   				  j='<h3><a href="/statusone.html?id='+b.rows[i].id+'">'+b.rows[i].id+"</a></h3><h4>"+b.rows[i].value.inspector + " inspected on "+ b.rows[i].value.inspdate +"</h4>";
   				}
   				else{
-  				  j='<h3><a href="/statusone.html?id='+b.rows[i].id+'">'+b.rows[i].id+"</a></h3><h4>"+b.rows[i].value.inspector + " inspected. Case opened "+ b.rows[i].value.opendate + ", resolved with " + b.rows[i].value.action + " on " + b.rows[i].value.closedate + "</h4>";  				
+  				  var sortedCases = prevAddresses[address].cases.sort( function(a,b){ return b.caseid * 1 - a.caseid * 1; } );
+  				  j='<h3><a href="/statusone.html?id='+address+'">'+address+"</a></h3><ul>";
+  				  for(c in sortedCases){
+    			    j += "<li>"+c.inspector + " inspected. Case opened "+ c.opendate + ", resolved with " + c.action + " on " + c.closedate + "</li>";
+    			  }
   				}
-				c.addLayer((new L.Marker(new L.LatLng(e,f))).bindPopup(j)),
+  				j+="</ul>";
+				c.addLayer((new L.Marker(new L.LatLng(prevAddresses[address].lat, prevAddresses[address].lng))).bindPopup(j)),
 				g=14;
 				var li = document.createElement("li");
 				li.className="active address result";
-				li.innerHTML="<a href='#'><img src='http://code.leafletjs.com/leaflet-0.3.1/images/marker.png' width='10px'><i class='home'></i><a href='/statusone.html?id=" + b.rows[i].id + "'>" + b.rows[i].id.split(',')[0] + "</a></a>";
+				li.innerHTML="<a href='#'><img src='http://code.leafletjs.com/leaflet-0.3.1/images/marker.png' width='10px'><i class='home'></i><a href='/statusone.html?id=" + b.rows[i].value.address + "'>" + b.rows[i].value.address.split(',')[0] + "</a></a>";
 				document.getElementById("resultbar").appendChild(li);
 			}
 			c.setView(new L.LatLng(e,f),g)
