@@ -13,6 +13,11 @@
 <meta content='width=device-width' name='viewport'>
 <script type="text/javascript">
 function gup(nm){nm=nm.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");var rxS="[\\?&]"+nm+"=([^&#]*)";var rx=new RegExp(rxS);var rs=rx.exec(window.location.href);if(!rs){return null;}else{return rs[1];}}
+function parseStamp(tstamp){
+  var pstamp = new Date(tstamp.substring(4,6) + "/" + tstamp.substring(6) + "/" + tstamp.substring(0,4));
+  pstamp = pstamp.toString().substring(4).substring(0,11);
+  return pstamp;
+}
 function initMe(){
 	var b="/searchdb?streetname=" + gup("streetname");
 	
@@ -66,7 +71,7 @@ function initMe(){
   				  j='<h3><a href="/statusone.html?id='+address+'">'+address.split(',')[0]+" "+address.split(',')[1]+"</a></h3><ul>";
   				  for(var i=0; i < sortedCases.length; i++){
   				    var sc = sortedCases[i];
-    			    j += "<li>"+sc.inspector + " inspected. Case opened "+ sc.opendate + ", resolved with " + sc.action + " on " + sc.closedate + "</li>";
+    			    j += "<li>"+sc.inspector + " inspected. Case opened "+ parseStamp(sc.opendate) + ", resolved with " + sc.action + " on " + parseStamp(sc.closedate) + "</li>";
     			  }
   				}
   				j+="</ul>";
