@@ -127,7 +127,7 @@ var urlReq = function(reqUrl, options, cb){
     
     var street = req.query["address"];
 
-    var sendurl = 'http://nickd.iriscouch.com:5984/housing/_design/poll1/_view/Poll1?key=' + encodeURIComponent( '"' + street + '"');
+    var sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/poll1/_view/Poll1?key=' + encodeURIComponent( '"' + street + '"');
 
     var requestOptions = {
       'uri': sendurl,
@@ -156,7 +156,7 @@ var urlReq = function(reqUrl, options, cb){
       }
     }
 
-    var sendurl = 'http://nickd.iriscouch.com:5984/housing/_design/streetname/_view/streetname?startkey=' + encodeURIComponent( '"' + street + '"') + '&endkey=' + encodeURIComponent( '"' + street + '0"' );
+    var sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/streetname/_view/streetname?startkey=' + encodeURIComponent( '"' + street + '"') + '&endkey=' + encodeURIComponent( '"' + street + '0"' );
 
     var requestOptions = {
       'uri': sendurl,
