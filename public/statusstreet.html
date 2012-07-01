@@ -40,7 +40,7 @@ function initMe(){
 				if(prevAddresses[b.rows[i].value.address]){
 				  // already thinking about this address
 				  prevAddresses[b.rows[i].value.address].cases.push({
-				  	id: b.rows[i].value.caseid,
+				  	id: b.rows[i].value.ecd_id,
 				  	inspector: b.rows[i].value.inspector,
 				  	opendate: b.rows[i].value.opendate,
 				  	action: b.rows[i].value.action,
@@ -53,7 +53,7 @@ function initMe(){
 				    lng: b.rows[i].value.loc[1] * 1.0
   				  };
 				  prevAddresses[b.rows[i].value.address].cases = [{
-				  	id: b.rows[i].value.caseid,
+				  	id: b.rows[i].value.ecd_id,
 				  	inspector: b.rows[i].value.inspector,
 				  	opendate: b.rows[i].value.opendate,
 				  	action: b.rows[i].value.action,
@@ -67,7 +67,7 @@ function initMe(){
   				  j='<h3><a href="/statusone.html?id='+b.rows[i].id+'">'+b.rows[i].id+"</a></h3><h4>"+b.rows[i].value.inspector + " inspected on "+ b.rows[i].value.inspdate +"</h4>";
   				}
   				else{
-  				  var sortedCases = prevAddresses[address].cases.sort( function(a,b){ return b.caseid * 1 - a.caseid * 1; } );
+  				  var sortedCases = prevAddresses[address].cases.sort( function(a,b){ return b.id * 1 - a.id * 1; } );
   				  j='<h3><a href="/statusone.html?id='+address+'">'+address.split(',')[0]+" "+address.split(',')[1]+"</a></h3><ul>";
   				  for(var i=0; i < sortedCases.length; i++){
   				    var sc = sortedCases[i];
