@@ -62,7 +62,7 @@ function initMe(){
   				}
   				else{
   				  var sortedCases = prevAddresses[address].cases.sort( function(a,b){ return b.caseid * 1 - a.caseid * 1; } );
-  				  j='<h3><a href="/statusone.html?id='+address+'">'+address+"</a></h3><ul>";
+  				  j='<h3><a href="/statusone.html?id='+address+'">'+address.split(',')[0]+" "+address.split(',')[1]+"</a></h3><ul>";
   				  for(var i=0; i < sortedCases.length; i++){
   				    var sc = sortedCases[i];
     			    j += "<li>"+sc.inspector + " inspected. Case opened "+ sc.opendate + ", resolved with " + sc.action + " on " + sc.closedate + "</li>";
@@ -73,7 +73,7 @@ function initMe(){
 				g=14;
 				var li = document.createElement("li");
 				li.className="active address result";
-				li.innerHTML="<a href='#'><img src='http://code.leafletjs.com/leaflet-0.3.1/images/marker.png' width='10px'><i class='home'></i><a href='/statusone.html?id=" + address + "'>" + address.split(',')[0] + "</a></a>";
+				li.innerHTML="<a href='#'><img src='http://code.leafletjs.com/leaflet-0.3.1/images/marker.png' width='10px'><i class='home'></i><a href='/statusone.html?id=" + address + "'>" + address.split(',')[0] + " " + address.split(',')[1] + "</a></a>";
 				document.getElementById("resultbar").appendChild(li);
 			}
 		}
