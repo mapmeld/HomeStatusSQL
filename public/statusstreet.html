@@ -63,8 +63,8 @@ function initMe(){
   				else{
   				  var sortedCases = prevAddresses[address].cases.sort( function(a,b){ return b.caseid * 1 - a.caseid * 1; } );
   				  j='<h3><a href="/statusone.html?id='+address+'">'+address+"</a></h3><ul>";
-  				  for(c in sortedCases){
-    			    j += "<li>"+c.inspector + " inspected. Case opened "+ c.opendate + ", resolved with " + c.action + " on " + c.closedate + "</li>";
+  				  for(sc in sortedCases){
+    			    j += "<li>"+sc.inspector + " inspected. Case opened "+ sc.opendate + ", resolved with " + sc.action + " on " + sc.closedate + "</li>";
     			  }
   				}
   				j+="</ul>";
