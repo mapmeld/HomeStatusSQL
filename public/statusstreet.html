@@ -19,10 +19,6 @@ function parseStamp(tstamp){
   return pstamp;
 }
 function initMe(){
-	var b="/searchdb?streetname=" + gup("streetname");
-	
-	jQuery.getJSON(b,function(b){
-		if(b.rows.length){
   var tileURL = "http://otile1.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png";
   var attribution = "Map data &copy; 2012 OpenStreetMap contributors, Tiles by MapQuest";
   var baseMapLayer = new L.TileLayer(tileURL, {maxZoom: 18, attribution: attribution});
@@ -34,6 +30,10 @@ function initMe(){
 			prevAddresses = { };
 			var lat = 0, lng = 0, ptcount = 0;
 			c.setView(new L.LatLng(e,f),g);
+
+	var b="/searchdb?streetname=" + gup("streetname");
+	jQuery.getJSON(b,function(b){
+		if(b.rows.length){
 			for(i=0;i<b.rows.length;i++){
 				var e=b.rows[i].value.loc[0] * 1.0,
 				f=b.rows[i].value.loc[1] * 1.0;
