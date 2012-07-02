@@ -30,6 +30,15 @@ function initMe(){
 			prevAddresses = { };
 			var lat = 0, lng = 0, ptcount = 0;
 			c.setView(new L.LatLng(e,f),g);
+			
+	var miniIcon = new L.Icon.extend({
+      iconUrl: 'http://code.leafletjs.com/leaflet-0.3.1/images/marker.png',
+      shadowUrl: 'http://code.leafletjs.com/leaflet-0.3.1/images/marker-shadow.png',
+      iconSize: new L.Point(19, 48),
+      shadowSize: new L.Point(34, 48),
+      iconAnchor: new L.Point(11, 47),
+      popupAnchor: new L.Point(-2, -38)
+    });
 
 	var b="/searchdb?streetname=" + gup("streetname");
 	jQuery.getJSON(b,function(b){
@@ -63,6 +72,7 @@ function initMe(){
 			}
 			for(address in prevAddresses){
 				var j="";
+				var notsobad = true;
 				if(prevAddresses[address].inspdate){
   				  j='<h3><a href="/statusone.html?id='+b.rows[i].id+'">'+b.rows[i].id+"</a></h3><h4>"+b.rows[i].value.inspector + " inspected on "+ b.rows[i].value.inspdate +"</h4>";
   				}
@@ -72,10 +82,19 @@ function initMe(){
   				  for(var i=0; i < sortedCases.length; i++){
   				    var sc = sortedCases[i];
     			    j += "<li>"+sc.inspector + " inspected. Case opened "+ parseStamp(sc.opendate) + ", resolved with " + sc.action + " on " + parseStamp(sc.closedate) + "</li>";
+    			    // if only actions were "No Violations" on same day as reported
+    			    if(sc.action != "No Violations" || sc.opendate != sc.closedate){
+    			      notsobad = false;
+    			    }
     			  }
   				}
   				j+="</ul>";
-				c.addLayer((new L.Marker(new L.LatLng(prevAddresses[address].lat, prevAddresses[address].lng))).bindPopup(j)),
+  				if(notsobad){
+  				  c.addLayer((new L.Marker(new L.LatLng(prevAddresses[address].lat, prevAddresses[address].lng), { icon: new miniIcon() })).bindPopup(j)),
+  				}
+  				else{
+  				  c.addLayer((new L.Marker(new L.LatLng(prevAddresses[address].lat, prevAddresses[address].lng))).bindPopup(j)),
+  				}
 				lat += prevAddresses[address].lat;
 				lng += prevAddresses[address].lng;
 				ptcount++;
