@@ -90,10 +90,11 @@ function initMe(){
   				}
   				j+="</ul>";
   				if(notsobad){
+  				  var mini = new miniIcon();
   				  c.addLayer(
   				  	new L.Marker(
   				  		new L.LatLng( prevAddresses[address].lat, prevAddresses[address].lng),
-  				  		{ icon: new miniIcon() }
+  				  		{ icon: mini }
   				  	).bindPopup(j)
   				  );
   				}
