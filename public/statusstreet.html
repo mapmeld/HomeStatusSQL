@@ -82,7 +82,9 @@ function initMe(){
   				j+="</ul>";
   				if(notsobad){
   				  var miniIcon = new L.Icon();
-  				  miniIcon.iconSize = new L.Point(12, 20);
+  				  miniIcon.iconSize = new L.Point(18, 20);
+  				  miniIcon.iconAnchor = new L.Point(9, 20);
+  				  miniIcon.iconUrl = "http://aux.iconpedia.net/uploads/2484076891043904041.png";
   				  c.addLayer(
   				  	new L.Marker(
   				  		new L.LatLng( prevAddresses[address].lat, prevAddresses[address].lng),
