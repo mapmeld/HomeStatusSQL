@@ -81,19 +81,10 @@ function initMe(){
   				}
   				j+="</ul>";
   				if(notsobad){
-  				
-	var miniIcon = new L.Icon.extend({
-      iconUrl: 'http://code.leafletjs.com/leaflet-0.3.1/images/marker.png',
-      shadowUrl: 'http://code.leafletjs.com/leaflet-0.3.1/images/marker-shadow.png',
-      iconSize: new L.Point(19, 48),
-      shadowSize: new L.Point(34, 48),
-      iconAnchor: new L.Point(11, 47),
-      popupAnchor: new L.Point(-2, -38)
-    });
   				  c.addLayer(
   				  	new L.Marker(
   				  		new L.LatLng( prevAddresses[address].lat, prevAddresses[address].lng),
-  				  		{ icon: new miniIcon() }
+  				  		{ icon: new L.Icon('http://aux.iconpedia.net/uploads/2484076891043904041.png') }
   				  	).bindPopup(j)
   				  );
   				}
