@@ -51,7 +51,7 @@ function imagify(){
   positionDetails += "&heading=" + map.getStreetView().getPov().heading;
   positionDetails += "&pitch=" + map.getStreetView().getPov().pitch;
   positionDetails += "&fov=180";
-  alert("http://maps.googleapis.com/maps/api/streetview?size=650x435&location=" + lat + ",%20" + lng + "&sensor=false" + positionDetails);
+  document.write("<img src='http://maps.googleapis.com/maps/api/streetview?size=650x435&location=" + lat + ",%20" + lng + "&sensor=false" + positionDetails + "'/>");
 }
   </script>
 </head>
