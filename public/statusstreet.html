@@ -72,7 +72,10 @@ function initMe(){
   				  j='<h3><a href="/statusone.html?id='+address+'">'+address.split(',')[0]+" "+address.split(',')[1]+"</a></h3><ul>";
   				  for(var i=0; i < sortedCases.length; i++){
   				    var sc = sortedCases[i];
-    			    j += "<li>"+sc.inspector + " inspected. Case opened "+ parseStamp(sc.opendate) + ", resolved with " + sc.action + " on " + parseStamp(sc.closedate) + "</li>";
+    			    j += "<li>"+sc.inspector + " inspected. Case opened "+ parseStamp(sc.opendate) + ".";
+    			    if(sc.closedate.length > 5){
+    			      j += " Resolved with " + sc.action + " on " + parseStamp(sc.closedate) + "</li>";
+    			    }
     			    // if only actions were "No Violations" on same day as reported
     			    if(sc.action != "No Violations" || sc.opendate != sc.closedate){
     			      notsobad = false;
