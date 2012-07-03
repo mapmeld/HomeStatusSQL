@@ -76,6 +76,9 @@ function initMe(){
     			    if(sc.closedate.length > 5){
     			      j += " Resolved with " + sc.action + " on " + parseStamp(sc.closedate) + "</li>";
     			    }
+    			    else{
+    			      j += " Case remains open.";
+    			    }
     			    // if only actions were "No Violations" on same day as reported
     			    if(sc.action != "No Violations" || sc.opendate != sc.closedate){
     			      notsobad = false;

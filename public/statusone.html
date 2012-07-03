@@ -74,7 +74,11 @@ function initMe(){
     			    j += "<li>"+sc.inspector + " inspected. Case opened "+ parseStamp(sc.opendate) + ".";
     			    if(sc.closedate.length > 5){
     			      j += " Resolved with " + sc.action + " on " + parseStamp(sc.closedate) + "</li>";
-    			    }				    var li = document.createElement("li");
+    			    }
+    			    else{
+    			      j += " Case remains open.";
+    			    }
+    			    var li = document.createElement("li");
 				    li.className="active address result";
 				    li.innerHTML="<a href='#'><img src='http://code.leafletjs.com/leaflet-0.3.1/images/marker.png' width='10px'><i class='home'></i>" + sc.id + "</a>";
   				    document.getElementById("resultbar").appendChild(li);
