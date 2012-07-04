@@ -104,7 +104,7 @@ function initMe(){
   				}
   				else if(stillopen){
   				  var openIcon = new L.Icon();
-  				  openIcon.iconUrl = "http://housepointer.herokuapp.com/images/leaflet-orange.png";
+  				  openIcon.iconUrl = "http://housepointer.herokuapp.com/images/leaflet-yellow.png";
   				  c.addLayer(
   				  	new L.Marker(
   				  		new L.LatLng( prevAddresses[address].lat, prevAddresses[address].lng),
@@ -129,7 +129,7 @@ function initMe(){
 					icon = 'http://aux.iconpedia.net/uploads/2484076891043904041.png';
 				}
 				else if(stillopen){
-				  icon = "http://housepointer.herokuapp.com/images/leaflet-orange.png";
+				  icon = "http://housepointer.herokuapp.com/images/leaflet-yellow.png";
 				}
 				li.innerHTML="<a href='#'><img src='" + icon + "' width='10px'><i class='home'></i><a href='/statusone.html?id=" + address + "'>" + address.split(',')[0] + " " + address.split(',')[1] + "</a></a>";
 				document.getElementById("resultbar").appendChild(li);
