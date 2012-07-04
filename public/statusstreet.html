@@ -124,12 +124,14 @@ function initMe(){
 				ptcount++;
 				var li = document.createElement("li");
 				li.className="active address result";
+				var icon = "http://code.leafletjs.com/leaflet-0.3.1/images/marker.png";
 				if(notsobad){
-					li.innerHTML="<a href='#'><img src='http://aux.iconpedia.net/uploads/2484076891043904041.png' width='10px'><i class='home'></i><a href='/statusone.html?id=" + address + "'>" + address.split(',')[0] + " " + address.split(',')[1] + "</a></a>";
+					icon = 'http://aux.iconpedia.net/uploads/2484076891043904041.png';
 				}
-				else{
-					li.innerHTML="<a href='#'><img src='http://code.leafletjs.com/leaflet-0.3.1/images/marker.png' width='10px'><i class='home'></i><a href='/statusone.html?id=" + address + "'>" + address.split(',')[0] + " " + address.split(',')[1] + "</a></a>";
+				else if(stillopen){
+				  icon = "http://housepointer.herokuapp.com/images/leaflet-orange.png";
 				}
+				li.innerHTML="<a href='#'><img src='" + icon + "' width='10px'><i class='home'></i><a href='/statusone.html?id=" + address + "'>" + address.split(',')[0] + " " + address.split(',')[1] + "</a></a>";
 				document.getElementById("resultbar").appendChild(li);
 			}
 			c.setView(new L.LatLng( lat / ptcount, lng / ptcount ), 14);
