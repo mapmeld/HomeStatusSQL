@@ -64,6 +64,7 @@ function initMe(){
 			for(address in prevAddresses){
 				var j="";
 				var notsobad = true;
+				var stillopen = false;
 				if(prevAddresses[address].inspdate){
   				  j='<h3><a href="/statusone.html?id='+b.rows[i].id+'">'+b.rows[i].id+"</a></h3><h4>"+b.rows[i].value.inspector + " inspected on "+ b.rows[i].value.inspdate +"</h4>";
   				}
@@ -78,6 +79,7 @@ function initMe(){
     			    }
     			    else{
     			      j += " Case remains open.";
+    			      stillopen = true;
     			    }
     			    // if only actions were "No Violations" on same day as reported
     			    if(sc.action != "No Violations" || sc.opendate != sc.closedate){
@@ -97,6 +99,16 @@ function initMe(){
   				  	new L.Marker(
   				  		new L.LatLng( prevAddresses[address].lat, prevAddresses[address].lng),
   				  		{ icon: miniIcon }
+  				  	).bindPopup(j)
+  				  );
+  				}
+  				else if(stillopen){
+  				  var openIcon = new L.Icon();
+  				  openIcon.iconUrl = "http://housepointer.herokuapp.com/images/leaflet-orange.png";
+  				  c.addLayer(
+  				  	new L.Marker(
+  				  		new L.LatLng( prevAddresses[address].lat, prevAddresses[address].lng),
+  				  		{ icon: openIcon }
   				  	).bindPopup(j)
   				  );
   				}
