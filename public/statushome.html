@@ -32,13 +32,13 @@ function showRecent(){
   });
 }
 function cleanAddress(add){
-  add = add.replace(",","").split(",")[0];
+  add = add.replace(","," ").split(",")[0];
   while(add[0] == " " || add[0] == "0"){
     add = add.substring(1);
   }
   for(var c=1;c<add.length;c++){
     if(add[c-1] != " "){
-      add[c] = add[c].toLowerCase();
+      add = add.substring(0,c) + add[c].toLowerCase() + add.substring(c+1,add.length);
     }
   }
   return add;
