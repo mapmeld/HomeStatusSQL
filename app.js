@@ -165,6 +165,25 @@ var urlReq = function(reqUrl, options, cb){
       res.send(body);
     });
   });
+  
+  app.get('/recentopen', function(req, res){
+    var sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/opendate/_view/opendate?descending=true&limit=5';
+    var requestOptions = {
+      'uri': sendurl,
+    };
+    request(requestOptions, function (err, response, body) {
+      res.send(body);
+    });
+  });
+  app.get('/recentclose', function(req, res){
+    var sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/closedate/_view/closedate?descending=true&limit=5';
+    var requestOptions = {
+      'uri': sendurl,
+    };
+    request(requestOptions, function (err, response, body) {
+      res.send(body);
+    });
+  });
 
   app.get('/auth', middleware.require_auth_browser, routes.index);
   app.post('/auth/add_comment',middleware.require_auth_browser, routes.add_comment);

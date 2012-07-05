@@ -13,8 +13,28 @@
 <meta content='width=device-width' name='viewport'>
 </meta>
 </meta>
+
+<script type="text/javascript">
+function showRecent(){
+  jQuery.getJSON("/recentopen", function(opened){
+    for(var i=0;i<opened.rows.length;i++){
+      var li = document.createElement("li");
+      li.innerHTML = '<a href="/statusone.html?id=' + opened.rows[i].value.address + '">' + opened.rows[i].value.address.replace(" ","").replace(",","").split(",")[0] + ' - ' + opened.rows[i].value.action + '</a>';
+      document.getElementById("recently_opened").appendChild(li);
+    }
+  });
+  jQuery.getJSON("/recentclose", function(closed){
+    for(var i=0;i<closed.rows.length;i++){
+      var li = document.createElement("li");
+      li.innerHTML = '<a href="/statusone.html?id=' + closed.rows[i].value.address + '">' + closed.rows[i].value.address.replace(" ","").replace(",","").split(",")[0] + ' - ' + closed.rows[i].value.action + '</a>';
+      document.getElementById("recently_closed").appendChild(li);
+    }
+  });
+}
+</script>
+
 </head>
-<body data-action='index' data-controller='home'>
+<body data-action='index' data-controller='home' onload='showRecent()'>
 <div class='container-home container-home-index' id='wrapper'>
 <div class='navbar'>
 <div class='navbar-inner'>
@@ -50,6 +70,20 @@
 
 </div>
 <div class='clear'></div>
+
+<div style="margin-left:auto;margin-right:auto;">
+	<div style="float:left;margin:40px;padding:10px;">
+		<h4>Recently Opened</h4>
+		<ul id="recently_opened">
+		</ul>
+	</div>
+	<div style="float:left;margin:40px;padding:10px;">
+		<h4>Recently Closed</h4>
+		<ul id="recently_closed">
+		</ul>
+	</div>
+</div>
+
 </div>
 
 <footer>
