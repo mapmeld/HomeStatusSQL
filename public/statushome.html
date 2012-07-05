@@ -19,17 +19,29 @@ function showRecent(){
   jQuery.getJSON("/recentopen", function(opened){
     for(var i=0;i<opened.rows.length;i++){
       var li = document.createElement("li");
-      li.innerHTML = '<a href="/statusone.html?id=' + opened.rows[i].value.address + '">' + opened.rows[i].value.address.replace(" ","").replace(",","").split(",")[0] + ' - ' + opened.rows[i].value.action + '</a>';
+      li.innerHTML = '<a href="/statusone.html?id=' + opened.rows[i].value.address + '">' + cleanAddress(opened.rows[i].value.address) + ' - ' + opened.rows[i].value.action + '</a>';
       document.getElementById("recently_opened").appendChild(li);
     }
   });
   jQuery.getJSON("/recentclose", function(closed){
     for(var i=0;i<closed.rows.length;i++){
       var li = document.createElement("li");
-      li.innerHTML = '<a href="/statusone.html?id=' + closed.rows[i].value.address + '">' + closed.rows[i].value.address.replace(" ","").replace(",","").split(",")[0] + ' - ' + closed.rows[i].value.action + '</a>';
+      li.innerHTML = '<a href="/statusone.html?id=' + closed.rows[i].value.address + '">' + cleanAddress(closed.rows[i].value.address) + ' - ' + closed.rows[i].value.action + '</a>';
       document.getElementById("recently_closed").appendChild(li);
     }
   });
+}
+function cleanAddress(add){
+  add = add.replace(",","").split(",")[0];
+  while(add[0] == " " || add[0] == "0"){
+    add = add.substring(1);
+  }
+  for(var c=1;c<add.length;c++){
+    if(add[c-1] != " "){
+      add[c] = add[c].toLowerCase();
+    }
+  }
+  return add;
 }
 </script>
 
