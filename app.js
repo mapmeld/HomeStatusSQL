@@ -143,6 +143,8 @@ var urlReq = function(reqUrl, options, cb){
     // http://nickd.iriscouch.com:5984/housing/_design/streetname/_view/streetname?startkey="adamsave"&endkey="adamsave0"
     var street = req.query["streetname"];
     street = street.toLowerCase();
+    street = street.replace("street","st");
+    street = street.replace("avenue","ave");
     if(street.indexOf("-") > -1){
       street = street.substring( street.indexOf("-") + 1 );
     }
