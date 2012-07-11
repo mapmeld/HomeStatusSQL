@@ -187,6 +187,53 @@ var urlReq = function(reqUrl, options, cb){
     });
   });
 
+  app.get('/311/requests.json', function(req, res){
+    var sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/opendate/_view/opendate?descending=true&limit=30';
+    var requestOptions = {
+      'uri': sendurl,
+    };
+    request(requestOptions, function (err, response, body) {
+      var outobjs = [ ];
+      var tstamp = function(t){
+        return t.substring(0,4) + "-" + t.substring(4,6) + "-" + t.substring(6-8) + "T12:00:00-04:00";
+      };
+      for(var r=0;r<body.rows.length;r++){
+        // straightforward mapping of values to Open311 API
+        var threeobj = {
+          "service_request_id": body.rows[r].value._id,
+          "status_notes": null,
+          "description": null,
+          "agency_responsible": "Macon ECD",
+          "service_notice": null,
+          "address": body.rows[r].value.address.replace(',',' '),
+          "address_id": body.rows[r].value._id,
+          "lat": body.rows[r].value.loc[0],
+          "long": body.rows[r].value.loc[1]
+        };
+        
+        // calculate and format additional values for Open311 API output
+        threeobj["requested_datetime"] = tstamp( body.rows[r].value.opendate );
+        if(body.rows[r].value.closedate.length == 8){
+          threeobj["status"] = "closed";
+          threeobj["service_name"] = body.rows[r].value.action;
+          threeobj["updated_datetime"] = tstamp( body.rows[r].value.closedate );
+          // service_code
+          // expected_datetime          
+        }
+        else{
+          threeobj["status"] = "open";
+          threeobj["service_name"] = "Undetermined";
+          threeobj["updated_datetime"] = tstamp( body.rows[r].value.opendate );
+          // service_code
+          // expected_datetime
+        }
+        outobjs.push( threeobj );
+        
+      }
+      res.send(outobjs);
+    });
+  });
+
   app.get('/auth', middleware.require_auth_browser, routes.index);
   app.post('/auth/add_comment',middleware.require_auth_browser, routes.add_comment);
   
