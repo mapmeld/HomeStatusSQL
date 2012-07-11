@@ -201,13 +201,13 @@ var urlReq = function(reqUrl, options, cb){
       for(var r=0;r<body.rows.length;r++){
         // straightforward mapping of values to Open311 API
         var threeobj = {
-          "service_request_id": body.rows[r].value._id,
+          "service_request_id": body.rows[r].value._rev,
           "status_notes": null,
           "description": null,
           "agency_responsible": "Macon ECD",
           "service_notice": null,
           "address": body.rows[r].value.address.replace(',',' '),
-          "address_id": body.rows[r].value._id,
+          "address_id": body.rows[r].value._rev,
           "lat": body.rows[r].value.loc[0],
           "long": body.rows[r].value.loc[1]
         };
