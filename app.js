@@ -186,6 +186,31 @@ var urlReq = function(reqUrl, options, cb){
       res.send(body);
     });
   });
+  
+  app.get('/311/services.json', function(req, res){
+    res.send([{
+      "service_code": 1,
+      "service_name":"Undetermined",
+      "description":"Case is open, will be reviewed by an inspector from Macon ECD.",
+      "metadata":true,
+      "type":"realtime",
+      "keywords":"undetermined, open",
+      "group":"ecd"
+    },
+    {
+      "service_code": 2,
+      "service_name":"Fixed",
+      "description":"Case was reviewed and closed by an inspector from Macon ECD.",
+      "metadata":true,
+      "type":"realtime",
+      "keywords":"fixed, closed",
+      "group":"ecd"
+    }]);
+  });
+  
+  app.get('/311/services/*.json', function(req, res){
+    res.send("regular expression");
+  });
 
   app.get('/311/requests.json', function(req, res){
     var sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/opendate/_view/opendate?descending=true&limit=30';
