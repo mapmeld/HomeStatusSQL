@@ -209,7 +209,7 @@ var urlReq = function(reqUrl, options, cb){
   });
   
   app.get('/311/services/*.json', function(req, res){
-    res.send("regular expression");
+    res.send(req.url.substring( req.url.indexOf("/services/") + 10, req.url.indexOf(".") ));
   });
 
   app.get('/311/requests.json', function(req, res){
