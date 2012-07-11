@@ -208,7 +208,7 @@ var urlReq = function(reqUrl, options, cb){
     }]);
   });
   
-  app.get('/311/services/*.json', function(req, res){
+  /*app.get('/311/services/*.json', function(req, res){
     var service_code = req.url.substring( req.url.indexOf("/services/") + 10, req.url.indexOf(".") );
     var service_name = "";
     if(service_code == 1){
@@ -272,9 +272,9 @@ var urlReq = function(reqUrl, options, cb){
       }
       res.send(outobjs);
     });
-  });
+  });*/
 
-  /*app.get('/311/requests.json', function(req, res){
+  app.get('/311/requests.json', function(req, res){
     var sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/opendate/_view/opendate?descending=true&limit=30';
     var requestOptions = {
       'uri': sendurl,
@@ -321,7 +321,7 @@ var urlReq = function(reqUrl, options, cb){
       }
       res.send(outobjs);
     });
-  });*/
+  });
 
   app.get('/auth', middleware.require_auth_browser, routes.index);
   app.post('/auth/add_comment',middleware.require_auth_browser, routes.add_comment);
