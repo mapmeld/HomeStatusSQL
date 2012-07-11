@@ -203,7 +203,6 @@ var urlReq = function(reqUrl, options, cb){
         var threeobj = {
           "service_request_id": body.rows[r].value._rev,
           "status_notes": null,
-          "description": null,
           "agency_responsible": "Macon ECD",
           "service_notice": null,
           "address": body.rows[r].value.address.replace(',',' '),
@@ -217,6 +216,7 @@ var urlReq = function(reqUrl, options, cb){
         if(body.rows[r].value.closedate.length == 8){
           threeobj["status"] = "closed";
           threeobj["service_name"] = body.rows[r].value.action;
+          threeobj["description"] = "Case closed with " + body.rows[r].value.action + " by " + body.rows[r].value.inspector;
           threeobj["updated_datetime"] = tstamp( body.rows[r].value.closedate );
           // service_code
           // expected_datetime          
@@ -224,6 +224,7 @@ var urlReq = function(reqUrl, options, cb){
         else{
           threeobj["status"] = "open";
           threeobj["service_name"] = "Undetermined";
+          threeobj["description"] = "Case opened by " + body.rows[r].value.reason;
           threeobj["updated_datetime"] = tstamp( body.rows[r].value.opendate );
           // service_code
           // expected_datetime
