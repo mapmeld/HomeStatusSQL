@@ -206,7 +206,7 @@ var urlReq = function(reqUrl, options, cb){
           "agency_responsible": "Macon ECD",
           "service_notice": null,
           "address": body.rows[r].value.address.replace(',',' '),
-          "address_id": body.rows[r].value._rev,
+          "address_id": body.rows[r].value.address,
           "lat": body.rows[r].value.loc[0],
           "long": body.rows[r].value.loc[1]
         };
