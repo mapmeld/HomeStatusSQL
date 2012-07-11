@@ -217,7 +217,7 @@ var urlReq = function(reqUrl, options, cb){
     else if(service_code == 2){
       service_name = "closed";
     }
-    var sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/opendate/_view/opendate?descending=true&limit=30';
+    var sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/opendate/_view/opendate?descending=true&limit=70';
     var requestOptions = {
       'uri': sendurl,
     };
@@ -228,6 +228,9 @@ var urlReq = function(reqUrl, options, cb){
       };
       body = JSON.parse(body);
       for(var r=0;r<body.rows.length;r++){
+        if(outobjs.length >= 30){
+          break;
+        }
         // straightforward mapping of values to Open311 API
         var threeobj = {
           "service_request_id": body.rows[r].value._rev,
@@ -271,7 +274,7 @@ var urlReq = function(reqUrl, options, cb){
     });
   });
 
-  app.get('/311/requests.json', function(req, res){
+  /*app.get('/311/requests.json', function(req, res){
     var sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/opendate/_view/opendate?descending=true&limit=30';
     var requestOptions = {
       'uri': sendurl,
@@ -318,7 +321,7 @@ var urlReq = function(reqUrl, options, cb){
       }
       res.send(outobjs);
     });
-  });
+  });*/
 
   app.get('/auth', middleware.require_auth_browser, routes.index);
   app.post('/auth/add_comment',middleware.require_auth_browser, routes.add_comment);
