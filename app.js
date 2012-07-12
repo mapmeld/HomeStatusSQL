@@ -233,7 +233,7 @@ var urlReq = function(reqUrl, options, cb){
         }
         // straightforward mapping of values to Open311 API
         var threeobj = {
-          "service_request_id": body.rows[r].value._rev,
+          "service_request_id": body.rows[r].value._id,
           "status_notes": null,
           "agency_responsible": "Macon ECD",
           "service_notice": null,
@@ -273,6 +273,51 @@ var urlReq = function(reqUrl, options, cb){
       res.send(outobjs);
     });
   });*/
+  
+  app.get('/311/requests/*.json', function(req, res){
+    var service_id = req.url.substring( req.url.indexOf("/requests/") + 10, req.url.indexOf(".") );
+    var sendurl = 'http://nickd.iriscouch.com:5984/cases/' + id;
+    var requestOptions = {
+      'uri': sendurl,
+    };
+    request(requestOptions, function (err, response, body) {
+      var tstamp = function(t){
+        return t.substring(0,4) + "-" + t.substring(4,6) + "-" + t.substring(6,8) + "T12:00:00-04:00";
+      };
+      body = JSON.parse(body);
+      // straightforward mapping of values to Open311 API
+      var threeobj = {
+        "service_request_id": body._id,
+        "status_notes": null,
+        "agency_responsible": "Macon ECD",
+        "service_notice": null,
+        "address": body.address.replace(',',' '),
+        "address_id": body.address,
+        "lat": body.loc[0],
+        "long": body.loc[1]
+      };
+        
+      // calculate and format additional values for Open311 API output
+      threeobj["requested_datetime"] = tstamp( body.opendate );
+      if(body.closedate.length == 8){
+        threeobj["status"] = "closed";
+        threeobj["service_name"] = body.action;
+        threeobj["description"] = "Case closed with " + body.action + " by " + body.inspector;
+        threeobj["updated_datetime"] = tstamp( body.closedate );
+        // service_code
+        // expected_datetime          
+      }
+      else{
+        threeobj["status"] = "open";
+        threeobj["service_name"] = "Undetermined";
+        threeobj["description"] = "Case opened by " + body.reason;
+        threeobj["updated_datetime"] = tstamp( body.opendate );
+        // service_code
+        // expected_datetime
+      }
+      res.send(threeobj);
+    });
+  });
 
   app.get('/311/requests.json', function(req, res){
     var sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/opendate/_view/opendate?descending=true&limit=30';
@@ -288,7 +333,7 @@ var urlReq = function(reqUrl, options, cb){
       for(var r=0;r<body.rows.length;r++){
         // straightforward mapping of values to Open311 API
         var threeobj = {
-          "service_request_id": body.rows[r].value._rev,
+          "service_request_id": body.rows[r].value._id,
           "status_notes": null,
           "agency_responsible": "Macon ECD",
           "service_notice": null,
