@@ -99,7 +99,14 @@ function initMe(){
 		}
 	});
 	var streetname = gup("id").split(',')[1];
+	streetname = replaceAll(streetname, "%20", " ");
 	jQuery("#streetlink").html( '<a href="/statusstreet.html?streetname=' + streetname + '">' + streetname + '</a>');
+}
+function replaceAll(src, oldr, newr){
+  while(src.indexOf(oldr) > -1){
+    src = src.replace(oldr, newr);
+  }
+  return src;
 }
 </script>
 </head>
@@ -135,9 +142,8 @@ function initMe(){
 <div class='left-bar'>
 <div class='well' style='padding: 8px 0;'>
 <ul id='resultbar' class='nav list'>
-<li id='streetlink' class='nav-header'>This Street</li>
 <li class='nav-header'>Search Results</li>
-
+<li id='streetlink' class='nav-header'>This Street</li>
 </ul>
 <div class='clearfix'></div>
 </div>
