@@ -73,10 +73,10 @@ function initMe(){
 				  document.getElementById("resultbar").appendChild(li);  
 				}
 			}
-			c.setView(new L.LatLng(e,f),g)
+			//c.setView(new L.LatLng(e,f),g)
 		}
 	});
-	var b="/searchdb?streetname=" + gup("streetname");
+	var b="/keydb?address=" + gup("id");
 	jQuery.getJSON(b,function(b){
 		$("#loadanim").css({ display: "none" });
 		if(b.rows.length){
@@ -149,6 +149,7 @@ function initMe(){
     			  }
   				}
   				j+="</ul>";
+  				c.setView(new L.LatLng(prevAddresses[address].lat, prevAddresses[address].lng), 16);
   				if(notsobad){
   				  var miniIcon = new L.Icon();
   				  miniIcon.iconSize = new L.Point(28, 30);
