@@ -18,6 +18,7 @@ function initMe(){
 	var attribution = "Map data &copy; 2012 OpenStreetMap contributors, Tiles by MapQuest";
 	var baseMapLayer = new L.TileLayer(tileURL, {maxZoom: 18, attribution: attribution});
 	var c = (new L.Map("map")).addLayer( baseMapLayer );
+	var prevAddresses = { };
 
 	var b="/surveyed?address=" + gup("id");
 	jQuery.getJSON(b,function(b){
