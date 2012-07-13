@@ -190,7 +190,13 @@ function initMe(){
   				  );
   				}
 				ptcount++;
-				var li = document.createElement("li");
+				
+				var earlyPopup = new L.Popup();
+				earlyPopup.setLatLng(new L.LatLng(prevAddresses[address].lat + 0.0005, prevAddresses[address].lng));
+				earlyPopup.setContent(j);
+				c.openPopup(earlyPopup);
+
+				/*var li = document.createElement("li");
 				li.className="active address result";
 				var icon = "http://code.leafletjs.com/leaflet-0.3.1/images/marker.png";
 				if(notsobad){
@@ -200,7 +206,7 @@ function initMe(){
 				  icon = "http://housepointer.herokuapp.com/images/leaflet-yellow.png";
 				}
 				li.innerHTML="<a href='#'><img src='" + icon + "' width='10px'><i class='home'></i><a href='/statusone.html?id=" + address + "'>" + address.split(',')[0] + " " + address.split(',')[1] + "</a></a>";
-				document.getElementById("resultbar").appendChild(li);
+				document.getElementById("resultbar").appendChild(li);*/
 			}
 		}
 	});
