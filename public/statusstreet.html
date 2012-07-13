@@ -149,7 +149,7 @@ function initMe(){
 				li.innerHTML="<a href='#'><img src='" + icon + "' width='10px'><i class='home'></i><a href='/statusone.html?id=" + address + "'>" + address.split(',')[0] + " " + address.split(',')[1] + "</a></a>";
 				document.getElementById("resultbar").appendChild(li);
 			}
-			c.setView(new L.LatLng( lat / ptcount, lng / ptcount ), 14);
+			c.setView(new L.LatLng( lat / ptcount, lng / ptcount ), 16);
 		}
 	})
 }
