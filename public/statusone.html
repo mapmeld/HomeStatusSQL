@@ -34,6 +34,7 @@ function initMe(){
 	var b="/keydb?address=" + gup("id");
 	jQuery.getJSON(b,function(b){
 		if(b.rows.length){
+			b.rows.sort(function(a,b){ return b.value.opendate - a.value.opendate });
 			for(i=0;i<b.rows.length;i++){
 				var e=b.rows[i].value.loc[0] * 1.0,
 				f=b.rows[i].value.loc[1] * 1.0;

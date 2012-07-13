@@ -34,6 +34,14 @@ function initMe(){
 	var b="/searchdb?streetname=" + gup("streetname");
 	jQuery.getJSON(b,function(b){
 		if(b.rows.length){
+			b.rows.sort(function(a,b){
+				if(b.value.address > a.value.address){
+					return 1;
+				}
+				else{
+					return -1;
+				}
+			});
 			for(i=0;i<b.rows.length;i++){
 				var e=b.rows[i].value.loc[0] * 1.0,
 				f=b.rows[i].value.loc[1] * 1.0;
