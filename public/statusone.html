@@ -33,6 +33,7 @@ function initMe(){
 
 	var b="/keydb?address=" + gup("id");
 	jQuery.getJSON(b,function(b){
+		$("#loadanim").css({ display: "none" });
 		if(b.rows.length){
 			b.rows.sort(function(a,b){ return b.value.opendate - a.value.opendate });
 			for(i=0;i<b.rows.length;i++){
@@ -144,6 +145,7 @@ function replaceAll(src, oldr, newr){
 <ul id='resultbar' class='nav list'>
 <li class='nav-header'>Search Results</li>
 <li id='streetlink' class='nav-header'>This Street</li>
+<img id="loadanim" src="/images/loading-gif.gif" style="width:100%;"/>
 </ul>
 <div class='clearfix'></div>
 </div>
