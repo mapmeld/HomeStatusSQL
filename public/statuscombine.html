@@ -76,7 +76,10 @@ function initMe(){
 			//c.setView(new L.LatLng(e,f),g)
 		}
 	});
-	var b="/keydb?address=" + gup("id");
+	var transformAddress = gup("id");
+	transformAddress = " " + transformAddress.split(',')[0].replace("%20",",");
+	transformAddress = transformAddress.replace("","");
+	var b="/keydb?address=" + transformAddress;
 	jQuery.getJSON(b,function(b){
 		$("#loadanim").css({ display: "none" });
 		if(b.rows.length){
