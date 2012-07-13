@@ -17,6 +17,7 @@ function initMe(){
 	var b="/surveyed?address=" + gup("id");
 	
 	jQuery.getJSON(b,function(b){
+		$("#loadanim").css({ display: "none" });
 		if(b.rows.length){
   var tileURL = "http://otile1.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png";
   var attribution = "Map data &copy; 2012 OpenStreetMap contributors, Tiles by MapQuest";
@@ -32,9 +33,13 @@ function initMe(){
 				j='<h3>'+b.rows[i].id+"</h3><h4>"+b.rows[i].value.inspector + " inspected on "+b.rows[i].value.inspdate +"</h4>";
 				c.addLayer((new L.Marker(new L.LatLng(e,f))).bindPopup(j)),
 				g=14;
-				//var li = document.createElement("li");
-				//li.className="active address result";
-				//li.innerHTML="<a href='#'><img src='http://code.leafletjs.com/leaflet-0.3.1/images/marker.png' width='10px'><i class='home'></i><a href='/statusone.html?id=" + b.rows[i].id + "'>" + b.rows[i].id.split(',')[0] + "</a></a>";
+
+				var earlyPopup = new L.Popup();
+				earlyPopup.setLatLng(new L.LatLng(e + 0.0005, f));
+				earlyPopup.setContent(j);
+				c.openPopup(earlyPopup);
+				
+				c.openPopup();
 				if(b.rows[i].value.major){
 				  var li = document.createElement("li");
 				  li.className="active address result";
@@ -111,7 +116,7 @@ function initMe(){
 <div class='well' style='padding: 8px 0;'>
 <ul id='resultbar' class='nav list'>
 <li class='nav-header'>Survey Notes</li>
-
+<img id="loadanim" src="/images/loading-gif.gif" style="width:100%;"/>
 </ul>
 <div class='clearfix'></div>
 </div>
