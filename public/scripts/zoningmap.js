@@ -80,7 +80,7 @@ function mapReport(report){
       }
       else{
         //for(var i=0;i<b.rows.length;i++){
-		  iContent += "Found.<br/>";
+		  iContent += "<a href='/statusone.html?address=" + b.rows[0].key + "'>Found</a>.<br/>";
         //}
       }
       infoWindow.setContent( infoWindow.getContent() + iContent);
