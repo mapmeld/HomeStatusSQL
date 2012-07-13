@@ -35,9 +35,9 @@ function initMe(){
 	jQuery.getJSON(b,function(b){
 		if(b.rows.length){
 			b.rows.sort(function(a,b){
-			    if(!isNaN(b.value.address.split(' ')[0]) && !isNaN(b.value.address.split(' ')[0])){
+			    if(!isNaN(a.value.address.split(',')[0]) && !isNaN(b.value.address.split(',')[0])){
 					// compare by numberic
-					return a.value.address.split(' ')[0] * 1 - b.value.address.split(' ')[0];
+					return a.value.address.split(',')[0] * 1 - b.value.address.split(',')[0];
 			    }
 			    else{
 			    	// compare by alphabetic
