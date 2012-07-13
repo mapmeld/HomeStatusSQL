@@ -188,9 +188,7 @@ function initMe(){
   				  		new L.LatLng(prevAddresses[address].lat, prevAddresses[address].lng)
   				  	).bindPopup(j)
   				  );
-  				}
-				ptcount++;
-				
+  				}				
 				var earlyPopup = new L.Popup();
 				earlyPopup.setLatLng(new L.LatLng(prevAddresses[address].lat + 0.0005, prevAddresses[address].lng));
 				earlyPopup.setContent(j);
