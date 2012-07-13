@@ -85,7 +85,7 @@ function initMe(){
     			  }
   				}
   				j+="</ul>";
-				c.addLayer((new L.Marker(new L.LatLng(prevAddresses[address].lat, prevAddresses[address].lng))).bindPopup(j)),
+				c.addLayer((new L.Marker(new L.LatLng(prevAddresses[address].lat, prevAddresses[address].lng))).bindPopup(j));
 				var earlyPopup = new L.Popup();
 				earlyPopup.setLatLng(new L.LatLng(prevAddresses[address].lat, prevAddresses[address].lng));
 				earlyPopup.setContent(j);
