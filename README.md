@@ -11,11 +11,8 @@ This is a simple app experimenting with CouchDB to store housing data. Check [op
 ### Click for 3-Year History
 <img src="http://i.imgur.com/3ePoQ.png"/>
 
-### Individual House History
-<img src="http://i.imgur.com/GmCjE.png"/>
-
-### Door-to-Door Survey Results
-<img src="http://i.imgur.com/hFdX5.png"/>
+### Individual House History and Survey Data
+<img src="http://i.imgur.com/QNAB1.png"/>
 
 ### Integration with SeeClickFix
 <img src="http://i.imgur.com/03l8t.png"/>
