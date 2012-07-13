@@ -35,11 +35,18 @@ function initMe(){
 	jQuery.getJSON(b,function(b){
 		if(b.rows.length){
 			b.rows.sort(function(a,b){
-				if(b.value.address > a.value.address){
-					return 1;
-				}
-				else{
-					return -1;
+			    if(!isNaN(b.value.address.split(' ')[0]) && !isNaN(b.value.address.split(' ')[0])){
+					// compare by numberic
+					return a.value.address.split(' ')[0] * 1 - b.value.address.split(' ')[0];
+			    }
+			    else{
+			    	// compare by alphabetic
+					if(b.value.address > a.value.address){
+						return -1;
+					}
+					else{
+						return 1;
+					}
 				}
 			});
 			for(i=0;i<b.rows.length;i++){
