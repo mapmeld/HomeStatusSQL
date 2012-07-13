@@ -73,7 +73,7 @@ function mapReport(report){
     });
     
     
-    jQuery.getJSON("/keydb?address= " + address.split(" ")[0] + "," + address.split(" ")[1].toUpperCase() + " " address.split(" ")[2].toUpperCase() + ",  Macon,  GA", function(b){
+    jQuery.getJSON("/keydb?address= " + address.split(" ")[0] + "," + address.split(" ")[1].toUpperCase() + " " + address.split(" ")[2].toUpperCase() + ",  Macon,  GA", function(b){
       var iContent = "<h4>ECD 2009-2012</h4>";
       if(b.rows.length == 0){
         iContent += "No results at this address.<br/>";
