@@ -85,7 +85,11 @@ function initMe(){
     			  }
   				}
   				j+="</ul>";
-				c.addLayer((new L.Marker(new L.LatLng(prevAddresses[address].lat, prevAddresses[address].lng))).bindPopup(j).openPopup()),
+				c.addLayer((new L.Marker(new L.LatLng(prevAddresses[address].lat, prevAddresses[address].lng))).bindPopup(j)),
+				var earlyPopup = new L.Popup();
+				earlyPopup.setLatLng(new L.LatLng(prevAddresses[address].lat, prevAddresses[address].lng));
+				earlyPopup.setContent(j);
+				map.openPopup(earlyPopup);
 				lat += prevAddresses[address].lat;
 				lng += prevAddresses[address].lng;
 				ptcount++;
