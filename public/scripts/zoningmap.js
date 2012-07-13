@@ -58,7 +58,7 @@ function mapReport(report){
     document.body.appendChild(s);
     
     // search 2008 ECD Survey for issues on this street
-    jQuery.getJSON("/surveystreet?streetname=" + address.toUpperCase(),function(b){
+    jQuery.getJSON("/surveystreet?streetname=" + address.split(',')[0].toLowerCase(),function(b){
       var iContent = "<h4>2008 Survey</h4>";
       if(b.rows.length == 0){
         iContent += "No Results in this Neighborhood";
