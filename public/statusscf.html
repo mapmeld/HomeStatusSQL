@@ -32,7 +32,7 @@ function initMe(){
 				f=b.rows[i].value.loc[1] * 1.0,
 				j='<h3>'+b.rows[i].id+"</h3><h4>"+b.rows[i].value.inspector + " inspected on "+b.rows[i].value.inspdate +"</h4>";
 				c.addLayer((new L.Marker(new L.LatLng(e,f))).bindPopup(j)),
-				g=14;
+				g=16;
 
 				var earlyPopup = new L.Popup();
 				earlyPopup.setLatLng(new L.LatLng(e + 0.0005, f));
