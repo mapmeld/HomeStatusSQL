@@ -33,6 +33,7 @@ function initMe(){
 
 	var b="/searchdb?streetname=" + gup("streetname");
 	jQuery.getJSON(b,function(b){
+		$("#loadanim").css({ display: "none" });
 		if(b.rows.length){
 			b.rows.sort(function(a,b){
 			    if(!isNaN(a.value.address.split(',')[0]) && !isNaN(b.value.address.split(',')[0])){
@@ -188,7 +189,7 @@ function initMe(){
 <div class='well' style='padding: 8px 0;'>
 <ul id='resultbar' class='nav list'>
 <li class='nav-header'>Search Results</li>
-
+<img id="loadanim" src="/images/loading-gif.gif" style="width:100%;"/>
 </ul>
 <div class='clearfix'></div>
 </div>
@@ -197,6 +198,7 @@ function initMe(){
 <h3>Results show only properties with cases:</h3>
 <div id='map' style='height: 400px;'></div>
 </div>
+
 <div class='row'></div>
 <div class='btn-toolbar'>
 <div class='btn-group'>
