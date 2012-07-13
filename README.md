@@ -3,19 +3,25 @@
 This is a simple app experimenting with CouchDB to store housing data. Check [openblight](https://github.com/codeforamerica/openblight) for more information on that project.
 
 ### Homepage
-<img src="http://i.imgur.com/koNAz.png" width="400"/>
+<img src="http://i.imgur.com/koNAz.png"/>
 
 ### Street-by-Street Results
-<img src="http://i.imgur.com/naW3T.png" width="400"/>
+<img src="http://i.imgur.com/naW3T.png"/>
 
 ### Click for 3-Year History
-<img src="http://i.imgur.com/3ePoQ.png" width="400"/>
+<img src="http://i.imgur.com/3ePoQ.png"/>
 
-### Individual Page
-<img src="http://i.imgur.com/GmCjE.png" width="400"/>
+### Individual House History
+<img src="http://i.imgur.com/GmCjE.png"/>
+
+### Door-to-Door Survey Results
+<img src="http://i.imgur.com/hFdX5.png"/>
+
+### Integration with SeeClickFix
+<img src="http://i.imgur.com/03l8t.png"/>
 
 ### Integration with Google Prediction API
-<img src="http://i.imgur.com/n3AmJ.png" width="400"/>
+<img src="http://i.imgur.com/n3AmJ.png"/>
 
 # About Poang Framework
 
