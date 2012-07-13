@@ -125,6 +125,7 @@ var urlReq = function(reqUrl, options, cb){
     // http://nickd.iriscouch.com:5984/housing/_design/poll1/_view/Poll1?key="ADDRESS, Macon, GA"
     var street = req.query["address"];
     var sendurl = 'http://nickd.iriscouch.com:5984/housing/_design/poll1/_view/Poll1?key=' + encodeURIComponent( '"' + street + '"');
+    res.send(sendurl);
     var requestOptions = {
       'uri': sendurl,
     };
