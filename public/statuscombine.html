@@ -77,7 +77,8 @@ function initMe(){
 		}
 	});
 	var transformAddress = gup("id");
-	transformAddress = " " + transformAddress.split(',')[0].replace("%20",",") + transformAddress.split(',')[1].toUpperCase() + ",%20" + transformAddress.split(',')[2] + ",%20" + transformAddress.split(',')[3];
+	transformAddress = " " + transformAddress.split(',')[0].replace("%20",",") + ",%20" + transformAddress.split(',')[1];
+	transformAddress = transformAddress.replace("%20GA","%20%20GA")
 	var b="/keydb?address=" + transformAddress;
 	jQuery.getJSON(b,function(b){
 		$("#loadanim").css({ display: "none" });
