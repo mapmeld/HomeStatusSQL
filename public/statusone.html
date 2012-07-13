@@ -85,7 +85,7 @@ function initMe(){
     			  }
   				}
   				j+="</ul>";
-				c.addLayer((new L.Marker(new L.LatLng(prevAddresses[address].lat, prevAddresses[address].lng))).bindPopup(j)),
+				c.addLayer((new L.Marker(new L.LatLng(prevAddresses[address].lat, prevAddresses[address].lng))).bindPopup(j).openPopup()),
 				lat += prevAddresses[address].lat;
 				lng += prevAddresses[address].lng;
 				ptcount++;
