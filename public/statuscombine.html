@@ -13,6 +13,11 @@
 <meta content='width=device-width' name='viewport'>
 <script type="text/javascript">
 function gup(nm){nm=nm.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");var rxS="[\\?&]"+nm+"=([^&#]*)";var rx=new RegExp(rxS);var rs=rx.exec(window.location.href);if(!rs){return null;}else{return rs[1];}}
+function parseStamp(tstamp){
+  var pstamp = new Date(tstamp.substring(4,6) + "/" + tstamp.substring(6) + "/" + tstamp.substring(0,4));
+  pstamp = pstamp.toString().substring(4).substring(0,11);
+  return pstamp;
+}
 function initMe(){
 	var tileURL = "http://otile1.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png";
 	var attribution = "Map data &copy; 2012 OpenStreetMap contributors, Tiles by MapQuest";
