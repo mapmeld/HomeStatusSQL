@@ -89,7 +89,7 @@ function initMe(){
 				var earlyPopup = new L.Popup();
 				earlyPopup.setLatLng(new L.LatLng(prevAddresses[address].lat, prevAddresses[address].lng));
 				earlyPopup.setContent(j);
-				map.openPopup(earlyPopup);
+				c.openPopup(earlyPopup);
 				lat += prevAddresses[address].lat;
 				lng += prevAddresses[address].lng;
 				ptcount++;
