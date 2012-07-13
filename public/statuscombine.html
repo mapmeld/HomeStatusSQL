@@ -27,7 +27,7 @@ function initMe(){
 
 	var surveyAddress = gup("id");
 	if(surveyAddress.indexOf("%20") == 0){
-		surveyAddress = surveyAddress.replace("%20","").replace(","," ").replace("%20%20","%20").replace("%20%20","%20").toLowerCase();
+		surveyAddress = surveyAddress.replace("%20","").replace(","," ").toLowerCase().split(',')[0];
 	}
 	var b="/surveyed?address=" + surveyAddress;
 	jQuery.getJSON(b,function(b){
