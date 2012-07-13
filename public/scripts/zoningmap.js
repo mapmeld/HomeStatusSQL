@@ -57,15 +57,31 @@ function mapReport(report){
     //s.src = "http://gis.co.bibb.ga.us/arcgisbibb/rest/services/AG4LG/TaxParcelQuery/MapServer/find?f=json&searchText=" + address + "&contains=true&returnGeometry=true&layers=0&searchFields=PARCELID%2CSITEADDRESS%2CCNVYNAME&callback=gotParcel&sr=4326";
     document.body.appendChild(s);
     
-    jQuery.getJSON("/searchdb?streetname=" + address.toUpperCase(),function(b){
+    // search 2008 ECD Survey for issues on this street
+    jQuery.getJSON("/surveystreet?streetname=" + address.toUpperCase(),function(b){
       var iContent = "<h4>2008 Survey</h4>";
       if(b.rows.length == 0){
-        iContent += "No Results";
+        iContent += "No Results in this Neighborhood";
       }
       else{
-        for(var i=0;i<b.rows.length;i++){
-		  iContent += "<a href='/statusone.html?id=" + b.rows[i].id + "'>" + b.rows[i].id.split(',')[0] + "</a><br/>";
-        }
+        //for(var i=0;i<b.rows.length;i++){
+		  iContent += b.rows.length + " cases in this neighborhood<br/>";
+        //}
+      }
+      infoWindow.setContent( infoWindow.getContent() + iContent);
+      infoWindow.open(map,activeMarker);
+    });
+    
+    
+    jQuery.getJSON("/keydb?address= " + address.split(" ")[0] + "," + address.split(" ")[1].toUpperCase() + " " address.split(" ")[2].toUpperCase() + ",  Macon,  GA", function(b){
+      var iContent = "<h4>ECD 2009-2012</h4>";
+      if(b.rows.length == 0){
+        iContent += "No results at this address.<br/>";
+      }
+      else{
+        //for(var i=0;i<b.rows.length;i++){
+		  iContent += "Found.<br/>";
+        //}
       }
       infoWindow.setContent( infoWindow.getContent() + iContent);
       infoWindow.open(map,activeMarker);
@@ -84,10 +100,10 @@ function searchAddress(){
   if(address.toLowerCase().indexOf(",") > -1){
     address = address.split(",")[0];
   }
-  var s = document.createElement("script");
-  s.type = "text/javascript";
+  //var s = document.createElement("script");
+  //s.type = "text/javascript";
   //s.src = "http://gis.co.bibb.ga.us/arcgisbibb/rest/services/AG4LG/TaxParcelQuery/MapServer/find?f=json&searchText=" + address + "&contains=true&returnGeometry=true&layers=0&searchFields=PARCELID%2CSITEADDRESS%2CCNVYNAME&callback=gotParcel&sr=4326";
-  document.body.appendChild(s);
+  //document.body.appendChild(s);
 }
 var zoneLink = {
 	"SC": "CH5PECODI.html",
