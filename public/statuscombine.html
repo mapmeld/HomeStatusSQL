@@ -25,7 +25,11 @@ function initMe(){
 	var c = (new L.Map("map")).addLayer( baseMapLayer );
 	var prevAddresses = { };
 
-	var b="/surveyed?address=" + gup("id");
+	var surveyAddress = gup("id");
+	if(surveyAddress.indexOf("%20") == 0){
+		surveyAddress = surveyAddress.replace("%20","").replace(","," ").replace("%20%20","%20").replace("%20%20","%20").toLowerCase();
+	}
+	var b="/surveyed?address=" + surveyAddress;
 	jQuery.getJSON(b,function(b){
 		$("#loadanim").css({ display: "none" });
 		if(b.rows.length){
@@ -34,10 +38,9 @@ function initMe(){
 				f=b.rows[i].value.loc[1] * 1.0,
 				g=16;
 				
-				/*j='<h3>'+b.rows[i].id+"</h3><h4>"+b.rows[i].value.inspector + " inspected on "+b.rows[i].value.inspdate +"</h4>";
-				c.addLayer((new L.Marker(new L.LatLng(e,f))).bindPopup(j));
+				c.addLayer(new L.Marker(new L.LatLng(e,f)));
 
-				var earlyPopup = new L.Popup();
+				/*var earlyPopup = new L.Popup();
 				earlyPopup.setLatLng(new L.LatLng(e + 0.0005, f));
 				earlyPopup.setContent(j);
 				c.openPopup(earlyPopup);*/
@@ -79,11 +82,13 @@ function initMe(){
 				  document.getElementById("resultbar").appendChild(li);  
 				}
 			}
-			//c.setView(new L.LatLng(e,f),g)
+			c.setView(new L.LatLng(e,f),g)
 		}
 	});
 	var transformAddress = gup("id");
-	transformAddress = " " + transformAddress.split(',')[0].toUpperCase().replace("%20",",") + ",%20" + transformAddress.split(',')[1] + ",%20%20GA";
+	if(transformAddress.indexOf("%20%20") == -1){
+		transformAddress = " " + transformAddress.split(',')[0].toUpperCase().replace("%20",",") + ",%20" + transformAddress.split(',')[1] + ",%20%20GA";
+	}
 	var b="/keydb?address=" + transformAddress;
 	jQuery.getJSON(b,function(b){
 		$("#loadanim").css({ display: "none" });
