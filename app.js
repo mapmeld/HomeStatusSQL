@@ -3,6 +3,8 @@
 /**
  * Module dependencies.
  */
+ 
+// Poang framework
 var auth = require('./auth')
     , express = require('express')
     , mongoose = require('mongoose')
@@ -10,6 +12,8 @@ var auth = require('./auth')
     , mongoStore = require('connect-mongo')(express)
     , routes = require('./routes')
     , middleware = require('./middleware')
+    
+// added http request libraries
     , http = require('http')
     , url = require('url')
     , request = require('request')
@@ -20,11 +24,14 @@ var session_store;
 
 var init = exports.init = function (config) {
   
+  // TODO: remove MongoDB storing sessions
+  // TODO: should MongoDB store EveryAuth logins?
   var db_uri = process.env.MONGOLAB_URI || process.env.MONGODB_URI || config.default_db_uri;
 
   mongoose.connect(db_uri);
   session_store = new mongoStore({url: db_uri});
 
+  // Express server setup
   var app = express.createServer();
 
   app.configure(function(){
@@ -52,61 +59,61 @@ var init = exports.init = function (config) {
   });
   
 
-var urlReq = function(reqUrl, options, cb){
-    if(typeof options === "function"){ cb = options; options = {}; }// incase no options passed in
-
+  // url request function
+  var urlReq = function(reqUrl, options, cb){
+    if(typeof options === "function"){
+      cb = options;
+      options = {};
+    }
     // parse url to chunks
     reqUrl = url.parse(reqUrl);
 
     // http.request settings
     var settings = {
-        host: reqUrl.hostname,
-        port: reqUrl.port || 80,
-        path: reqUrl.pathname,
-        headers: options.headers || {},
-        method: options.method || 'GET'
+      host: reqUrl.hostname,
+      port: reqUrl.port || 80,
+      path: reqUrl.pathname,
+      headers: options.headers || {},
+      method: options.method || 'GET'
     };
-
-    // if there are params:
     if(options.params){
-        options.params = JSON.stringify(options.params);
-        settings.headers['Content-Type'] = 'application/json';
-        settings.headers['Content-Length'] = options.params.length;
+      options.params = JSON.stringify(options.params);
+      settings.headers['Content-Type'] = 'application/json';
+      settings.headers['Content-Length'] = options.params.length;
     };
 
-    // MAKE THE REQUEST
+    // Make the request
     var req = http.request(settings);
+    if(options.params){
+      req.write(options.params);
+    }
 
-    // if there are params: write them to the request
-    if(options.params){ req.write(options.params) };
-
-    // when the response comes back
+    // Handle the response
     req.on('response', function(res){
-        res.body = '';
-        res.setEncoding('utf-8');
-
-        // concat chunks
-        res.on('data', function(chunk){ res.body += chunk });
-
-        // when the response has finished
-        res.on('end', function(){
-            
-            // fire callback
-            cb(res.body, res);
-        });
+      res.body = '';
+      res.setEncoding('utf-8');
+    
+      // concat chunks
+      res.on('data', function(chunk){ res.body += chunk });
+    
+      // when the response has finished
+      res.on('end', function(){
+        // fire callback
+        cb(res.body, res);
+      });
     });
 
     // end the request
     req.end();
-}
-  
-  
+  }
+
   // Routes
   app.get('/', function(req, res){
     res.redirect('/statushome.html');
   });
   
-  app.get('/sendstuff', function(req,res){
+  // Sample posting to housing DB
+  /* app.get('/sendstuff', function(req,res){
     urlReq("http://nickd.iriscouch.com:5984/housing", {
       method: 'POST',
       params: {
@@ -116,50 +123,11 @@ var urlReq = function(reqUrl, options, cb){
     }, function(body, info){
       res.send( body );
     });
-  });
+  }); */
   
-  app.get('/seeclickfix', function(req, res){
-    res.render('seeclickfix');
-  });
-  app.get('/surveyed', function(req, res){
-    // http://nickd.iriscouch.com:5984/housing/_design/poll1/_view/Poll1?key="ADDRESS, Macon, GA"
-    var street = req.query["address"];
-    var sendurl = 'http://nickd.iriscouch.com:5984/housing/_design/poll1/_view/Poll1?key=' + encodeURIComponent( '"' + street + '"');
-    //res.send(sendurl);
-    var requestOptions = {
-      'uri': sendurl,
-    };
-    request(requestOptions, function (err, response, body) {
-      res.send(body);
-    });
-  });
-  app.get('/surveystreet', function(req, res){
-    // http://nickd.iriscouch.com:5984/housing/_design/streetname/_view/streetname?startkey="adamsave"&endkey="adamsave0"
-    var street = req.query["streetname"];
-    street = street.toLowerCase();
-    street = street.replace("street","st");
-    street = street.replace("avenue","ave");
-    if(street.indexOf("-") > -1){
-      street = street.substring( street.indexOf("-") + 1 );
-    }
-    while(street.indexOf(" ") > -1){
-      street = street.replace(" ","");
-    }
-    for(var c=0;c<street.length;c++){
-      if(isNaN(1*street[c])){
-        street = street.substring(c);
-        break;
-      }
-    }
-    var sendurl = 'http://nickd.iriscouch.com:5984/housing/_design/streetname/_view/streetname?startkey=' + encodeURIComponent( '"' + street + '"') + '&endkey=' + encodeURIComponent( '"' + street + '0"' );
-    var requestOptions = {
-      'uri': sendurl,
-    };
-    request(requestOptions, function (err, response, body) {
-      res.send(body);
-    });
-  });
+  // Code Enforcement Case History URLs
   app.get('/keydb', function(req, res){
+    // Request a house's code enforcement history by address
     var street = req.query["address"];
     var sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/poll1/_view/Poll1?key=' + encodeURIComponent( '"' + street + '"');
     var requestOptions = {
@@ -171,7 +139,8 @@ var urlReq = function(reqUrl, options, cb){
   });
   
   app.get('/searchdb', function(req, res){
-    // http://nickd.iriscouch.com:5984/cases/_design/streetname/_view/streetname?startkey="adamsave"&endkey="adamsave0"
+    // Request code enforcement history by street
+    // Sample URL: http://nickd.iriscouch.com:5984/cases/_design/streetname/_view/streetname?startkey="adamsave"&endkey="adamsave0"
     var street = req.query["streetname"];
     street = street.toLowerCase();
     street = street.replace("street","st");
@@ -199,6 +168,7 @@ var urlReq = function(reqUrl, options, cb){
     });
   });
   
+  // Code Enforcement's recent cases: recent opens and recent closes
   app.get('/recentopen', function(req, res){
     var sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/opendate/_view/opendate?descending=true&limit=5';
     var requestOptions = {
@@ -217,7 +187,55 @@ var urlReq = function(reqUrl, options, cb){
       res.send(body);
     });
   });
+
+  // Open311 / SeeClickFix Client (works and makes maps from city's service request system)
+  app.get('/seeclickfix', function(req, res){
+    // map of recent reports to look up survey and case history
+    res.render('seeclickfix');
+  });
+  app.get('/surveyed', function(req, res){
+    // Request survey data by address
+    // Sample URL: http://nickd.iriscouch.com:5984/housing/_design/poll1/_view/Poll1?key="ADDRESS, Macon, GA"
+    var street = req.query["address"];
+    var sendurl = 'http://nickd.iriscouch.com:5984/housing/_design/poll1/_view/Poll1?key=' + encodeURIComponent( '"' + street + '"');
+    //res.send(sendurl);
+    var requestOptions = {
+      'uri': sendurl,
+    };
+    request(requestOptions, function (err, response, body) {
+      res.send(body);
+    });
+  });
+  app.get('/surveystreet', function(req, res){
+    // Request survey data by street
+    // Sample URL: http://nickd.iriscouch.com:5984/housing/_design/streetname/_view/streetname?startkey="adamsave"&endkey="adamsave0"
+    var street = req.query["streetname"];
+    street = street.toLowerCase();
+    street = street.replace("street","st");
+    street = street.replace("avenue","ave");
+    if(street.indexOf("-") > -1){
+      street = street.substring( street.indexOf("-") + 1 );
+    }
+    while(street.indexOf(" ") > -1){
+      street = street.replace(" ","");
+    }
+    for(var c=0;c<street.length;c++){
+      if(isNaN(1*street[c])){
+        street = street.substring(c);
+        break;
+      }
+    }
+    var sendurl = 'http://nickd.iriscouch.com:5984/housing/_design/streetname/_view/streetname?startkey=' + encodeURIComponent( '"' + street + '"') + '&endkey=' + encodeURIComponent( '"' + street + '0"' );
+    var requestOptions = {
+      'uri': sendurl,
+    };
+    request(requestOptions, function (err, response, body) {
+      res.send(body);
+    });
+  });
   
+  // Open311 Server - returns code enforcement cases in Open311's JSON format
+  // TODO: add XML support
   app.get('/311/services.json', function(req, res){
     res.send([{
       "service_code": 1,
@@ -399,6 +417,7 @@ var urlReq = function(reqUrl, options, cb){
     });
   });
 
+  // not yet developed: authentication via Node.js EveryAuth
   app.get('/auth', middleware.require_auth_browser, routes.index);
   app.post('/auth/add_comment',middleware.require_auth_browser, routes.add_comment);
   
