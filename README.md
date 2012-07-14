@@ -23,6 +23,38 @@ This is a simple app experimenting with CouchDB to store housing data. Check [op
 ### Integration with Google Prediction API
 <img src="http://i.imgur.com/n3AmJ.png"/>
 
+# About IrisCouch
+
+## CouchDB - NoSQL database
+
+[CouchDB](http://couchdb.apache.org/) is an open source (Apache license), NoSQL database designed around web technologies. It uses JSON to store data, JavaScript as its query language using MapReduce, and HTTP for a REST API.
+
+CouchDB does not store data and relationships in tables. Instead, each database is a collection of independent documents. Each document maintains its own data and self-contained schema.
+
+This project uses CouchDB for several reasons:
+<ul>
+  <li>Schema-less document structure lets local groups and new apps contribute data without overwriting your records.</li>
+  <li>Geospatial index for easy use in maps and mobile apps</li>
+  <li>Sync data between local and cloud databases</li>
+  <li>Sync data between your database and mobile devices</li>
+</ul>
+
+Sources: http://guide.couchdb.org/draft/why.html and http://en.wikipedia.org/wiki/CouchDB
+
+## IrisCouch
+
+[IrisCouch](http://www.iriscouch.com/) hosts your CouchDB database on their servers, and includes:
+<ul>
+<li>Futon admin panel</li>
+<li>GeoCouch geospatial data system to store latitude and longitude</li>
+<li>pingquery_couchdb plugin for monitoring</li>
+</ul>
+
+IrisCouch's [pricing system](http://www.iriscouch.com/service) does not charge for hosting until an application receives heavy usage or stores gigabytes of data.
+
+<strong>Avoid lock-in</strong>: We recommend that cities use CouchDB's built-in data syncing to keep a local back-up of their data.
+So why use IrisCouch at all? We recommend that you keep the public view of your database "in the cloud" so you can handle jumps in traffic, local power and network outages, and other unpredictable events.
+
 # About Poang Framework
 
 ## Poang - A sample node.js/MongoDB app for Heroku/MongoLab
