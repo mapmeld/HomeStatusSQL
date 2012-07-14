@@ -23,7 +23,7 @@ This is a simple app experimenting with CouchDB to store housing data. Check [op
 ### Integration with Google Prediction API
 <img src="http://i.imgur.com/n3AmJ.png"/>
 
-# About IrisCouch
+# About the Database
 
 ## CouchDB - NoSQL database
 
