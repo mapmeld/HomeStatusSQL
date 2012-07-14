@@ -82,7 +82,7 @@ function initMe(){
 				  document.getElementById("resultbar").appendChild(li);  
 				}
 			}
-			c.setView(new L.LatLng(e,f),g)
+			c.setView(new L.LatLng(e + 0.0007,f),g)
 		}
 	});
 	var transformAddress = gup("id");
@@ -162,7 +162,7 @@ function initMe(){
     			  }
   				}
   				j+="</ul>";
-  				c.setView(new L.LatLng(prevAddresses[address].lat, prevAddresses[address].lng), 16);
+  				c.setView(new L.LatLng(prevAddresses[address].lat + 0.0007, prevAddresses[address].lng), 16);
   				if(notsobad){
   				  var miniIcon = new L.Icon();
   				  miniIcon.iconSize = new L.Point(28, 30);

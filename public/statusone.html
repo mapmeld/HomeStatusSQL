@@ -96,7 +96,7 @@ function initMe(){
 				lng += prevAddresses[address].lng;
 				ptcount++;
 			}
-			c.setView(new L.LatLng( lat / ptcount, lng / ptcount ), 16);
+			c.setView(new L.LatLng( lat / ptcount + 0.0007, lng / ptcount ), 16);
 		}
 	});
 	var streetname = gup("id").split(',')[1];
