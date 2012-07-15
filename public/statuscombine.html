@@ -140,11 +140,11 @@ function initMe(){
 				var notsobad = true;
 				var stillopen = false;
 				if(prevAddresses[address].inspdate){
-  				  j='<h3><a href="/statuscombine.html?id='+b.rows[i].id+'">'+b.rows[i].id+"</a></h3><h4>"+b.rows[i].value.inspector + " inspected on "+ b.rows[i].value.inspdate +"</h4>";
+  				  j='<h3>'+b.rows[i].id+"</h3><h4>"+b.rows[i].value.inspector + " inspected on "+ b.rows[i].value.inspdate +"</h4>";
   				}
   				else{
   				  var sortedCases = prevAddresses[address].cases.sort( function(a,b){ return b.id * 1 - a.id * 1; } );
-  				  j='<h3><a href="/statuscombine.html?id='+address+'">'+address.split(',')[0]+" "+address.split(',')[1]+"</a></h3><ul>";
+  				  j='<h3>'+address.split(',')[0]+" "+address.split(',')[1]+"</h3><ul>";
   				  for(var i=0; i < sortedCases.length; i++){
   				    var sc = sortedCases[i];
     			    j += "<li>"+sc.inspector + " inspected. Case opened "+ parseStamp(sc.opendate) + ".";

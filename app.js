@@ -187,6 +187,41 @@ var init = exports.init = function (config) {
       res.send(body);
     });
   });
+  
+  // Code Enforcement cases: look up by geo
+  app.get('/geo', function(req, res){
+    // GET /geo?bbox=south,west,north,east
+    // http://nickd.iriscouch.com:5984/cases/_design/spatial/_view/spatial?startkey={%22type%22:%22Point%22,%22coordinates%22:[32.7,85]}&endkey={%22type%22:%22Point%22,%22coordinates%22:[32.78,84]}
+    var bbox = req.query["bbox"].split(",");
+    var south = bbox[0],
+      north = bbox[2],
+      west = bbox[1],
+      east = bbox[3];
+
+    var sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/spatial/_view/spatial?startkey={%22type%22:%22Point%22,%22coordinates%22:[' + south + ',0]}&endkey={%22type%22:%22Point%22,%22coordinates%22:[' + north + ',0]}';
+    var requestOptions = {
+      'uri': sendurl,
+    };
+    request(requestOptions, function (err, response, body) {
+      var totalrep = JSON.parse(body);
+      // for now the query returns all points between south and north bounds
+      // remaining points should be filtered out if they're outside west and east bounds
+      for(var r=0;r<totalrep.rows.length;r++){
+        if(west > east){
+          // int'l date line fix
+          if(totalrep.rows[r].key.coordinates[1] > west && totalrep.rows[r].key.coordinates[1] < east){
+            totalrep.rows.splice(r,1);
+          }
+        }
+        else{
+          if(totalrep.rows[r].key.coordinates[1] < west || totalrep.rows[r].key.coordinates[1] > east){
+            totalrep.rows.splice(r,1);
+          }
+        }
+      }
+      res.send(totalrep);
+    });
+  });
 
   // Open311 / SeeClickFix Client (works and makes maps from city's service request system)
   app.get('/seeclickfix', function(req, res){
