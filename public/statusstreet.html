@@ -129,18 +129,18 @@ function initMe(){
           miniIcon.shadowSize = new L.Point(34,30);
           miniIcon.popupAnchor = new L.Point(-2, -35);
           miniIcon.iconUrl = "http://aux.iconpedia.net/uploads/2484076891043904041.png";
-          var miniMarker = new L.Marker( new L.LatLng( prevAddresses[address].lat, prevAddresses[address].lng ), { icon: miniIcon });
-          map.addLayer(miniMarker).bindPopup(j);
+          var miniMarker = new L.Marker( new L.LatLng( prevAddresses[address].lat, prevAddresses[address].lng ), { icon: miniIcon }).bindPopup(j);
+          map.addLayer(miniMarker);
   	    }
   	    else if(stillopen){
   	      var openIcon = new L.Icon();
   	      openIcon.iconUrl = "http://housepointer.herokuapp.com/images/leaflet-yellow.png";
-  	      var openMarker = new L.Marker( new L.LatLng( prevAddresses[address].lat, prevAddresses[address].lng ), { icon: openIcon });
-  	      map.addLayer(openMarker).bindPopup(j);
+  	      var openMarker = new L.Marker( new L.LatLng( prevAddresses[address].lat, prevAddresses[address].lng ), { icon: openIcon }).bindPopup(j);
+  	      map.addLayer(openMarker);
   	    }
   	    else{
-  	      var avgMarker = new L.Marker( new L.LatLng(prevAddresses[address].lat, prevAddresses[address].lng ) );
-  	      map.addLayer(avgMarker).bindPopup(j);
+  	      var avgMarker = new L.Marker( new L.LatLng(prevAddresses[address].lat, prevAddresses[address].lng ) ).bindPopup(j);
+  	      map.addLayer(avgMarker);
   	    }
   	    
   	    // average latlngs to center the map
@@ -256,18 +256,18 @@ function findRoad(){
               miniIcon.shadowSize = new L.Point(34,30);
               miniIcon.popupAnchor = new L.Point(-2, -35);
               miniIcon.iconUrl = "http://aux.iconpedia.net/uploads/2484076891043904041.png";
-              var miniMarker = new L.Marker( new L.LatLng( prevAddresses[address].lat, prevAddresses[address].lng ), { icon: miniIcon });
-              map.addLayer(miniMarker).bindPopup(j);
+              var miniMarker = new L.Marker( new L.LatLng( prevAddresses[address].lat, prevAddresses[address].lng ), { icon: miniIcon }).bindPopup(j);
+              map.addLayer(miniMarker);
       	    }
   	        else if(stillopen){
   	          var openIcon = new L.Icon();
   	          openIcon.iconUrl = "http://housepointer.herokuapp.com/images/leaflet-yellow.png";
-  	          var openMarker = new L.Marker( new L.LatLng( prevAddresses[address].lat, prevAddresses[address].lng ), { icon: openIcon });
-  	          map.addLayer(openMarker).bindPopup(j);
+  	          var openMarker = new L.Marker( new L.LatLng( prevAddresses[address].lat, prevAddresses[address].lng ), { icon: openIcon }).bindPopup(j);
+  	          map.addLayer(openMarker);
   	        }
   	        else{
-      	      var avgMarker = new L.Marker( new L.LatLng(prevAddresses[address].lat, prevAddresses[address].lng ) );
-      	      map.addLayer(avgMarker).bindPopup(j);
+      	      var avgMarker = new L.Marker( new L.LatLng(prevAddresses[address].lat, prevAddresses[address].lng ) ).bindPopup(j);
+      	      map.addLayer(avgMarker);
       	    }
   	    
   	        // add address list to sidebar
