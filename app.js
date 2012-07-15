@@ -191,9 +191,9 @@ var init = exports.init = function (config) {
   // Code Enforcement cases: look up by geo
   app.get('/osmgeo', function(req, res){
     // OSM Nominatim search
-    var sendurl = 'http://nominatim.openstreetmap.org/search?format=json&q=' + req.query["streetname"];
+    var sendurl = 'http://nominatim.openstreetmap.org/search?format=json&q=' + req.query["streetname"] + "&maxlat=33.0363&maxlon=-83.2819&minlat=32.5745&minlon=-84.10583";
     if(sendurl.toLowerCase().indexOf("macon") == -1){
-      sendurl += ",+macon,+ga";
+      sendurl += ",+Macon,+Bibb+County,+GA";
     }
     var requestOptions = {
       'uri': sendurl,
