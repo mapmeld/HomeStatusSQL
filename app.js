@@ -191,7 +191,17 @@ var init = exports.init = function (config) {
   // Code Enforcement cases: look up by geo
   app.get('/osmgeo', function(req, res){
     // OSM Nominatim search
-    var sendurl = 'http://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(req.query["streetname"]) + "+Macon&maxlat=33.0363&maxlon=-83.2819&minlat=32.5745&minlon=-84.10583";
+    var street = req.query["streetname"] + " Macon";
+    for(var c=0;c<street.length;c++){
+      if(street[c] == " "){
+        continue; 
+      }
+      if(isNaN(1*street[c])){
+        street = street.substring(c);
+        break;
+      }
+    }
+    var sendurl = 'http://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(street) + "&maxlat=33.0363&maxlon=-83.2819&minlat=32.5745&minlon=-84.10583";
     /* if(sendurl.toLowerCase().indexOf("macon") == -1){
       sendurl += ", Macon, Bibb County, GA";
     } */
