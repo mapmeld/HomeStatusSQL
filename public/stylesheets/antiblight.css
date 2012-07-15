@@ -8,8 +8,6 @@
  * You're free to add application-wide styles to this file and they'll appear at the top of the
  * compiled file, but it's generally better to create a new file per style scope.
  *
-
-
 */
 #wrapper {
   position: absolute;
@@ -179,9 +177,6 @@ footer {
 
 .row .pagination a {
   float: none; }
-
-.leaflet-control-attribution {
-  display: none; }
 
 .badge-yellow {
   background-color: #F9CC5D;
@@ -363,9 +358,6 @@ footer {
       .container-addresses .single .note .span4 {
         margin-left: 0;
         padding-left: 0; }
-
-.leaflet-container .leaflet-control-attribution {
-  display: none; }
 
 .leaflet-popup-content h4 {
   font-size: 14px;
