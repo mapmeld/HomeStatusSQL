@@ -193,10 +193,10 @@ var init = exports.init = function (config) {
     // GET /geo?bbox=south,west,north,east
     // http://nickd.iriscouch.com:5984/cases/_design/spatial/_view/spatial?startkey={%22type%22:%22Point%22,%22coordinates%22:[32.7,85]}&endkey={%22type%22:%22Point%22,%22coordinates%22:[32.78,84]}
     var bbox = req.query["bbox"].split(",");
-    var south = bbox[0] * 1,
-      north = bbox[2] * 1,
-      west = bbox[1] * 1,
-      east = bbox[3] * 1;
+    var south = bbox[0] * 1.0,
+      north = bbox[2] * 1.0,
+      west = bbox[1] * 1.0,
+      east = bbox[3] * 1.0;
 
     var sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/spatial/_view/spatial?startkey={%22type%22:%22Point%22,%22coordinates%22:[' + south + ',0]}&endkey={%22type%22:%22Point%22,%22coordinates%22:[' + north + ',0]}';
     var requestOptions = {
