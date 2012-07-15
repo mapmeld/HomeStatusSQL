@@ -13,6 +13,7 @@
 <meta content='width=device-width' name='viewport'>
 <script type="text/javascript">
 var map;
+var prevAddresses = { };
 function gup(nm){nm=nm.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");var rxS="[\\?&]"+nm+"=([^&#]*)";var rx=new RegExp(rxS);var rs=rx.exec(window.location.href);if(!rs){return null;}else{return rs[1];}}
 function parseStamp(tstamp){
   var pstamp = new Date(tstamp.substring(4,6) + "/" + tstamp.substring(6) + "/" + tstamp.substring(0,4));
@@ -34,7 +35,6 @@ function initMe(){
   var e=32.840943,
     f=-83.62587,
     g=12,
-    prevAddresses = { },
     lat=0,
     lng=0,
     ptcount=0;
