@@ -127,7 +127,7 @@ function initMe(){
           miniIcon.iconSize = new L.Point(28,30);
           miniIcon.iconAnchor = new L.Point(15,30);
           miniIcon.shadowSize = new L.Point(34,30);
-          miniIcon.popupAnchor = new L.Point(-2, -35);
+          miniIcon.popupAnchor = new L.Point(0,-25);
           miniIcon.iconUrl = "http://aux.iconpedia.net/uploads/2484076891043904041.png";
           var miniMarker = new L.Marker( new L.LatLng( prevAddresses[address].lat, prevAddresses[address].lng ), { icon: miniIcon }).bindPopup(j);
           map.addLayer(miniMarker);
@@ -270,7 +270,7 @@ function findRoad(){
               miniIcon.iconSize = new L.Point(28,30);
               miniIcon.iconAnchor = new L.Point(15,30);
               miniIcon.shadowSize = new L.Point(34,30);
-              miniIcon.popupAnchor = new L.Point(-2, -35);
+              miniIcon.popupAnchor = new L.Point(0,-25);
               miniIcon.iconUrl = "http://aux.iconpedia.net/uploads/2484076891043904041.png";
               var miniMarker = new L.Marker( new L.LatLng( prevAddresses[address].lat, prevAddresses[address].lng ), { icon: miniIcon }).bindPopup(j);
               map.addLayer(miniMarker);
