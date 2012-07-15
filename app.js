@@ -206,7 +206,7 @@ var init = exports.init = function (config) {
       var totalrep = JSON.parse(body);
       // for now the query returns all points between south and north bounds
       // remaining points should be filtered out if they're outside west and east bounds
-      for(var r=0;r<totalrep.rows.length;r++){
+      for(var r=totalrep.rows.length-1;r>=0;r--){
         if(west > east){
           // int'l date line fix
           if(totalrep.rows[r].key.coordinates[1] > west && totalrep.rows[r].key.coordinates[1] < east){
