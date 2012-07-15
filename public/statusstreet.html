@@ -174,6 +174,13 @@ function findRoad(){
   // no cases on searched road
   // check OpenStreetMap for a street, zoom to that bbox, and search
   // http://nominatim.openstreetmap.org/search?q=2nd%20ave,+macon,+ga&format=json
+
+  var li = document.createElement("li");
+  li.className="nav-header";
+  li.innerHTML="No Results on Street";
+  $("#resultbar")[0].appendChild(li);
+  $("#loadanim").css({ display: "block" });
+
   var local = "/osmgeo?streetname=" + gup("streetname");
   jQuery.getJSON(local, function(r){
     var topAddress;
@@ -185,7 +192,8 @@ function findRoad(){
     }
     if(topAddress && topAddress.boundingbox){
   	  var li = document.createElement("li");
-      li.innerHTML="No Results on Street<br/><br/>Nearby Cases";
+  	  li.className="nav-header";
+      li.innerHTML="Nearby Cases (if any)";
   	  $("#resultbar")[0].appendChild(li);
       
       var southwest = new L.LatLng( topAddress.boundingbox[0], topAddress.boundingbox[2] );
@@ -193,8 +201,8 @@ function findRoad(){
       var zoomBounds = new L.LatLngBounds( southwest, northeast );
       map.fitBounds(zoomBounds);
       jQuery.getJSON("/geo?bbox=" + southwest.lat + "," + southwest.lng + "," + northeast.lat + "," + northeast.lng, function(b){
+        $("#loadanim").css({ display: "none" });
         if(b.rows.length){
-
           // store cases in address objects
           for(i=0;i<b.rows.length;i++){
             var e=b.rows[i].value.loc[0] * 1.0,
