@@ -140,7 +140,7 @@ function initMe(){
   	    }
   	    else{
   	      var avgMarker = new L.Marker( new L.LatLng(prevAddresses[address].lat, prevAddresses[address].lng ) );
-  	      map.addLayer(avgMarker).bingPopup(j);
+  	      map.addLayer(avgMarker).bindPopup(j);
   	    }
   	    
   	    // average latlngs to center the map
@@ -267,7 +267,7 @@ function findRoad(){
   	        }
   	        else{
       	      var avgMarker = new L.Marker( new L.LatLng(prevAddresses[address].lat, prevAddresses[address].lng ) );
-      	      map.addLayer(avgMarker).bingPopup(j);
+      	      map.addLayer(avgMarker).bindPopup(j);
       	    }
   	    
   	        // add address list to sidebar
