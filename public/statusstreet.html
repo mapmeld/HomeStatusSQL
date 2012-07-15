@@ -135,8 +135,9 @@ function initMe(){
   	    else if(stillopen){
   	      var openIcon = new L.Icon();
   	      openIcon.iconSize = new L.Point(35,30);
-          miniIcon.iconAnchor = new L.Point(18,30);
+          openIcon.iconAnchor = new L.Point(18,30);
   	      openIcon.shadowSize = new L.Point(42,30);
+          openIcon.popupAnchor = new L.Point(3,-35);
   	      openIcon.iconUrl = "http://housepointer.herokuapp.com/images/leaflet-yellow.png";
   	      var openMarker = new L.Marker( new L.LatLng( prevAddresses[address].lat, prevAddresses[address].lng ), { icon: openIcon }).bindPopup(j);
   	      map.addLayer(openMarker);
@@ -276,6 +277,10 @@ function findRoad(){
       	    }
   	        else if(stillopen){
   	          var openIcon = new L.Icon();
+  	          openIcon.iconSize = new L.Point(35,30);
+              openIcon.iconAnchor = new L.Point(18,30);
+  	          openIcon.shadowSize = new L.Point(42,30);
+              openIcon.popupAnchor = new L.Point(3,-35);
   	          openIcon.iconUrl = "http://housepointer.herokuapp.com/images/leaflet-yellow.png";
   	          var openMarker = new L.Marker( new L.LatLng( prevAddresses[address].lat, prevAddresses[address].lng ), { icon: openIcon }).bindPopup(j);
   	          map.addLayer(openMarker);
