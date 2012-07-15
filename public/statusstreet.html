@@ -184,6 +184,10 @@ function findRoad(){
       }
     }
     if(topAddress && topAddress.boundingbox){
+  	  var li = document.createElement("li");
+      li.innerHTML="No Results on Street<br/><br/>Nearby Cases";
+  	  $("#resultbar")[0].appendChild(li);
+      
       var southwest = new L.LatLng( topAddress.boundingbox[0], topAddress.boundingbox[2] );
       var northeast = new L.LatLng( topAddress.boundingbox[1], topAddress.boundingbox[3] );
       var zoomBounds = new L.LatLngBounds( southwest, northeast );
