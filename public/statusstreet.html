@@ -174,7 +174,7 @@ function findRoad(){
   // no cases on searched road
   // check OpenStreetMap for a street, zoom to that bbox, and search
   // http://nominatim.openstreetmap.org/search?q=2nd%20ave,+macon,+ga&format=json
-  var local = "/streetgeo?streetname=" + gup("streetname");
+  var local = "/osmgeo?streetname=" + gup("streetname");
   jQuery.getJSON(local, function(r){
     if(r.length && r[0].boundingbox){
       var southwest = new L.LatLng( r[0].boundingbox[0], r[0].boundingbox[2] );

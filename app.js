@@ -189,6 +189,19 @@ var init = exports.init = function (config) {
   });
   
   // Code Enforcement cases: look up by geo
+  app.get('/osmgeo', function(req, res){
+    // OSM Nominatim search
+    var sendurl = 'http://nominatim.openstreetmap.org/search?format=json&q=' + req.query["streetname"];
+    if(sendurl.toLowerCase().indexOf("macon") == -1){
+      sendurl += ",+macon,+ga";
+    }
+    var requestOptions = {
+      'uri': sendurl,
+    };
+    request(requestOptions, function (err, response, body) {
+      res.send(body);
+    });
+  });
   app.get('/geo', function(req, res){
     // GET /geo?bbox=south,west,north,east
     // http://nickd.iriscouch.com:5984/cases/_design/spatial/_view/spatial?startkey={%22type%22:%22Point%22,%22coordinates%22:[32.7,85]}&endkey={%22type%22:%22Point%22,%22coordinates%22:[32.78,84]}
