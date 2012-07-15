@@ -29,9 +29,9 @@ function initMe(){
   var tileURL = "http://otile1.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png";
   var attribution = "Map data &copy; 2012 OpenStreetMap contributors, Tiles by MapQuest";
   var baseMapLayer = new L.TileLayer(tileURL, {maxZoom: 18, attribution: attribution});
-  var map=(new L.Map("map")).addLayer( baseMapLayer ),
-    d=new L.Popup,
-    e=32.840943,
+  map = new L.Map("map");
+  map.addLayer( baseMapLayer );
+  var e=32.840943,
     f=-83.62587,
     g=12,
     prevAddresses = { },
