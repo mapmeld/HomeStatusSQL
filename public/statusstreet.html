@@ -176,9 +176,16 @@ function findRoad(){
   // http://nominatim.openstreetmap.org/search?q=2nd%20ave,+macon,+ga&format=json
   var local = "/osmgeo?streetname=" + gup("streetname");
   jQuery.getJSON(local, function(r){
-    if(r.length && r[0].boundingbox){
-      var southwest = new L.LatLng( r[0].boundingbox[0], r[0].boundingbox[2] );
-      var northeast = new L.LatLng( r[0].boundingbox[1], r[0].boundingbox[3] );
+    var topAddress;
+    for(var i=0;i<r.length;i++){
+      if(r[i].display_name.indexOf("Macon,") > -1){
+        topAddress = r[i];
+        break;
+      }
+    }
+    if(topAddress && topAddress.boundingbox){
+      var southwest = new L.LatLng( topAddress.boundingbox[0], topAddress.boundingbox[2] );
+      var northeast = new L.LatLng( topAddress.boundingbox[1], topAddress.boundingbox[3] );
       var zoomBounds = new L.LatLngBounds( southwest, northeast );
       map.fitBounds(zoomBounds);
       jQuery.getJSON("/geo?bbox=" + southwest.lat + "," + southwest.lng + "," + northeast.lat + "," + northeast.lng, function(b){
