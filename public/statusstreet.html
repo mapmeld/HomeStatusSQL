@@ -208,8 +208,8 @@ function findRoad(){
       li.innerHTML="Nearby Cases (if any)";
   	  $("#resultbar")[0].appendChild(li);
       
-      var latspan = topAddress.boundingbox[1] - topAddress.boundingbox[0];
-      var lngspan = topAddress.boundingbox[3] - topAddress.boundingbox[2];
+      var latspan = topAddress.boundingbox[1] * 1.0 - topAddress.boundingbox[0] * 1.0;
+      var lngspan = topAddress.boundingbox[3] * 1.0 - topAddress.boundingbox[2] * 1.0;
       // TODO: international date line concerns?
       if(latspan * 1.5 > lngspan){
         // bounding box is mostly vertical - expand lngspan
@@ -219,8 +219,8 @@ function findRoad(){
         // bounding box is mostly horizontal - expand latspan
         latspan = lngspan / 1.5;
       }
-      var ctrlat = (topAddress.boundingbox[0] + topAddress.boundingbox[1]) / 2;
-      var ctrlng = (topAddress.boundingbox[2] + topAddress.boundingbox[3]) / 2;
+      var ctrlat = (topAddress.boundingbox[0] * 1.0 + topAddress.boundingbox[1] * 1.0) / 2;
+      var ctrlng = (topAddress.boundingbox[2] * 1.0 + topAddress.boundingbox[3] * 1.0) / 2;
       var southwest = new L.LatLng( ctrlat - latspan / 2, ctrlng - lngspan / 2 );
       var northeast = new L.LatLng( ctrlat + latspan / 2, ctrlng + lngspan / 2 );
       
