@@ -510,33 +510,34 @@ var init = exports.init = function (config) {
       };
       body = JSON.parse(body);
       for(var r=0;r<body.rows.length;r++){
+        var rowdata = body.rows[r].value || body.rows[r].doc;
         // straightforward mapping of values to Open311 API
         var threeobj = {
-          "service_request_id": body.rows[r].value._id,
+          "service_request_id": rowdata._id,
           "status_notes": null,
           "agency_responsible": "Macon ECD",
           "service_notice": null,
-          "address": body.rows[r].value.address.replace(',',' '),
-          "address_id": body.rows[r].value.address,
-          "lat": body.rows[r].value.loc[0],
-          "long": body.rows[r].value.loc[1]
+          "address": rowdata.address.replace(',',' '),
+          "address_id": rowdata.address,
+          "lat": rowdata.loc[0],
+          "long": rowdata.loc[1]
         };
         
         // calculate and format additional values for Open311 API output
-        threeobj["requested_datetime"] = tstamp( body.rows[r].value.opendate );
-        if(body.rows[r].value.closedate.length == 8){
+        threeobj["requested_datetime"] = tstamp( rowdata.opendate );
+        if(rowdata.closedate.length == 8){
           threeobj["status"] = "closed";
-          threeobj["service_name"] = body.rows[r].value.action;
-          threeobj["description"] = "Case closed with " + body.rows[r].value.action + " by " + body.rows[r].value.inspector;
-          threeobj["updated_datetime"] = tstamp( body.rows[r].value.closedate );
+          threeobj["service_name"] = rowdata.action;
+          threeobj["description"] = "Case closed with " + rowdata.action + " by " + rowdata.inspector;
+          threeobj["updated_datetime"] = tstamp( rowdata.closedate );
           // service_code
           // expected_datetime          
         }
         else{
           threeobj["status"] = "open";
           threeobj["service_name"] = "Undetermined";
-          threeobj["description"] = "Case opened by " + body.rows[r].value.reason;
-          threeobj["updated_datetime"] = tstamp( body.rows[r].value.opendate );
+          threeobj["description"] = "Case opened by " + rowdata.reason;
+          threeobj["updated_datetime"] = tstamp( rowdata.opendate );
           // service_code
           // expected_datetime
         }
