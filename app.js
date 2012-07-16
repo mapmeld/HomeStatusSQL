@@ -454,9 +454,7 @@ var init = exports.init = function (config) {
       // this query asks for multiple service requests by their id
       // any other parameters in the URL are ignored
       var service_requests = req.query['service_request_id'].split(',');
-      sendurl = 'http://nickd.iriscouch.com:5984/cases/_all_docs?include_docs=true&keys=' + encodeURIComponent('[') + encodeURIComponent( service_requests ) + encodeURIComponent(']');
-      res.send(sendurl);
-      return;
+      sendurl = 'http://nickd.iriscouch.com:5984/cases/_all_docs?include_docs=true&keys=' + encodeURIComponent('["') + encodeURIComponent( service_requests.join('","') ) + encodeURIComponent('"]');
     }
     else{
       // follow Open311 API parameters
