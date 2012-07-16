@@ -24,7 +24,7 @@ var session_store;
 
 var init = exports.init = function (config) {
   
-  // TODO: remove MongoDB storing sessions
+  // TODO: remove MongoDB storing sessions or cap collection
   // TODO: should MongoDB store EveryAuth logins?
   var db_uri = process.env.MONGOLAB_URI || process.env.MONGODB_URI || config.default_db_uri;
 
@@ -374,71 +374,34 @@ var init = exports.init = function (config) {
     }]);
   });
   
-  /*app.get('/311/services/*.json', function(req, res){
+  app.get('/311/services/*.json', function(req, res){
     var service_code = req.url.substring( req.url.indexOf("/services/") + 10, req.url.indexOf(".") );
     var service_name = "";
     if(service_code == 1){
       service_name = "open";
+      res.send({
+        "service_code": "1",
+        "service_name":"Undetermined",
+        "description":"Case is open, will be reviewed by an inspector from Macon ECD.",
+        "metadata":true,
+        "type":"realtime",
+        "keywords":"undetermined, open",
+        "group":"ecd"
+      });
     }
     else if(service_code == 2){
       service_name = "closed";
+      res.send({
+        "service_code": "2",
+        "service_name":"Fixed",
+        "description":"Case was reviewed and closed by an inspector from Macon ECD.",
+        "metadata":true,
+        "type":"realtime",
+        "keywords":"fixed, closed",
+        "group":"ecd"
+      });
     }
-    var sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/opendate/_view/opendate?descending=true&limit=70';
-    var requestOptions = {
-      'uri': sendurl,
-    };
-    request(requestOptions, function (err, response, body) {
-      var outobjs = [ ];
-      var tstamp = function(t){
-        return t.substring(0,4) + "-" + t.substring(4,6) + "-" + t.substring(6,8) + "T12:00:00-04:00";
-      };
-      body = JSON.parse(body);
-      for(var r=0;r<body.rows.length;r++){
-        if(outobjs.length >= 30){
-          break;
-        }
-        // straightforward mapping of values to Open311 API
-        var threeobj = {
-          "service_request_id": body.rows[r].value._id,
-          "status_notes": null,
-          "agency_responsible": "Macon ECD",
-          "service_notice": null,
-          "address": body.rows[r].value.address.replace(',',' '),
-          "address_id": body.rows[r].value.address,
-          "lat": body.rows[r].value.loc[0],
-          "long": body.rows[r].value.loc[1]
-        };
-        
-        // calculate and format additional values for Open311 API output
-        threeobj["requested_datetime"] = tstamp( body.rows[r].value.opendate );
-        if(body.rows[r].value.closedate.length == 8){
-          if(service_name == "open"){
-            continue;
-          }
-          threeobj["status"] = "closed";
-          threeobj["service_name"] = body.rows[r].value.action;
-          threeobj["description"] = "Case closed with " + body.rows[r].value.action + " by " + body.rows[r].value.inspector;
-          threeobj["updated_datetime"] = tstamp( body.rows[r].value.closedate );
-          // service_code
-          // expected_datetime          
-        }
-        else{
-          if(service_name == "closed"){
-            continue;
-          }
-          threeobj["status"] = "open";
-          threeobj["service_name"] = "Undetermined";
-          threeobj["description"] = "Case opened by " + body.rows[r].value.reason;
-          threeobj["updated_datetime"] = tstamp( body.rows[r].value.opendate );
-          // service_code
-          // expected_datetime
-        }
-        outobjs.push( threeobj );
-        
-      }
-      res.send(outobjs);
-    });
-  });*/
+  });
   
   app.get('/311/requests/*.json', function(req, res){
     var service_id = req.url.substring( req.url.indexOf("/requests/") + 10, req.url.indexOf(".") );
@@ -470,23 +433,73 @@ var init = exports.init = function (config) {
         threeobj["service_name"] = body.action;
         threeobj["description"] = "Case closed with " + body.action + " by " + body.inspector;
         threeobj["updated_datetime"] = tstamp( body.closedate );
-        // service_code
-        // expected_datetime          
+        // expected_datetime
+        threeobj["service_code"] = "2";
       }
       else{
         threeobj["status"] = "open";
         threeobj["service_name"] = "Undetermined";
         threeobj["description"] = "Case opened by " + body.reason;
         threeobj["updated_datetime"] = tstamp( body.opendate );
-        // service_code
         // expected_datetime
+        threeobj["service_code"] = "1";
       }
       res.send(threeobj);
     });
   });
 
   app.get('/311/requests.json', function(req, res){
-    var sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/opendate/_view/opendate?descending=true&limit=30';
+    var sendurl;
+    if(req.query['service_request_id'] && req.query['service_request_id'].length){
+      // this query asks for multiple service requests by their id
+      // any other parameters in the URL are ignored
+      var service_requests = req.query['service_request_id'].split(',');
+      sendurl = 'http://nickd.iriscouch.com:5984/cases/_all_docs?include_docs=true&keys=[' + encodeURIComponent( service_requests ) + ']';
+    }
+    else{
+      // follow Open311 API parameters
+      var printDate = function(dt){
+        var printmonth = dt.getMonth() * 1 + 1;
+        if(printmonth < 10){
+          printmonth = "0" + printmonth;
+        }
+        var printday = dt.getDate();
+        if(printday < 10){
+          printday = "0" + printday;
+        }
+        return dt.getFullYear() + "" + printmonth + "" + printday;
+      };
+      var enddate;
+      if(req.query['end_date'] && req.query['end_date'].length){
+        // end date specified
+        enddate = new Date(req.query['end_date']);
+      }
+      else{
+        // default: return 90 days or 1000 results, whichever returns fewer reports
+        enddate = new Date();
+        enddate = new Date(enddate + 90 * 24 * 60 * 60 * 1000);
+      }
+      var startdate = ''
+      if(req.query['start_date'] && req.query['start_date'].length){
+        startdate = new Date(req.query['start_date']);
+        startdate = "&startkey=" + printDate(startdate);
+      }
+      if((req.query['status'] && req.query['status'].length)||(req.query['service_code'] && req.query['service_code'].length)){
+        if((req.query['status'] && req.query['status'] == "open")||(req.query['service_code'] && req.query['service_code'] == "1")){
+          // show only the open cases
+          sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/opendate/_view/opendate?descending=true&limit=1000&endkey=' + printDate(enddate) + startdate;
+        }
+        else{
+          // show only the closed cases
+          sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/closedate/_view/closedate?descending=true&limit=1000&endkey=' + printDate(enddate) + startdate;
+        }
+      }
+      else{
+        // show all reports
+        sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/opendate/_view/opendate?descending=true&limit=1000&endkey=' + printDate(enddate) + startdate;
+      }
+    }
+    // common request and output of returned docs
     var requestOptions = {
       'uri': sendurl,
     };
