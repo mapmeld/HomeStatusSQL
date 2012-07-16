@@ -467,7 +467,7 @@ var init = exports.init = function (config) {
         if(printday < 10){
           printday = "0" + printday;
         }
-        return dt.getFullYear() + "" + printmonth + "" + printday;
+        return encodeURIComponent('"' + dt.getFullYear() + "" + printmonth + "" + printday + '"');
       };
       var enddate;
       if(req.query['end_date'] && req.query['end_date'].length){
