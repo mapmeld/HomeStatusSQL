@@ -1,0 +1,45 @@
+head
+  title homeSTATUS
+  link(href="/stylesheets/antiblight.css", media="all", rel="stylesheet", type="text/css")
+  link(href='/stylesheets/leaflet.css', rel='stylesheet')
+  meta(charset='utf-8')
+  meta(content='', name='description')
+  meta(content='width=device-width', name='viewport')
+
+body(data-action='index', data-controller='home')
+  div.container-home.container-home-index#wrapper
+    .navbar
+      .navbar-inner
+        .container
+          p
+            img(height='20px', src='/images/code_flag.png')
+            span Created by Code for America in partnership with the City of Macon.
+            a(href='http://www.codeforamerica.org', target='_blank') Learn more
+
+    header.page-header
+      h1#logo
+        a(href="/") homeSTATUS API
+
+      div.tag-line Access data on Macon properties
+      div.top-search-bar
+
+    div.content.frontpage
+      .homesearch
+        .search-form
+          p
+            strong Make a better app
+            span Use and re-use our data. Available in KML, JSON, and PNG formats
+
+    footer
+      div.footer
+        p
+          a(href='/about') About
+          span -
+          a(href='/terms-of-service') Terms of Service
+          span -
+          a(href='/stats') Statistics
+          span -
+          a(href='/feedback') Send feedback
+
+    script(src='/scripts/leaflet.js', type='text/javascript')
+    script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js', type='text/javascript')

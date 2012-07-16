@@ -292,6 +292,11 @@ var init = exports.init = function (config) {
     });
   });
   
+  // API home - explains Open311, JSON, KML, and node-canvas APIs
+  app.get('/api', function(req, res){
+    res.render('apihome');
+  });
+  
   // Open311 Server - returns code enforcement cases in Open311's JSON format
   // TODO: add XML support
   app.get('/311/services.json', function(req, res){
