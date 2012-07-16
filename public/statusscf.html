@@ -12,6 +12,9 @@
 <!-- Mobile viewport optimized: h5bp.com/viewport -->
 <meta content='width=device-width' name='viewport'>
 <script type="text/javascript">
+if(!console || !console.log){
+  console = { log: function(e){ } };
+}
 function gup(nm){nm=nm.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");var rxS="[\\?&]"+nm+"=([^&#]*)";var rx=new RegExp(rxS);var rs=rx.exec(window.location.href);if(!rs){return null;}else{return rs[1];}}
 function initMe(){
 	var b="/surveyed?address=" + gup("id");
