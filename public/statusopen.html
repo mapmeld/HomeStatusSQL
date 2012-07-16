@@ -42,8 +42,6 @@ function initMe(){
     lng=0,
     ptcount=0;
   map.setView(new L.LatLng(e,f),g);
-
-  $("#main-search-field").val( replaceAll(gup("streetname"), "+", " ") );
   
   map.on('moveend', findRoad);
   findRoad();
