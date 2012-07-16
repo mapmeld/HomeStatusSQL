@@ -163,8 +163,30 @@ var init = exports.init = function (config) {
     var requestOptions = {
       'uri': sendurl,
     };
-    request(requestOptions, function (err, response, body) {
-      res.send(body);
+    request(requestOptions, function(err, response, body){
+      if(req.query["fmt"] == "kml"){
+        // KML API for mapping mash-ups
+        var body = JSON.parse(body);
+        var kmlintro = '<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">\n<Document>	<name>Macon Housing API</name>\n	<Style id="BasicStyle">\n		<IconStyle>\n			<scale>1.1</scale>\n			<Icon>\n				<href>http://maps.google.com/mapfiles/kml/paddle/red-blank_maps.png</href>\n			</Icon>\n			<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>\n		</IconStyle>\n		<BalloonStyle>\n			<text>$[description]</text>\n		</BalloonStyle>\n	</Style>\n	<Folder id="KMLAPI">\n		<name>KML API Download</name>\n		<Style id="BasicStyle">\n			<IconStyle>\n				<color>ffffffff</color>\n				<scale>1.1</scale>\n				<Icon>\n					<href>http://maps.google.com/mapfiles/kml/paddle/red-blank_maps.png</href>\n				</Icon>\n				<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>\n			</IconStyle>\n			<BalloonStyle>\n				<text>$[description]</text>\n				<textColor>ff000000</textColor>\n				<displayMode>default</displayMode>\n</BalloonStyle>\n</Style>\n';
+		// Placemarks
+		var kmlplacemarks = '';
+		for(var pt=0;pt<body.rows.length;pt++){
+		  kmlplacemarks += '		<Placemark>\n			<name>' + body.rows[pt].value.address + '</name>\n			<address>' + body.rows[pt].value.address + '</address>\n';
+		  kmlplacemarks += '			<description><![CDATA[<div class="googft-info-window" style="font-family:sans-serif">\n<b>Address:</b>' + body.rows[pt].value.address + '<br>\n<b>Case ID:</b> ' + body.rows[pt].value.caseid + '<br>\n<b>Opened:</b> ' + body.rows[pt].value.opendate + '<br>\n<b>Closed:</b> ' + body.rows[pt].value.closedate + '<br>\n<b>Inspector:</b> ' + body.rows[pt].value.inspector + '<br>\n<b>Cause:</b> ' + body.rows[pt].value.cause + '<br>\n<b>Neighborhood:</b> ' + body.rows[pt].value.address || body.rows[pt].value.neighborhood + '<br>\n</div>]]></description>\n';
+		  kmlplacemarks += '			<styleUrl>#BasicStyle</styleUrl>\n			<ExtendedData>\n				<Data name="F">\n					<value>F</value>\n				</Data>\n			</ExtendedData>\n';
+		  kmlplacemarks += '			<Point>\n				<coordinates>' + lng + ',' + lat + ',0</coordinates>\n			</Point>\n		</Placemark>\n';
+		}
+		var kmlend = '	</Folder>\n</Document>\n</kml>';
+        res.send(kmlintro + kmlplacemarks + kmlend);
+      }
+      else if(req.query["fmt"] == "png"){
+        // PNG API using node-canvas
+        res.send("todo");
+      }
+      else{
+        // JSON API / main site
+        res.send(body);
+      }
     });
   });
   

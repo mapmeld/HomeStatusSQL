@@ -221,8 +221,8 @@ function findRoad(){
       }
       var ctrlat = (topAddress.boundingbox[0] * 1.0 + topAddress.boundingbox[1] * 1.0) / 2;
       var ctrlng = (topAddress.boundingbox[2] * 1.0 + topAddress.boundingbox[3] * 1.0) / 2;
-      var southwest = new L.LatLng( ctrlat - latspan / 2, ctrlng - lngspan / 2 );
-      var northeast = new L.LatLng( ctrlat + latspan / 2, ctrlng + lngspan / 2 );
+      var southwest = new L.LatLng( (ctrlat - latspan / 2).toFixed(6), (ctrlng - lngspan / 2).toFixed(6) );
+      var northeast = new L.LatLng( (ctrlat + latspan / 2).toFixed(6), (ctrlng + lngspan / 2).toFixed(6) );
       
       var zoomBounds = new L.LatLngBounds( southwest, northeast );
       map.fitBounds(zoomBounds);
