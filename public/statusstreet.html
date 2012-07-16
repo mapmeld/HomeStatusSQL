@@ -329,9 +329,9 @@ function findRoad(){
   	      }
   	    }
       });
-      $("#jsonlink")[0].href = geolink;
-      $("#kmllink")[0].href = geolink + "&fmt=kml";
-      $("#pnglink")[0].href = geolink + "&fmt=png";
+      $("#jsonlink")[0].href = geolink + ".json";
+      $("#kmllink")[0].href = geolink + "&fmt=kml.kml";
+      $("#pnglink")[0].href = geolink + "&fmt=png.png";
     }
   });
 }
