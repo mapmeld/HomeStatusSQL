@@ -173,6 +173,11 @@ function initMe(){
   	  findRoad();
   	}
   });
+  
+  // set API links
+  $("#jsonlink")[0].href = b;
+  $("#kmllink")[0].href = b + "&fmt=kml";
+  $("#pnglink")[0].href = b + "&fmt=png";
 }
 function findRoad(){
   // no cases on searched road
@@ -200,11 +205,27 @@ function findRoad(){
       li.innerHTML="Nearby Cases (if any)";
   	  $("#resultbar")[0].appendChild(li);
       
-      var southwest = new L.LatLng( topAddress.boundingbox[0], topAddress.boundingbox[2] );
-      var northeast = new L.LatLng( topAddress.boundingbox[1], topAddress.boundingbox[3] );
+      var latspan = topAddress.boundingbox[1] - topAddress.boundingbox[0];
+      var lngspan = topAddress.boundingbox[3] - topAddress.boundingbox[2];
+      // TODO: international date line concerns?
+      if(latspan * 1.5 > lngspan){
+        // bounding box is mostly vertical - expand lngspan
+        lngspan = latspan * 1.5;
+      }
+      else if(lngspan / 1.5 > latspan){
+        // bounding box is mostly horizontal - expand latspan
+        latspan = lngspan / 1.5;
+      }
+      var ctrlat = (topAddress.boundingbox[0] + topAddress.boundingbox[1]) / 2;
+      var ctrlng = (topAddress.boundingbox[2] + topAddress.boundingbox[3]) / 2;
+      var southwest = new L.LatLng( ctrlat - latspan / 2, ctrlng - lngspan / 2 );
+      var northeast = new L.LatLng( ctrlat + latspan / 2, ctrlng + lngspan / 2 );
+      
       var zoomBounds = new L.LatLngBounds( southwest, northeast );
       map.fitBounds(zoomBounds);
-      jQuery.getJSON("/geo?bbox=" + southwest.lat + "," + southwest.lng + "," + northeast.lat + "," + northeast.lng, function(b){
+      
+      var geolink = "/geo?bbox=" + southwest.lat + "," + southwest.lng + "," + northeast.lat + "," + northeast.lng;
+      jQuery.getJSON(geolink, function(b){
         $("#loadanim").css({ display: "none" });
         if(b.rows.length){
           // store cases in address objects
@@ -305,6 +326,9 @@ function findRoad(){
   	      }
   	    }
       });
+      $("#jsonlink")[0].href = geolink;
+      $("#kmllink")[0].href = geolink + "&fmt=kml";
+      $("#pnglink")[0].href = geolink + "&fmt=png";
     }
   });
 }
