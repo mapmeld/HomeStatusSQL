@@ -508,7 +508,12 @@ var init = exports.init = function (config) {
       var tstamp = function(t){
         return t.substring(0,4) + "-" + t.substring(4,6) + "-" + t.substring(6,8) + "T12:00:00-04:00";
       };
-      body = JSON.parse(body);
+      try{
+        body = JSON.parse(body);
+      }
+      catch(e){
+        res.send(body);
+      }
       for(var r=0;r<body.rows.length;r++){
         var rowdata = body.rows[r].value || body.rows[r].doc;
         // straightforward mapping of values to Open311 API
