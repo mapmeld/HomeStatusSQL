@@ -491,7 +491,7 @@ var init = exports.init = function (config) {
       if((req.query['status'] && req.query['status'].length)||(req.query['service_code'] && req.query['service_code'].length)){
         if((req.query['status'] && req.query['status'] == "open")||(req.query['service_code'] && req.query['service_code'] == "1")){
           // show only the open cases
-          sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/opendate/_view/opendate?descending=true&limit=1000&endkey=' + printDate(endkey) + startkey;
+          sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/isopendate/_view/isopendate?descending=true&limit=1000&endkey=' + printDate(endkey) + startkey;
         }
         else{
           // show only the closed cases
