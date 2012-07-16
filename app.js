@@ -515,7 +515,7 @@ var init = exports.init = function (config) {
         res.send(body);
       }
       for(var r=0;r<body.rows.length;r++){
-        var rowdata = body.rows[r].value || body.rows[r].doc;
+        var rowdata = body.rows[r].doc || body.rows[r].value;
         // straightforward mapping of values to Open311 API
         var threeobj = {
           "service_request_id": rowdata._id,
