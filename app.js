@@ -482,6 +482,10 @@ var init = exports.init = function (config) {
       var startkey = ''; // the startkey is the end_date, the latest date to return from the database
       if(req.query['end_date'] && req.query['end_date'].length){
         startkey = new Date(req.query['end_date']);
+        // if the startkey wasn't specified or would make this search invalid, set it to 90 days before the endkey
+        if(endkey > startkey || !req.query['start_date'] || !req.query['start_date'].length){
+          endkey = new Date(startkey - 90 * 24 * 60 * 60 * 1000);
+        }
         startkey = "&startkey=" + printDate(startkey);
       }
       if((req.query['status'] && req.query['status'].length)||(req.query['service_code'] && req.query['service_code'].length)){
