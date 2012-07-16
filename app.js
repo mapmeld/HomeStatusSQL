@@ -477,7 +477,7 @@ var init = exports.init = function (config) {
       else{
         // default: return 90 days or 1000 results, whichever returns fewer reports
         enddate = new Date();
-        enddate = new Date(enddate + 90 * 24 * 60 * 60 * 1000);
+        enddate = new Date(enddate - 90 * 24 * 60 * 60 * 1000);
       }
       var startdate = ''
       if(req.query['start_date'] && req.query['start_date'].length){
