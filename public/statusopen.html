@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<head>
+  <title>homeSTATUS</title>
+  <link href="/stylesheets/antiblight.css" media="all" rel="stylesheet" type="text/css" />
+  <link href='/stylesheets/leaflet.css' rel='stylesheet'>
+  <meta charset='utf-8'/>
+  <meta content='' name='description'/>
+  <!-- Mobile viewport optimized: h5bp.com/viewport -->
+  <meta content='width=device-width' name='viewport'>
+  <script type="text/javascript">
+var map, markers;
+var prevAddresses = { };
+if(!console || !console.log){
+  console = { log: function(e){ } };
+}
+function gup(nm){nm=nm.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");var rxS="[\\?&]"+nm+"=([^&#]*)";var rx=new RegExp(rxS);var rs=rx.exec(window.location.href);if(!rs){return null;}else{return rs[1];}}
+function parseStamp(tstamp){
+  var pstamp = new Date(tstamp.substring(4,6) + "/" + tstamp.substring(6) + "/" + tstamp.substring(0,4));
+  pstamp = pstamp.toString().substring(4).substring(0,11);
+  return pstamp;
+}
+function replaceAll(src, oldr, newr){
+  while(src.indexOf(oldr) > -1){
+    src = src.replace(oldr, newr);
+  }
+  return src;
+}
+function initMe(){
+  var tileURL = "http://otile1.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png";
+  var attribution = "Map data &copy; 2012 OpenStreetMap contributors, Tiles by MapQuest";
+  var baseMapLayer = new L.TileLayer(tileURL, {maxZoom: 18, attribution: attribution});
+  map = new L.Map("map", { minZoom: 11, maxZoom: 18 });
+  map.addLayer( baseMapLayer );
+  var e=32.840943,
+    f=-83.62587,
+    g=12,
+    lat=0,
+    lng=0,
+    ptcount=0;
+  map.setView(new L.LatLng(e,f),g);
+
+  $("#main-search-field").val( replaceAll(gup("streetname"), "+", " ") );
+  
+  map.on('moveend', findRoad);
+  findRoad();
+}
+function findRoad(){
+  // no cases on searched road
+  // check OpenStreetMap for a street, zoom to that bbox, and search
+  // http://nominatim.openstreetmap.org/search?q=2nd%20ave,+macon,+ga&format=json
+
+  $("#loadanim").css({ display: "block" });
+  var zoomBounds = map.getBounds();
+  var northeast = zoomBounds.getNorthEast();
+  var southwest = zoomBounds.getSouthWest();
+
+  var geolink = "/geo?status=open&bbox=" + southwest.lat + "," + southwest.lng + "," + northeast.lat + "," + northeast.lng;
+  jQuery.getJSON(geolink, function(b){
+    $("#loadanim").css({ display: "none" });
+    if(b.rows.length){
+      if(markers){
+        for(var m=0;m<markers.length;m++){
+          map.removeLayer(markers[m]);
+        }
+      }
+      $("#resultbar").html('<li class='nav-header'>Search Results</li><img id="loadanim" src="/images/loading-gif.gif" style="width:100%;"/>');
+      markers = [ ];
+      prevAddresses = { };
+      // store cases in address objects
+      for(i=0;i<b.rows.length;i++){
+        var e=b.rows[i].value.loc[0] * 1.0,
+          f=b.rows[i].value.loc[1] * 1.0;
+        if(prevAddresses[b.rows[i].value.address]){
+          // already thinking about this address
+          prevAddresses[b.rows[i].value.address].cases.push({
+            id: b.rows[i].value.ecd_id,
+            inspector: b.rows[i].value.inspector,
+            opendate: b.rows[i].value.opendate,
+            action: b.rows[i].value.action,
+            closedate: b.rows[i].value.closedate
+          });
+        }
+        else{
+          prevAddresses[b.rows[i].value.address] = {
+            lat: b.rows[i].value.loc[0] * 1.0,
+            lng: b.rows[i].value.loc[1] * 1.0
+          };
+          prevAddresses[b.rows[i].value.address].cases = [{
+            id: b.rows[i].value.ecd_id,
+            inspector: b.rows[i].value.inspector,
+            opendate: b.rows[i].value.opendate,
+            action: b.rows[i].value.action,
+            closedate: b.rows[i].value.closedate
+          }];
+        }
+      }
+
+      for(address in prevAddresses){
+        var j="";
+        var stillopen = true;
+        // sort cases for this address by their date
+        var sortedCases = prevAddresses[address].cases.sort( function(a,b){
+          return b.id * 1 - a.id * 1;
+        });
+        // write the top of a map popup
+        j='<h3><a href="/statuscombine.html?id='+address+'">'+address.split(',')[0]+" "+address.split(',')[1]+"</a></h3><ul>";
+        // make a list of cases
+        for(var i=0;i<sortedCases.length;i++){
+          var sc = sortedCases[i];
+          j += "<li>"+sc.inspector + " inspected. Case opened "+ parseStamp(sc.opendate) + ".";
+          if(sc.closedate.length > 5){
+            j += " Resolved with " + sc.action + " on " + parseStamp(sc.closedate) + "</li>";
+          }
+          else{
+            j += " Case remains open.";
+          }
+          // if only actions were "No Violations" on same day as reported
+          if(sc.action != "No Violations" || sc.opendate != sc.closedate){
+            notsobad = false;
+          }
+        }
+        j+="</ul>";
+        
+        // choose icons / map symbols based on cases
+        var openIcon = new L.Icon();
+  	    openIcon.iconSize = new L.Point(35,30);
+        openIcon.iconAnchor = new L.Point(18,30);
+  	    openIcon.shadowSize = new L.Point(42,30);
+        openIcon.popupAnchor = new L.Point(0,-28);
+  	    openIcon.iconUrl = "http://housepointer.herokuapp.com/images/leaflet-yellow.png";
+  	    var openMarker = new L.Marker( new L.LatLng( prevAddresses[address].lat, prevAddresses[address].lng ), { icon: openIcon }).bindPopup(j);
+  	    map.addLayer(openMarker);
+  	    markers.push(openMarker);
+  	    
+  	    // add address list to sidebar
+  	    var li = document.createElement("li");
+  	    li.className="active address result";
+  	    var icon = "http://housepointer.herokuapp.com/images/leaflet-yellow.png";
+      	li.innerHTML="<a href='#'><img src='" + icon + "' width='10px'><i class='home'></i><a href='/statuscombine.html?id=" + address + "'>" + address.split(',')[0] + " " + address.split(',')[1] + "</a></a>";
+  	    $("#resultbar")[0].appendChild(li);
+  	  }
+  	}
+  });
+  $("#jsonlink")[0].href = geolink.replace("/geo","/geo.json");
+  $("#kmllink")[0].href = geolink.replace("/geo","/geo.kml") + "&fmt=kml";
+  $("#pnglink")[0].href = geolink.replace("/geo","/geo.png") + "&fmt=png";
+}
+  </script>
+</head>
+<body data-action='search' data-controller='addresses' onload='initMe()'>
+  <div class='container-addresses container-addresses-search' id='wrapper'>
+    <div class='navbar'>
+      <div class='navbar-inner'>
+        <div class='container'>
+          <p>
+            <img height='20px' src='/images/code_flag.png'>
+            Created by Code for America in partnership with the City of Macon.
+            <a href='http://www.codeforamerica.org' target='_blank'>Learn more</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+    <header class='page-header'>
+      <h1 id='logo'>
+        <a href="/">homeSTATUS</a>
+      </h1>
+      <div class='top-search-bar'>
+        <div class='search-form'>
+          <form accept-charset="UTF-8" action="/statusstreet.html" method="get">
+            <div style="margin:0;padding:0;display:inline">
+              <input name="utf8" type="hidden" value="&#x2713;" />
+            </div>
+            <div class='search-field'>
+              <input id="main-search-field" name="streetname" placeholder="Example: Adams Ave" type="text" value="" />
+            </div>
+            <div class='search-button'>
+              <input class="btn" name="commit" type="submit" value="Map Addresses" />
+            </div>
+          </form>
+        </div>
+      </div>
+    </header>
+    <div class='search-results'>
+      <div class='left-bar'>
+        <div class='well' style='padding: 8px 0;'>
+          <ul id='resultbar' class='nav list'>
+            <li class='nav-header'>Search Results</li>
+            <img id="loadanim" src="/images/loading-gif.gif" style="width:100%;"/>
+          </ul>
+          <div class='exportlinks nav'>
+            <li class='nav-header'>Download Data</li>
+            <a class="btn" id="kmllink" href="/api">
+              <img src="http://icons.iconarchive.com/icons/deleket/sleek-xp-basic/24/Download-icon.png" style="vertical-align:middle;"/>
+              <span style="font-size:8pt;vertical-align:middle;">KML (Google Earth)</span>
+            </a>
+            <br/>
+            <a class="btn" id="pnglink" href="/api">
+              <img src="http://icons.iconarchive.com/icons/deleket/sleek-xp-basic/24/Download-icon.png" style="vertical-align:middle;"/>
+              <span style="font-size:8pt;vertical-align:middle;">PNG (image)</span>
+            </a>
+            <br/>
+            <a class="btn" id="jsonlink" href="/api">
+              <img src="http://icons.iconarchive.com/icons/deleket/sleek-xp-basic/24/Download-icon.png" style="vertical-align:middle;"/>
+              <span style="font-size:8pt;vertical-align:middle;">JSON</span>
+            </a>
+          </div>
+          <div class='clearfix'></div>
+        </div>
+      </div>
+      <div class='right-bar'>
+        <h3>Results show only properties with cases:</h3>
+        <div id='map' style='height: 400px;'></div>
+      </div>
+    </div>
+    <footer>
+      <div class='footer'>
+        <p>
+          <a href='/about'>About</a>
+          -
+          <a href='/terms-of-service'>Terms of Service</a>
+          -
+          <a href='/stats'>Statistics</a>
+          -
+          <a href='/feedback'>Send feedback</a>
+        </p>
+      </div>
+    </footer>
+    <script src='/scripts/leaflet.js' type='text/javascript'></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js' type='text/javascript'></script>
+    <!--[if lte IE 8]>
+      <link rel="stylesheet" href="/stylesheets/leaflet.ie.css" />
+    <![endif]-->
+  </div>
+</body>
+</html>
