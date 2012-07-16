@@ -55,6 +55,8 @@ IrisCouch's [pricing system](http://www.iriscouch.com/service) does not charge f
 <strong>Avoid lock-in</strong>: We recommend that cities use CouchDB's built-in data syncing to keep a local back-up of their data.
 So why use IrisCouch at all? We recommend that you keep the public view of your database "in the cloud" so you can handle jumps in traffic, local power and network outages, and other unpredictable events.
 
+<a href="http://www.kennethdonaldson.net/couchdb/read-only-couchdb">Follow these directions</a> to make your IrisCouch instance read-only by anonymous users.
+
 # About Poang Framework
 
 ## Poang - A sample node.js/MongoDB app for Heroku/MongoLab
