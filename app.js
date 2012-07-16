@@ -500,6 +500,10 @@ var init = exports.init = function (config) {
       }
     }
     // common request and output of returned docs
+    if(req.query['showme'] == 'url'){
+      res.send(sendurl);
+      return;
+    }
     var requestOptions = {
       'uri': sendurl,
     };
@@ -508,6 +512,10 @@ var init = exports.init = function (config) {
       var tstamp = function(t){
         return t.substring(0,4) + "-" + t.substring(4,6) + "-" + t.substring(6,8) + "T12:00:00-04:00";
       };
+      if(req.query['showme'] == 'json'){
+        res.send(body);
+        return;
+      }
       body = JSON.parse(body);
       for(var r=0;r<body.rows.length;r++){
         var rowdata = body.rows[r].doc || body.rows[r].value;
