@@ -469,34 +469,34 @@ var init = exports.init = function (config) {
         }
         return encodeURIComponent('"' + dt.getFullYear() + "" + printmonth + "" + printday + '"');
       };
-      var enddate;
-      if(req.query['end_date'] && req.query['end_date'].length){
-        // end date specified
-        enddate = new Date(req.query['end_date']);
+      var endkey; // the endkey is the start_date, the earliest date to return from the database
+      if(req.query['start_date'] && req.query['start_date'].length){
+        // start date specified
+        endkey = new Date(req.query['start_date']);
       }
       else{
-        // default: return 90 days or 1000 results, whichever returns fewer reports
-        enddate = new Date();
-        enddate = new Date(enddate - 90 * 24 * 60 * 60 * 1000);
+        // default: up to 90 days ago, or 1000 results, whichever returns fewer reports
+        endkey = new Date();
+        endkey = new Date(endkey - 90 * 24 * 60 * 60 * 1000);
       }
-      var startdate = ''
-      if(req.query['start_date'] && req.query['start_date'].length){
-        startdate = new Date(req.query['start_date']);
-        startdate = "&startkey=" + printDate(startdate);
+      var startkey = ''; // the startkey is the end_date, the latest date to return from the database
+      if(req.query['end_date'] && req.query['end_date'].length){
+        startkey = new Date(req.query['end_date']);
+        startkey = "&startkey=" + printDate(startkey);
       }
       if((req.query['status'] && req.query['status'].length)||(req.query['service_code'] && req.query['service_code'].length)){
         if((req.query['status'] && req.query['status'] == "open")||(req.query['service_code'] && req.query['service_code'] == "1")){
           // show only the open cases
-          sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/opendate/_view/opendate?descending=true&limit=1000&endkey=' + printDate(enddate) + startdate;
+          sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/opendate/_view/opendate?descending=true&limit=1000&endkey=' + printDate(endkey) + startkey;
         }
         else{
           // show only the closed cases
-          sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/closedate/_view/closedate?descending=true&limit=1000&endkey=' + printDate(enddate) + startdate;
+          sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/closedate/_view/closedate?descending=true&limit=1000&endkey=' + printDate(endkey) + startkey;
         }
       }
       else{
         // show all reports
-        sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/opendate/_view/opendate?descending=true&limit=1000&endkey=' + printDate(enddate) + startdate;
+        sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/opendate/_view/opendate?descending=true&limit=1000&endkey=' + printDate(endkey) + startkey;
       }
     }
     // common request and output of returned docs
