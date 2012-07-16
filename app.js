@@ -454,7 +454,7 @@ var init = exports.init = function (config) {
       // this query asks for multiple service requests by their id
       // any other parameters in the URL are ignored
       var service_requests = req.query['service_request_id'].split(',');
-      sendurl = 'http://nickd.iriscouch.com:5984/cases/_all_docs?include_docs=true&keys=[' + encodeURIComponent( service_requests ) + ']';
+      sendurl = 'http://nickd.iriscouch.com:5984/cases/_all_docs?include_docs=true&keys=' + encodeURIComponent('[') + encodeURIComponent( service_requests ) + encodeURIComponent(']');
     }
     else{
       // follow Open311 API parameters
@@ -508,13 +508,7 @@ var init = exports.init = function (config) {
       var tstamp = function(t){
         return t.substring(0,4) + "-" + t.substring(4,6) + "-" + t.substring(6,8) + "T12:00:00-04:00";
       };
-      try{
-        body = JSON.parse(body);
-      }
-      catch(e){
-        res.send(body);
-        return;
-      }
+      body = JSON.parse(body);
       for(var r=0;r<body.rows.length;r++){
         var rowdata = body.rows[r].doc || body.rows[r].value;
         // straightforward mapping of values to Open311 API
