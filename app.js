@@ -513,6 +513,7 @@ var init = exports.init = function (config) {
       }
       catch(e){
         res.send(body);
+        return;
       }
       for(var r=0;r<body.rows.length;r++){
         var rowdata = body.rows[r].doc || body.rows[r].value;
