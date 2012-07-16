@@ -237,7 +237,7 @@ var init = exports.init = function (config) {
       res.send(body);
     });
   });
-  app.get('/geo', function(req, res){
+  app.get('/geo*', function(req, res){
     // GET /geo?bbox=south,west,north,east
     // http://nickd.iriscouch.com:5984/cases/_design/spatial/_view/spatial?startkey={%22type%22:%22Point%22,%22coordinates%22:[32.7,85]}&endkey={%22type%22:%22Point%22,%22coordinates%22:[32.78,84]}
     var bbox = req.query["bbox"].split(",");
