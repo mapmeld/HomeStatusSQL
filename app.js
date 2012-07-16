@@ -247,7 +247,7 @@ var init = exports.init = function (config) {
       east = bbox[3] * 1.0;
 
     var sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/spatial/_view/spatial?startkey={%22type%22:%22Point%22,%22coordinates%22:[' + south + ',0]}&endkey={%22type%22:%22Point%22,%22coordinates%22:[' + north + ',0]}';
-    if(req.query["status"] == "isopen"){
+    if(req.query["status"] == "open"){
       // add &status=isopen to geosearch only open cases
       sendurl = sendurl.replace("/spatial", "/isopen").replace("/spatial", "/isopen");
     }
