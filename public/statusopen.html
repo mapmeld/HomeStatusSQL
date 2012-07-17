@@ -60,12 +60,31 @@ function findRoad(){
   jQuery.getJSON(geolink, function(b){
     $("#loadanim").css({ display: "none" });
     if(b.rows.length){
+      // sort addresses by street name, and then again by number
+      b.rows.sort(function(a,b){
+        if(a.value.address.split(",")[1] == b.value.address.split(",")[1]){
+          // streets match, sort by number
+          return a.value.address.split(',')[0] * 1 - b.value.address.split(',')[0] * 1;
+        }
+        else{
+          // streets don't match
+          if(b.value.address.split(",")[1] > a.value.address.split(",")[1]){
+            return -1;
+          }
+          else{
+            return 1;
+          }
+        }
+      });
+
+      // clear existing markers
       if(markers){
         for(var m=0;m<markers.length;m++){
           map.removeLayer(markers[m]);
         }
       }
       $("#resultbar").html('<li class="nav-header">Search Results</li><img id="loadanim" src="/images/loading-gif.gif" style="width:100%;display:none"/>');
+
       markers = [ ];
       prevAddresses = { };
       // store cases in address objects
