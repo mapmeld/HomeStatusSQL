@@ -54,7 +54,7 @@ function initMe(){
       b.rows.sort(function(a,b){
         if(!isNaN(a.value.address.split(',')[0]) && !isNaN(b.value.address.split(',')[0])){
           // compare by numberic
-          return a.value.address.split(',')[0] * 1 - b.value.address.split(',')[0];
+          return a.value.address.split(',')[0] * 1 - b.value.address.split(',')[0] * 1;
         }
         else{
           // compare by alphabetic
@@ -231,6 +231,24 @@ function findRoad(){
       jQuery.getJSON(geolink, function(b){
         $("#loadanim").css({ display: "none" });
         if(b.rows.length){
+
+          // sort addresses by street name, and then again by number
+          b.rows.sort(function(a,b){
+            if(a.value.address.split(",")[1] == b.value.address.split(",")[1]){
+              // streets match, sort by number
+              return a.value.address.split(',')[0] * 1 - b.value.address.split(',')[0] * 1;
+            }
+            else{
+              // streets don't match
+              if(b.value.address.split(",")[1] > a.value.address.split(",")[1]){
+                return -1;
+              }
+              else{
+                return 1;
+              }
+            }
+          });
+
           // store cases in address objects
           for(i=0;i<b.rows.length;i++){
             var e=b.rows[i].value.loc[0] * 1.0,
@@ -259,7 +277,7 @@ function findRoad(){
               }];
             }
           }
-
+          
           for(address in prevAddresses){
             var j="";
             var notsobad = true;
