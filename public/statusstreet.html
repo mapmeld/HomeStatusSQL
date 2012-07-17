@@ -43,7 +43,7 @@ function initMe(){
     ptcount=0;
   map.setView(new L.LatLng(e,f),g);
 
-  $("#main-search-field").val( replaceAll(gup("streetname"), "+", " ") );
+  $("#main-search-field").val( replaceAll(replaceAll(gup("streetname"), "+", " "), "%20", " " );
 
   var b="/searchdb?streetname=" + gup("streetname");
   jQuery.getJSON(b,function(b){
