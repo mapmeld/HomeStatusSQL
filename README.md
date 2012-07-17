@@ -14,6 +14,9 @@ This is a simple app experimenting with CouchDB to store housing data. Check [op
 ### Individual House History and Survey Data
 <img src="http://i.imgur.com/QNAB1.png"/>
 
+### Browse Open Cases Map
+<img src="http://i.imgur.com/ejycX.png"/>
+
 ### Integration with SeeClickFix
 <img src="http://i.imgur.com/03l8t.png"/>
 
