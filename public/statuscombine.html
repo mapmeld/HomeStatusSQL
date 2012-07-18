@@ -123,6 +123,10 @@ function initMe(){
 				f=b.rows[i].value.loc[1] * 1.0;
 				if(prevAddresses[b.rows[i].value.address]){
 				  // already thinking about this address
+                  if(!prevAddresses[b.rows[i].value.address].lat && b.rows[i].value.loc){
+                    prevAddresses[b.rows[i].value.address].lat = b.rows[i].value.loc[0] * 1.0;
+                    prevAddresses[b.rows[i].value.address].lng = b.rows[i].value.loc[1] * 1.0;
+                  }
 				  prevAddresses[b.rows[i].value.address].cases.push({
 				  	id: b.rows[i].value.ecd_id,
 				  	inspector: b.rows[i].value.inspector,
@@ -132,10 +136,15 @@ function initMe(){
 				  });
 				}
 				else{
-				  prevAddresses[b.rows[i].value.address] = {
-				    lat: b.rows[i].value.loc[0] * 1.0,
-				    lng: b.rows[i].value.loc[1] * 1.0
-  				  };
+                  if(b.rows[i].value.loc){
+                    prevAddresses[b.rows[i].value.address] = {
+                      lat: b.rows[i].value.loc[0] * 1.0,
+                      lng: b.rows[i].value.loc[1] * 1.0
+                    };
+                  }
+                  else{
+                    prevAddresses[b.rows[i].value.address] = { };
+                  }
 				  prevAddresses[b.rows[i].value.address].cases = [{
 				  	id: b.rows[i].value.ecd_id,
 				  	inspector: b.rows[i].value.inspector,
@@ -172,8 +181,26 @@ function initMe(){
     			  }
   				}
   				j+="</ul>";
-  				c.setView(new L.LatLng(prevAddresses[address].lat + 0.0007, prevAddresses[address].lng), 16);
-  				if(notsobad){
+  				if(prevAddresses[address].lat){
+     			  c.setView(new L.LatLng(prevAddresses[address].lat + 0.0007, prevAddresses[address].lng), 16);
+     			}
+                if(!prevAddresses[address].lat){
+                  // no known location - highlight in sidebar
+                  var li = document.createElement("li");
+  	              li.className="active address result";
+  	              li.style.backgroundColor = "#ffaaaa";
+  	              var icon = "http://code.leafletjs.com/leaflet-0.3.1/images/marker.png";
+  	              if(notsobad){
+  	                icon = 'http://aux.iconpedia.net/uploads/2484076891043904041.png';
+  	              }
+  	              else if(stillopen){
+  	                icon = "http://housepointer.herokuapp.com/images/leaflet-yellow.png";
+  	              }
+      	          li.innerHTML="<a href='#'><img src='" + icon + "' width='10px'><i class='home'></i><a href='/statuscombine.html?id=" + address + "'>" + address.split(',')[0] + " " + address.split(',')[1] + "</a></a>";
+  	              $("#resultbar")[0].appendChild(li);
+                  continue;
+                }
+                else if(notsobad){
   				  var miniIcon = new L.Icon();
   				  miniIcon.iconSize = new L.Point(28, 30);
   				  miniIcon.iconAnchor = new L.Point(15, 30);
