@@ -38,7 +38,7 @@ function mapReport(report){
   });
   google.maps.event.addListener(reportMarker, "click", function(){
     activeMarker = reportMarker;
-    var iContent = "<h4>SeeClickFix: " + report.address.split(' Macon, GA')[0] + "</h4><small>" + report.description + "</small><br/>Status: " + report.status + "<br/>Updated " + report.updated_at;
+    var iContent = "<h4><a href='/statusscf.html?id=%20" + report.address.replace(' ',',').toUpperCase().replace(" MACON","%20%20Macon").replace(" GA","%20%20GA") + "&report=" + report.issue_id + "' target='_blank'>" + report.address.split(' Macon, GA')[0] + "</a></h4><small>" + report.description + "</small><br/>Status: " + report.status + "<br/>Updated " + report.updated_at;
     infoWindow.setContent(iContent);
     infoWindow.open(map,reportMarker);
     if(parcelPoly){
@@ -61,11 +61,11 @@ function mapReport(report){
     jQuery.getJSON("/surveystreet?streetname=" + address.split(',')[0].toLowerCase(),function(b){
       var iContent = "<h4>2008 Survey</h4>";
       if(b.rows.length == 0){
-        iContent += "No Results in this Neighborhood";
+        iContent += "No Results on this street";
       }
       else{
         //for(var i=0;i<b.rows.length;i++){
-		  iContent += b.rows.length + " cases in this neighborhood<br/>";
+		  iContent += b.rows.length + " cases on this street<br/>";
         //}
       }
       infoWindow.setContent( infoWindow.getContent() + iContent);
@@ -79,9 +79,7 @@ function mapReport(report){
         iContent += "No results at this address.<br/>";
       }
       else{
-        //for(var i=0;i<b.rows.length;i++){
-		  iContent += "<a href='/statusscf.html?id=" + b.rows[0].key + "&report=" + report.issue_id + "'>Found record</a>.<br/>";
-        //}
+        iContent += "<a href='/statusscf.html?id=" + b.rows[0].key + "&report=" + report.issue_id + "'>Found record</a>.<br/>";
       }
       infoWindow.setContent( infoWindow.getContent() + iContent);
       infoWindow.open(map,activeMarker);
