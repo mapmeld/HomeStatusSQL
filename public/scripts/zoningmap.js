@@ -32,14 +32,14 @@ function loadSCF(reports){
   }
 }
 function mapReport(report){
+  if(report.status == "Closed"){
+    // don't map closed issues
+    return;
+  }
   var reportMarker = new google.maps.Marker({
     map: map,
     position: new google.maps.LatLng( report.lat, report.lng )
   });
-  var closedIcon = new google.maps.MarkerImage("http://aux.iconpedia.net/uploads/2484076891043904041.png", new google.maps.Size(28, 30));
-  if(report.status == "Closed"){
-    reportMarker.setIcon(closedIcon);
-  }
   google.maps.event.addListener(reportMarker, "click", function(){
     activeMarker = reportMarker;
     var iContent = "<h4><a href='/statusscf.html?id=%20" + report.address.replace(' ',',').toUpperCase().replace(" MACON","%20%20Macon").replace(" GA","%20%20GA") + "&report=" + report.issue_id + "' target='_blank'>" + report.address.split(' Macon, GA')[0] + "</a></h4><small>" + report.description + "</small><br/>Status: " + report.status + "<br/>Updated " + report.updated_at;
