@@ -137,7 +137,23 @@ function initMe(){
         j+="</ul>";
         
         // choose icons / map symbols based on cases
-        if(notsobad){
+        if(!prevAddresses[address].lat){
+          // no known location - highlight in sidebar
+          var li = document.createElement("li");
+  	      li.className="active address result";
+  	      li.style.backgroundColor = "#ffaaaa";
+  	      var icon = "http://code.leafletjs.com/leaflet-0.3.1/images/marker.png";
+  	      if(notsobad){
+  	        icon = 'http://aux.iconpedia.net/uploads/2484076891043904041.png';
+  	      }
+  	      else if(stillopen){
+  	        icon = "http://housepointer.herokuapp.com/images/leaflet-yellow.png";
+  	      }
+      	  li.innerHTML="<a href='#'><img src='" + icon + "' width='10px'><i class='home'></i><a href='/statuscombine.html?id=" + address + "'>" + address.split(',')[0] + " " + address.split(',')[1] + "</a></a>";
+  	      $("#resultbar")[0].appendChild(li);
+          continue;
+        }
+        else if(notsobad){
           var miniIcon = new L.Icon();
           miniIcon.iconSize = new L.Point(28,30);
           miniIcon.iconAnchor = new L.Point(15,30);
