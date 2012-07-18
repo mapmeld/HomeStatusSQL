@@ -43,12 +43,13 @@ function initMe(){
 	jQuery.getJSON(b,function(b){
 		$("#loadanim").css({ display: "none" });
 		if(b.rows.length){
+		    var e, f, g;
 			for(i=0;i<b.rows.length;i++){
-				var e=b.rows[i].value.loc[0] * 1.0,
-				f=b.rows[i].value.loc[1] * 1.0,
-				g=16;
-				
-				c.addLayer(new L.Marker(new L.LatLng(e,f)));
+			    if(b.rows[i].value.loc){
+			      e=b.rows[i].value.loc[0] * 1.0;
+				  f=b.rows[i].value.loc[1] * 1.0;
+				  c.addLayer(new L.Marker(new L.LatLng(e,f)));
+				}
 
 				/*var earlyPopup = new L.Popup();
 				earlyPopup.setLatLng(new L.LatLng(e + 0.0005, f));
@@ -92,7 +93,13 @@ function initMe(){
 				  document.getElementById("resultbar").appendChild(li);  
 				}
 			}
-			c.setView(new L.LatLng(e + 0.0007,f),g)
+			if(e && f){
+   			  c.setView(new L.LatLng(e + 0.0007,f),16);
+   			}
+   			else{
+   			  // no location known
+   			  c.setView(32.840943,-83.62587,12);
+   			}
 		}
 	});
 	var transformAddress = gup("id");
@@ -119,8 +126,11 @@ function initMe(){
 				}
 			});
 			for(i=0;i<b.rows.length;i++){
-				var e=b.rows[i].value.loc[0] * 1.0,
-				f=b.rows[i].value.loc[1] * 1.0;
+			    var e, f;
+			    if(b.rows[i].value.loc){
+			      e=b.rows[i].value.loc[0] * 1.0;
+			      f=b.rows[i].value.loc[1] * 1.0;
+			    }
 				if(prevAddresses[b.rows[i].value.address]){
 				  // already thinking about this address
                   if(!prevAddresses[b.rows[i].value.address].lat && b.rows[i].value.loc){
