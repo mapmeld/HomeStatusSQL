@@ -240,7 +240,7 @@ function loadSCFReport(reports){
   }
   var s = document.createElement("script");
   s.type = "text/javascript";
-  s.src = "http://seeclickfix.com/api/issues.json?at=" + report.address + "&callback=scfhistory";
+  s.src = "http://seeclickfix.com/api/issues.json?at=" + report.address + "&start=10000&callback=scfhistory";
   document.body.appendChild(s);
 }
 function scfhistory(reports){
