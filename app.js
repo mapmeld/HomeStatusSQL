@@ -283,6 +283,10 @@ var init = exports.init = function (config) {
 		// Placemarks
 		var kmlplacemarks = '';
 		for(var pt=0;pt<totalrep.rows.length;pt++){
+		  if(!totalrep.rows[pt].value.loc){
+		    // don't map unmappable addresses
+		    continue;
+		  }
 		  kmlplacemarks += '		<Placemark>\n			<name>' + totalrep.rows[pt].value.address + '</name>\n			<address>' + totalrep.rows[pt].value.address + '</address>\n';
 		  kmlplacemarks += '			<description><![CDATA[<div class="googft-info-window" style="font-family:sans-serif"><b>Address:</b>' + totalrep.rows[pt].value.address + '<br><b>Case ID:</b> ' + totalrep.rows[pt].value.ecd_id + '<br><b>Opened:</b> ' + totalrep.rows[pt].value.opendate + '<br><b>Closed:</b> ' + totalrep.rows[pt].value.closedate + '<br><b>Inspector:</b> ' + totalrep.rows[pt].value.inspector + '<br><b>Cause:</b> ' + totalrep.rows[pt].value.reason + '<br><b>Neighborhood:</b> ' + (totalrep.rows[pt].value.neighborhood || '') + '<br></div>]]></description>\n';
 		  kmlplacemarks += '			<styleUrl>#BasicStyle</styleUrl>\n			<ExtendedData>\n				<Data name="F">\n					<value>F</value>\n				</Data>\n			</ExtendedData>\n';
