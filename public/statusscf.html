@@ -233,6 +233,34 @@ function loadSCFReport(reports){
     li.innerHTML = "<strong>" + property + "</strong>: " + report[property];
     document.getElementById("reportbox").appendChild(li);
   }
+
+  var surveyAddress = gup("id");
+  if(surveyAddress.indexOf("%20") == 0){
+    surveyAddress = surveyAddress.replace("%20","").replace(","," ").toLowerCase().split(',')[0];
+  }
+  var s = document.createElement("script");
+  s.type = "text/javascript";
+  s.src = "http://seeclickfix.com/api/issues.json?at=" + report.address + "&callback=scfhistory";
+  document.body.appendChild(s);
+}
+function scfhistory(reports){
+  if(reports.length > 1){
+    // add report history
+    var historyTitle = document.createElement("li");
+    historyTitle.className="nav-header";
+    historyTitle.innerHTML = "Report History";
+    document.getElementById("reportbox").appendChild(historyTitle);
+  }
+  for(var r=0;r<reports.length;r++){
+    if(reports[r].id == gup("report")){
+      // this is the main report and already described
+      continue;
+    }
+    var li = document.createElement("li");
+    li.className="active address result";
+    li.innerHTML = "<strong>" + reports[r].summary + "</strong>: " + reports[r].created_at;
+    document.getElementById("reportbox").appendChild(li);
+  }
 }
   </script>
 </head>
