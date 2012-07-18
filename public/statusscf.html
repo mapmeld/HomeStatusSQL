@@ -12,7 +12,7 @@
   <!-- Mobile viewport optimized: h5bp.com/viewport -->
   <meta content='width=device-width' name='viewport'/>
   <script type="text/javascript">
-var reportAddress;
+var reportAddress, map, hasLocation;
 if(!console || !console.log){
   console = { log: function(e){ } };
 }
@@ -32,7 +32,7 @@ function initMe(){
   var tileURL = "http://otile1.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png";
   var attribution = "Map data &copy; 2012 OpenStreetMap contributors, Tiles by MapQuest";
   var baseMapLayer = new L.TileLayer(tileURL, {maxZoom: 18, attribution: attribution});
-  var c = (new L.Map("map")).addLayer( baseMapLayer );
+  map = (new L.Map("map")).addLayer( baseMapLayer );
   var prevAddresses = { };
   $("#main-search-field").val( replaceAll(replaceAll(gup("id"), "+", " "), "%20", " "));
 
@@ -49,12 +49,12 @@ function initMe(){
         f=b.rows[i].value.loc[1] * 1.0,
         g=16;
         
-        c.addLayer(new L.Marker(new L.LatLng(e,f)));
+        map.addLayer(new L.Marker(new L.LatLng(e,f)));
 
         /*var earlyPopup = new L.Popup();
         earlyPopup.setLatLng(new L.LatLng(e + 0.0005, f));
         earlyPopup.setContent(j);
-        c.openPopup(earlyPopup);*/
+        map.openPopup(earlyPopup);*/
         
         if(b.rows[i].value.major){
           var li = document.createElement("li");
@@ -93,7 +93,8 @@ function initMe(){
           document.getElementById("resultbar").appendChild(li);  
         }
       }
-      c.setView(new L.LatLng(e + 0.0007,f),g)
+      map.setView(new L.LatLng(e + 0.0007,f),g);
+      hasLocation = true;
     }
   });
   var transformAddress = gup("id");
@@ -173,7 +174,8 @@ function initMe(){
             }
           }
           j+="</ul>";
-          c.setView(new L.LatLng(prevAddresses[address].lat + 0.0007, prevAddresses[address].lng), 16);
+          map.setView(new L.LatLng(prevAddresses[address].lat + 0.0007, prevAddresses[address].lng), 16);
+          hasLocation = true;
           if(notsobad){
             var miniIcon = new L.Icon();
             miniIcon.iconSize = new L.Point(28, 30);
@@ -181,7 +183,7 @@ function initMe(){
             miniIcon.shadowSize = new L.Point(34, 30);
             miniIcon.popupAnchor = new L.Point(-2, -35);
             miniIcon.iconUrl = "http://aux.iconpedia.net/uploads/2484076891043904041.png";
-            c.addLayer(
+            map.addLayer(
               new L.Marker(
                 new L.LatLng( prevAddresses[address].lat, prevAddresses[address].lng),
                 { icon: miniIcon }
@@ -191,7 +193,7 @@ function initMe(){
           else if(stillopen){
             var openIcon = new L.Icon();
             openIcon.iconUrl = "http://housepointer.herokuapp.com/images/leaflet-yellow.png";
-            c.addLayer(
+            map.addLayer(
               new L.Marker(
                 new L.LatLng( prevAddresses[address].lat, prevAddresses[address].lng),
                 { icon: openIcon }
@@ -199,7 +201,7 @@ function initMe(){
             );
           }
           else{
-            c.addLayer(
+            map.addLayer(
               new L.Marker(
                 new L.LatLng(prevAddresses[address].lat, prevAddresses[address].lng)
               ).bindPopup(j)
@@ -208,7 +210,7 @@ function initMe(){
         var earlyPopup = new L.Popup();
         earlyPopup.setLatLng(new L.LatLng(prevAddresses[address].lat + 0.0005, prevAddresses[address].lng));
         earlyPopup.setContent(j);
-        c.openPopup(earlyPopup);
+        map.openPopup(earlyPopup);
       }
     }
   });
@@ -220,6 +222,10 @@ function initMe(){
 function loadSCFReport(reports){
   var report = reports[0];
   $("#scfanim").css({ display: "none" });
+  
+  if(!hasLocation){
+    map.setView(new L.LatLng(report.lat + 0.0007, report.lng), 16);
+  }
   
   var iconProp = document.createElement("li");
   iconProp.className="active address result";
