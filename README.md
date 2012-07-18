@@ -20,7 +20,7 @@ This is a simple app experimenting with CouchDB to store housing data. Check [op
 ### Integration with SeeClickFix
 <img src="http://i.imgur.com/03l8t.png"/>
 <br/>
-<img src="http://i.imgur.com/rAbIq.png"/>
+<img src="http://i.imgur.com/ZE5i9.png"/>
 
 ### Open311 Server
 <img src="http://i.imgur.com/Wxkmu.png"/>
