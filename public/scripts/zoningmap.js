@@ -36,6 +36,9 @@ function mapReport(report){
     map: map,
     position: new google.maps.LatLng( report.lat, report.lng )
   });
+  if(report.status == "Closed"){
+    reportMarker.setIcon("http://aux.iconpedia.net/uploads/2484076891043904041.png");
+  }
   google.maps.event.addListener(reportMarker, "click", function(){
     activeMarker = reportMarker;
     var iContent = "<h4><a href='/statusscf.html?id=%20" + report.address.replace(' ',',').toUpperCase().replace(" MACON","%20%20Macon").replace(" GA","%20%20GA") + "&report=" + report.issue_id + "' target='_blank'>" + report.address.split(' Macon, GA')[0] + "</a></h4><small>" + report.description + "</small><br/>Status: " + report.status + "<br/>Updated " + report.updated_at;
