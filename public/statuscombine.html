@@ -189,6 +189,9 @@ function initMe(){
   				if(prevAddresses[address].lat){
      			  c.setView(new L.LatLng(prevAddresses[address].lat + 0.0007, prevAddresses[address].lng), 16);
      			}
+     			else{
+     			  c.setView(32.840943,-83.62587,12);
+     			}
                 if(!prevAddresses[address].lat){
                   // no known location - highlight in sidebar
                   var li = document.createElement("li");
