@@ -36,8 +36,9 @@ function mapReport(report){
     map: map,
     position: new google.maps.LatLng( report.lat, report.lng )
   });
+  var closedIcon = new google.maps.MarkerImage("http://aux.iconpedia.net/uploads/2484076891043904041.png", new google.maps.Size(28, 30));
   if(report.status == "Closed"){
-    reportMarker.setIcon("http://aux.iconpedia.net/uploads/2484076891043904041.png");
+    reportMarker.setIcon(closedIcon);
   }
   google.maps.event.addListener(reportMarker, "click", function(){
     activeMarker = reportMarker;
