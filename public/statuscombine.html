@@ -50,11 +50,6 @@ function initMe(){
 				  f=b.rows[i].value.loc[1] * 1.0;
 				  c.addLayer(new L.Marker(new L.LatLng(e,f)));
 				}
-
-				/*var earlyPopup = new L.Popup();
-				earlyPopup.setLatLng(new L.LatLng(e + 0.0005, f));
-				earlyPopup.setContent(j);
-				c.openPopup(earlyPopup);*/
 				
 				if(b.rows[i].value.major){
 				  var li = document.createElement("li");
@@ -182,7 +177,7 @@ function initMe(){
     			    }
     			    else{
     			      j += " Case remains open.";
-    			      //stillopen = true;
+    			      stillopen = true;
     			    }
     			    // if only actions were "No Violations" on same day as reported
     			    if(sc.action != "No Violations" || sc.opendate != sc.closedate){
@@ -208,7 +203,8 @@ function initMe(){
   	              }
       	          li.innerHTML="<a href='#'><img src='" + icon + "' width='10px'><i class='home'></i><a href='/statuscombine.html?id=" + address + "'>" + address.split(',')[0] + " " + address.split(',')[1] + "</a></a>";
       	          $("#resultbar").html(j);
-  	              $("#resultbar")[0].appendChild(li);
+  	              //$("#resultbar")[0].appendChild(li);
+  	              c.setView(32.840943,-83.62587,12);
                   continue;
                 }
                 else if(notsobad){
@@ -241,11 +237,13 @@ function initMe(){
   				  		new L.LatLng(prevAddresses[address].lat, prevAddresses[address].lng)
   				  	).bindPopup(j)
   				  );
-  				}				
-				var earlyPopup = new L.Popup();
-				earlyPopup.setLatLng(new L.LatLng(prevAddresses[address].lat + 0.0005, prevAddresses[address].lng));
-				earlyPopup.setContent(j);
-				c.openPopup(earlyPopup);
+  				}	
+  				if(prevAddresses[address].lat){
+  				  var earlyPopup = new L.Popup();
+				  earlyPopup.setLatLng(new L.LatLng(prevAddresses[address].lat + 0.0005, prevAddresses[address].lng));
+				  earlyPopup.setContent(j);
+				  c.openPopup(earlyPopup);
+				}
 			}
 		}
 	});
