@@ -12,6 +12,7 @@
   <!-- Mobile viewport optimized: h5bp.com/viewport -->
   <meta content='width=device-width' name='viewport'/>
   <script type="text/javascript">
+var map;
 if(!console || !console.log){
   console = { log: function(e){ } };
 }
@@ -31,7 +32,7 @@ function initMe(){
 	var tileURL = "http://otile1.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png";
 	var attribution = "Map data &copy; 2012 OpenStreetMap contributors, Tiles by MapQuest";
 	var baseMapLayer = new L.TileLayer(tileURL, {maxZoom: 18, attribution: attribution});
-	var c = (new L.Map("map")).addLayer( baseMapLayer );
+	map = (new L.Map("map")).addLayer( baseMapLayer );
 	var prevAddresses = { };
 	$("#main-search-field").val( replaceAll(replaceAll(gup("id"), "+", " "), "%20", " "));
 
@@ -48,7 +49,7 @@ function initMe(){
 			    if(b.rows[i].value.loc){
 			      e=b.rows[i].value.loc[0] * 1.0;
 				  f=b.rows[i].value.loc[1] * 1.0;
-				  c.addLayer(new L.Marker(new L.LatLng(e,f)));
+				  map.addLayer(new L.Marker(new L.LatLng(e,f)));
 				}
 				
 				if(b.rows[i].value.major){
@@ -89,11 +90,11 @@ function initMe(){
 				}
 			}
 			if(e && f){
-   			  c.setView(new L.LatLng(e + 0.0007,f),16);
+   			  map.setView(new L.LatLng(e + 0.0007,f),16);
    			}
    			else{
    			  // no location known
-   			  c.setView(32.840943,-83.62587,12);
+   			  map.setView(32.840943,-83.62587,12);
    			}
 		}
 	});
@@ -187,10 +188,10 @@ function initMe(){
   				}
   				j+="</ul>";
   				if(prevAddresses[address].lat){
-     			  c.setView(new L.LatLng(prevAddresses[address].lat + 0.0007, prevAddresses[address].lng), 16);
+     			  map.setView(new L.LatLng(prevAddresses[address].lat + 0.0007, prevAddresses[address].lng), 16);
      			}
      			else{
-     			  c.setView(32.840943,-83.62587,12);
+     			  map.setView(32.840943,-83.62587,12);
      			}
                 if(!prevAddresses[address].lat){
                   // no known location - highlight in sidebar
@@ -207,7 +208,7 @@ function initMe(){
       	          li.innerHTML="<a href='#'><img src='" + icon + "' width='10px'><i class='home'></i><a href='/statuscombine.html?id=" + address + "'>" + address.split(',')[0] + " " + address.split(',')[1] + "</a></a>";
       	          $("#resultbar").html(j);
   	              //$("#resultbar")[0].appendChild(li);
-  	              c.setView(32.840943,-83.62587,12);
+  	              map.setView(32.840943,-83.62587,12);
                   continue;
                 }
                 else if(notsobad){
@@ -217,7 +218,7 @@ function initMe(){
   				  miniIcon.shadowSize = new L.Point(34, 30);
   				  miniIcon.popupAnchor = new L.Point(-2, -35);
   				  miniIcon.iconUrl = "http://aux.iconpedia.net/uploads/2484076891043904041.png";
-  				  c.addLayer(
+  				  map.addLayer(
   				  	new L.Marker(
   				  		new L.LatLng( prevAddresses[address].lat, prevAddresses[address].lng),
   				  		{ icon: miniIcon }
@@ -227,7 +228,7 @@ function initMe(){
   				else if(stillopen){
   				  var openIcon = new L.Icon();
   				  openIcon.iconUrl = "http://housepointer.herokuapp.com/images/leaflet-yellow.png";
-  				  c.addLayer(
+  				  map.addLayer(
   				  	new L.Marker(
   				  		new L.LatLng( prevAddresses[address].lat, prevAddresses[address].lng),
   				  		{ icon: openIcon }
@@ -235,7 +236,7 @@ function initMe(){
   				  );
   				}
   				else{
-  				  c.addLayer(
+  				  map.addLayer(
   				  	new L.Marker(
   				  		new L.LatLng(prevAddresses[address].lat, prevAddresses[address].lng)
   				  	).bindPopup(j)
@@ -245,7 +246,7 @@ function initMe(){
   				  var earlyPopup = new L.Popup();
 				  earlyPopup.setLatLng(new L.LatLng(prevAddresses[address].lat + 0.0005, prevAddresses[address].lng));
 				  earlyPopup.setContent(j);
-				  c.openPopup(earlyPopup);
+				  map.openPopup(earlyPopup);
 				}
 			}
 		}
