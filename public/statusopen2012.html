@@ -62,13 +62,13 @@ function findRoad(){
     if(b.rows.length){
       // test: don't show any cases opened over eight months ago
       // these are handled differently by ECD
-      var now = new Date();
+      /* var now = new Date();
       for(var a=b.rows.length-1;a>=0;a--){
         var opendate = new Date(b.rows[a].value.opendate.substring(0,4) + "/" + b.rows[a].value.opendate.substring(4,6) + "/" + b.rows[a].value.opendate.substring(6));
         if(now - opendate > 242 * 24 * 60 * 60 * 1000){
           b.rows.splice(a,1);
         }
-      }
+      } */
       // sort addresses by street name, and then again by number
       b.rows.sort(function(a,b){
         if(a.value.address.split(",")[1] == b.value.address.split(",")[1]){
