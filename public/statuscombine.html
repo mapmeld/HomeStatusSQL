@@ -32,7 +32,9 @@ function initMe(){
 	var tileURL = "http://otile1.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png";
 	var attribution = "Map data &copy; 2012 OpenStreetMap contributors, Tiles by MapQuest";
 	var baseMapLayer = new L.TileLayer(tileURL, {maxZoom: 18, attribution: attribution});
-	map = (new L.Map("map")).addLayer( baseMapLayer );
+	map = new L.Map("map");
+	map.addLayer( baseMapLayer );
+	map.setView(32.840943,-83.62587,12);
 	var prevAddresses = { };
 	$("#main-search-field").val( replaceAll(replaceAll(gup("id"), "+", " "), "%20", " "));
 
@@ -91,10 +93,6 @@ function initMe(){
 			}
 			if(e && f){
    			  map.setView(new L.LatLng(e + 0.0007,f),16);
-   			}
-   			else{
-   			  // no location known
-   			  map.setView(32.840943,-83.62587,12);
    			}
 		}
 	});
@@ -190,12 +188,9 @@ function initMe(){
   				if(prevAddresses[address].lat){
      			  map.setView(new L.LatLng(prevAddresses[address].lat + 0.0007, prevAddresses[address].lng), 16);
      			}
-     			else{
-     			  map.setView(32.840943,-83.62587,12);
-     			}
                 if(!prevAddresses[address].lat){
                   // no known location - highlight in sidebar
-                  var li = document.createElement("li");
+                  /*var li = document.createElement("li");
   	              li.className="active address result";
   	              li.style.backgroundColor = "#ffaaaa";
   	              var icon = "http://code.leafletjs.com/leaflet-0.3.1/images/marker.png";
@@ -205,10 +200,9 @@ function initMe(){
   	              else if(stillopen){
   	                icon = "http://housepointer.herokuapp.com/images/leaflet-yellow.png";
   	              }
-      	          li.innerHTML="<a href='#'><img src='" + icon + "' width='10px'><i class='home'></i><a href='/statuscombine.html?id=" + address + "'>" + address.split(',')[0] + " " + address.split(',')[1] + "</a></a>";
+      	          li.innerHTML="<a href='#'><img src='" + icon + "' width='10px'><i class='home'></i><a href='/statuscombine.html?id=" + address + "'>" + address.split(',')[0] + " " + address.split(',')[1] + "</a></a>";*/
       	          $("#resultbar").html(j);
   	              //$("#resultbar")[0].appendChild(li);
-  	              map.setView(32.840943,-83.62587,12);
                   continue;
                 }
                 else if(notsobad){
