@@ -207,6 +207,7 @@ function initMe(){
   	                icon = "http://housepointer.herokuapp.com/images/leaflet-yellow.png";
   	              }
       	          li.innerHTML="<a href='#'><img src='" + icon + "' width='10px'><i class='home'></i><a href='/statuscombine.html?id=" + address + "'>" + address.split(',')[0] + " " + address.split(',')[1] + "</a></a>";
+      	          $("#resultbar").html(j);
   	              $("#resultbar")[0].appendChild(li);
                   continue;
                 }
@@ -245,18 +246,6 @@ function initMe(){
 				earlyPopup.setLatLng(new L.LatLng(prevAddresses[address].lat + 0.0005, prevAddresses[address].lng));
 				earlyPopup.setContent(j);
 				c.openPopup(earlyPopup);
-
-				/*var li = document.createElement("li");
-				li.className="active address result";
-				var icon = "http://code.leafletjs.com/leaflet-0.3.1/images/marker.png";
-				if(notsobad){
-					icon = 'http://aux.iconpedia.net/uploads/2484076891043904041.png';
-				}
-				else if(stillopen){
-				  icon = "http://housepointer.herokuapp.com/images/leaflet-yellow.png";
-				}
-				li.innerHTML="<a href='#'><img src='" + icon + "' width='10px'><i class='home'></i><a href='/statusone.html?id=" + address + "'>" + address.split(',')[0] + " " + address.split(',')[1] + "</a></a>";
-				document.getElementById("resultbar").appendChild(li);*/
 			}
 		}
 	});
