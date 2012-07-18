@@ -225,6 +225,18 @@ function loadSCFReport(reports){
   
   if(!hasLocation){
     map.setView(new L.LatLng(report.lat + 0.0007, report.lng), 16);
+    var miniIcon = new L.Icon();
+    miniIcon.iconSize = new L.Point(28, 30);
+    miniIcon.iconAnchor = new L.Point(15, 30);
+    miniIcon.shadowSize = new L.Point(34, 30);
+    miniIcon.popupAnchor = new L.Point(-2, -35);
+    miniIcon.iconUrl = "http://aux.iconpedia.net/uploads/2484076891043904041.png";
+    map.addLayer(
+      new L.Marker(
+        new L.LatLng( report.lat, report.lng),
+        { icon: miniIcon }
+      )
+    );
   }
   
   var iconProp = document.createElement("li");
