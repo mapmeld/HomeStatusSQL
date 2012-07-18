@@ -64,7 +64,7 @@ function findRoad(){
       // these are handled differently by ECD
       var now = new Date();
       for(var a=b.rows.length-1;a>=0;a--){
-        var opendate = new Date(b.rows[a].value.closedate.substring(0,4) + "/" + b.rows[a].value.closedate.substring(4,6) + "/" + b.rows[a].value.closedate.substring(6);
+        var opendate = new Date(b.rows[a].value.closedate.substring(0,4) + "/" + b.rows[a].value.closedate.substring(4,6) + "/" + b.rows[a].value.closedate.substring(6));
         if(now - opendate > 242 * 24 * 60 * 60 * 1000){
           b.rows.splice(a,1);
         }
