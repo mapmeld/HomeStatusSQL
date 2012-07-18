@@ -76,6 +76,10 @@ function initMe(){
         }
         if(prevAddresses[b.rows[i].value.address]){
           // already thinking about this address
+          if(!prevAddresses[b.rows[i].value.address].lat && b.rows[i].value.loc){
+            prevAddresses[b.rows[i].value.address].lat = b.rows[i].value.loc[0] * 1.0;
+            prevAddresses[b.rows[i].value.address].lng = b.rows[i].value.loc[1] * 1.0;
+          }
           prevAddresses[b.rows[i].value.address].cases.push({
             id: b.rows[i].value.ecd_id,
             inspector: b.rows[i].value.inspector,
@@ -85,10 +89,15 @@ function initMe(){
           });
         }
         else{
-          prevAddresses[b.rows[i].value.address] = {
-            lat: b.rows[i].value.loc[0] * 1.0,
-            lng: b.rows[i].value.loc[1] * 1.0
-          };
+          if(b.rows[i].value.loc){
+            prevAddresses[b.rows[i].value.address] = {
+              lat: b.rows[i].value.loc[0] * 1.0,
+              lng: b.rows[i].value.loc[1] * 1.0
+            };
+          }
+          else{
+            prevAddresses[b.rows[i].value.address] = { };
+          }
           prevAddresses[b.rows[i].value.address].cases = [{
             id: b.rows[i].value.ecd_id,
             inspector: b.rows[i].value.inspector,
