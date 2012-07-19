@@ -44,7 +44,7 @@ function initMe(){
 	}
 
 	var b="/surveyed?address=" + surveyAddress;
-	jQuery("surveylink")[0].href = b;
+	jQuery("#surveylink")[0].href = b;
 	jQuery.getJSON(b,function(b){
 		$("#loadanim").css({ display: "none" });
 		if(b.rows.length){
@@ -103,7 +103,7 @@ function initMe(){
 		transformAddress = " " + transformAddress.split(',')[0].toUpperCase().replace("%20",",") + ",%20" + transformAddress.split(',')[1] + ",%20%20GA";
 	}
 	var b="/keydb?address=" + transformAddress;
-	jQuery("caseslink")[0].href = b;
+	jQuery("#caseslink")[0].href = b;
 	jQuery.getJSON(b,function(b){
 		$("#loadanim").css({ display: "none" });
 		if(b.rows.length){
