@@ -239,11 +239,11 @@ var init = exports.init = function (config) {
         var kmlplacemarks = '		<Placemark>\n			<name>' + address + '</name>\n			<address>' + address + '</address>\n';
         kmlplacemarks += '			<description><![CDATA[<div class="googft-info-window" style="font-family:sans-serif">';
         if(casesbody.rows.length){
-          kmlplacemarks += '<h3>Code Enforcement</h3><b>Address:</b>' + casesbody.address + '<br><b>Neighborhood:</b> ' + (casesbody.neighborhood || '');
+          kmlplacemarks += '<h3>Code Enforcement</h3><b>Address:</b>' + casesbody.rows[0].value.address + '<br><b>Neighborhood:</b> ' + (casesbody.rows[0].value.neighborhood || '');
           kmlplacemarks += '<hr>';
           casesbody.rows.sort(function(a,b){ return b.value.ecd_id * 1 - a.value.ecd_id * 1 });
           for(var r=0;r<casesbody.rows.length;r++){
-            kmlplacemarks += '<h4>Case ' + casesbody.ecd_id + '</h4><b>Opened:</b> ' + casesbody.opendate + '<br><b>Closed:</b> ' + casesbody.closedate + '<br><b>Inspector:</b> ' + casesbody.inspector + '<br><b>Cause:</b> ' + casesbody.reason;
+            kmlplacemarks += '<h4>Case ' + casesbody.rows[r].value.ecd_id + '</h4><b>Opened:</b> ' + casesbody.rows[r].value.opendate + '<br><b>Closed:</b> ' + casesbody.rows[r].value.closedate + '<br><b>Inspector:</b> ' + casesbody.rows[r].value.inspector + '<br><b>Cause:</b> ' + casesbody.rows[r].value.reason;
           }
         }
         if(surveybody.rows.length){
