@@ -222,12 +222,12 @@ var init = exports.init = function (config) {
         surveybody = JSON.parse(surveybody);
         
         var address, lat, lng;
-        if(casesbody.rows.length){
+        if(casesbody.rows && casesbody.rows.length){
           address = casesbody.rows[0].value.address;
           lat = casesbody.rows[0].value.loc[0];
           lng = casesbody.rows[0].value.loc[1];
         }
-        else if(surveybody.rows.length){
+        else if(surveybody && surveybody.rows.length){
           address = surveybody.rows[0].value.address;
           lat = surveybody.rows[0].value.loc[0];
           lng = surveybody.rows[0].value.loc[1];
