@@ -208,7 +208,7 @@ var init = exports.init = function (config) {
   // Combined KML file for Code Enforcement, Survey
   app.get('/export.kml', function(req, res){
     var street = req.query['address'];
-    var sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/poll1/_view/Poll1?key=' + encodeURIComponent( '"' + req.query['address'] + '"');
+    var sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/poll1/_view/Poll1?key=' + encodeURIComponent( '"' + req.query['cases'] + '"');
     var requestOptions = {
       'uri': sendurl,
     };
