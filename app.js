@@ -208,7 +208,7 @@ var init = exports.init = function (config) {
   // Combined KML file for Code Enforcement, Survey
   app.get('/export.kml', function(req, res){
     var street = req.query['address'];
-    var sendurl = 'http://nickd.iriscouch.com:5984/cases/' + req.query['ecd_id'];
+    var sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/poll1/_view/Poll1?key=' + encodeURIComponent( '"' + req.query['address'] + '"');
     var requestOptions = {
       'uri': sendurl,
     };
@@ -222,10 +222,10 @@ var init = exports.init = function (config) {
         surveybody = JSON.parse(surveybody);
         
         var address, lat, lng;
-        if(casesbody.address){
-          address = casesbody.address;
-          lat = casesbody.loc[0];
-          lng = casesbody.loc[1];
+        if(casesbody.rows.length){
+          address = casesbody.rows[0].value.address;
+          lat = casesbody.rows[0].value.loc[0];
+          lng = casesbody.rows[0].value.loc[1];
         }
         else if(surveybody.rows.length){
           address = surveybody.rows[0].value.address;
@@ -238,8 +238,13 @@ var init = exports.init = function (config) {
         // Placemarks
         var kmlplacemarks = '		<Placemark>\n			<name>' + address + '</name>\n			<address>' + address + '</address>\n';
         kmlplacemarks += '			<description><![CDATA[<div class="googft-info-window" style="font-family:sans-serif">';
-        if(casesbody.address){
-          kmlplacemarks += '<h3>Code Enforcement</h3><b>Address:</b>' + casesbody.address + '<br><b>Case ID:</b> ' + casesbody.ecd_id + '<br><b>Opened:</b> ' + casesbody.opendate + '<br><b>Closed:</b> ' + casesbody.closedate + '<br><b>Inspector:</b> ' + casesbody.inspector + '<br><b>Cause:</b> ' + casesbody.reason + '<br><b>Neighborhood:</b> ' + (casesbody.neighborhood || '') + '<br>';
+        if(casesbody.rows.length){
+          kmlplacemarks += '<h3>Code Enforcement</h3><b>Address:</b>' + casesbody.address + '<br><b>Neighborhood:</b> ' + (casesbody.neighborhood || '');
+          kmlplacemarks += '<hr>';
+          casesbody.rows.sort(function(a,b){ return b.value.ecd_id * 1 - a.value.ecd_id * 1 });
+          for(var r=0;r<casesbody.rows.length;r++){
+            kmlplacemarks += '<h4>Case ' + casesbody.ecd_id + '</h4><b>Opened:</b> ' + casesbody.opendate + '<br><b>Closed:</b> ' + casesbody.closedate + '<br><b>Inspector:</b> ' + casesbody.inspector + '<br><b>Cause:</b> ' + casesbody.reason;
+          }
         }
         if(surveybody.rows.length){
           kmlplacemarks += '<h3>Survey</h3><b>Inspected:</b>' + surveybody.rows[0].value.inspdate + '<br><b>Major Damage?</b>' + surveybody.rows[0].value.major + '<br><b>Minor Damage?</b>' + surveybody.rows[0].value.minor + '<br><b>Open?</b>' + surveybody.rows[0].value.open + '<br><b>Boarded?</b>' + surveybody.rows[0].value.boarded + '<br><b>Secure?</b>' + surveybody.rows[0].value.secure + '<br><b>Burned?</b>' + surveybody.rows[0].value.burned;
