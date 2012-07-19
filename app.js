@@ -251,7 +251,7 @@ var init = exports.init = function (config) {
         res.send(kmlintro + kmlplacemarks + kmlend);
       });      
     });
-  }
+  });
  
   // Code Enforcement's recent cases: recent opens and recent closes
   app.get('/recentopen', function(req, res){
