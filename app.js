@@ -230,6 +230,20 @@ var init = exports.init = function (config) {
         break;
       }
     }
+    street = street.replace("Street","st");
+    street = street.replace("Avenue","ave");
+    street = street.replace("Lane","ln");
+    street = street.replace("Circle","cir");
+    street = street.replace("First","1st");
+    street = street.replace("Second","2nd");
+    street = street.replace("Third","3rd");
+    street = street.replace("Fourth","4th");
+    street = street.replace("Fifth","5th");
+    street = street.replace("Sixth","6th");
+    street = street.replace("Seventh","7th");
+    street = street.replace("Eighth","8th");
+    street = street.replace("Ninth","9th");
+
     var sendurl = 'http://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(street) + "&maxlat=33.0363&maxlon=-83.2819&minlat=32.5745&minlon=-84.10583";
     /* if(sendurl.toLowerCase().indexOf("macon") == -1){
       sendurl += ", Macon, Bibb County, GA";
@@ -333,6 +347,17 @@ var init = exports.init = function (config) {
     street = street.toLowerCase();
     street = street.replace("street","st");
     street = street.replace("avenue","ave");
+    street = street.replace("circle","cir");
+    street = street.replace("1st","first");
+    street = street.replace("2nd","second");
+    street = street.replace("3rd","third");
+    street = street.replace("4th","fourth");
+    street = street.replace("5th","fifth");
+    street = street.replace("6th","sixth");
+    street = street.replace("7th","seventh");
+    street = street.replace("8th","eighth");
+    street = street.replace("9th","ninth");
+
     if(street.indexOf("-") > -1){
       street = street.substring( street.indexOf("-") + 1 );
     }
