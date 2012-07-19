@@ -1,6 +1,6 @@
 # About HousePointer
 
-This is a simple app experimenting with CouchDB to store housing data. Check [openblight](https://github.com/codeforamerica/openblight) for more information on that project.
+This is an app experimenting with CouchDB to store housing data. Check [openblight](https://github.com/codeforamerica/openblight) for more information on that project.
 
 ### Homepage
 <img src="http://i.imgur.com/koNAz.png"/>
@@ -16,6 +16,9 @@ This is a simple app experimenting with CouchDB to store housing data. Check [op
 
 ### Browse Open Cases Map
 <img src="http://i.imgur.com/ejycX.png"/>
+
+### Download as Google Earth KML
+<img src="http://i.imgur.com/bqAHM.jpg"/>
 
 ### Integration with SeeClickFix
 <img src="http://i.imgur.com/03l8t.png"/>
