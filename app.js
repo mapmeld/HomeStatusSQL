@@ -364,41 +364,36 @@ var init = exports.init = function (config) {
 		var prevAddresses = { };
 		
 		for(i=0;i<body.rows.length;i++){
-          var e, f;
-          if(b.rows[i].value.loc){
-            e=b.rows[i].value.loc[0] * 1.0;
-            f=b.rows[i].value.loc[1] * 1.0;
-          }
-          if(prevAddresses[b.rows[i].value.address]){
+          if(prevAddresses[body.rows[i].value.address]){
             // already thinking about this address
-            if(!prevAddresses[b.rows[i].value.address].lat && b.rows[i].value.loc){
-              prevAddresses[b.rows[i].value.address].lat = b.rows[i].value.loc[0] * 1.0;
-              prevAddresses[b.rows[i].value.address].lng = b.rows[i].value.loc[1] * 1.0;
+            if(!prevAddresses[body.rows[i].value.address].lat && body.rows[i].value.loc){
+              prevAddresses[body.rows[i].value.address].lat = body.rows[i].value.loc[0] * 1.0;
+              prevAddresses[body.rows[i].value.address].lng = body.rows[i].value.loc[1] * 1.0;
             }
-            prevAddresses[b.rows[i].value.address].cases.push({
-              id: b.rows[i].value.ecd_id,
-              inspector: b.rows[i].value.inspector,
-              opendate: b.rows[i].value.opendate,
-              action: b.rows[i].value.action,
-              closedate: b.rows[i].value.closedate
+            prevAddresses[body.rows[i].value.address].cases.push({
+              id: body.rows[i].value.ecd_id,
+              inspector: body.rows[i].value.inspector,
+              opendate: body.rows[i].value.opendate,
+              action: body.rows[i].value.action,
+              closedate: body.rows[i].value.closedate
             });
           }
           else{
-            if(b.rows[i].value.loc){
-              prevAddresses[b.rows[i].value.address] = {
-                lat: b.rows[i].value.loc[0] * 1.0,
-                lng: b.rows[i].value.loc[1] * 1.0
+            if(body.rows[i].value.loc){
+              prevAddresses[body.rows[i].value.address] = {
+                lat: body.rows[i].value.loc[0] * 1.0,
+                lng: body.rows[i].value.loc[1] * 1.0
               };
             }
             else{
-              prevAddresses[b.rows[i].value.address] = { };
+              prevAddresses[body.rows[i].value.address] = { };
             }
-            prevAddresses[b.rows[i].value.address].cases = [{
-              id: b.rows[i].value.ecd_id,
-              inspector: b.rows[i].value.inspector,
-              opendate: b.rows[i].value.opendate,
-              action: b.rows[i].value.action,
-              closedate: b.rows[i].value.closedate
+            prevAddresses[body.rows[i].value.address].cases = [{
+              id: body.rows[i].value.ecd_id,
+              inspector: body.rows[i].value.inspector,
+              opendate: body.rows[i].value.opendate,
+              action: body.rows[i].value.action,
+              closedate: body.rows[i].value.closedate
             }];
           }
         }
@@ -409,7 +404,7 @@ var init = exports.init = function (config) {
             continue;
           }
           kmlplacemarks += '		<Placemark>\n			<name>' + address + '</name>\n			<address>' + address + '</address>\n';
-          kmlplacemarks += '			<description><![CDATA[<div class="googft-info-window" style="font-family:sans-serif">';
+          kmlplacemarks += '			<description><![CDATA[<div class="googft-info-window" style="font-family:sans-serif"><b>Neighborhood:</b>' + (totalrep.rows[pt].value.neighborhood || '');
           prevAddresses[address].cases.sort( function(a,b){ return b.id * 1 - a.id * 1; } );
 		  for(var pt=0;pt<prevAddresses[address].cases.length;pt++){
 		    kmlplacemarks += '<h4>Case ' + prevAddresses[address].cases[pt].id + '</h4><b>Opened:</b> ' + prevAddresses[address].cases[pt].opendate + '<br><b>Closed:</b> ' + prevAddresses[address].cases[pt].closedate + '<br><b>Inspector:</b> ' + prevAddresses[address].cases[pt].inspector + '<br><b>Cause:</b> ' + prevAddresses[address].cases[pt].reason;
