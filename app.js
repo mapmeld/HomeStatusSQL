@@ -134,6 +134,7 @@ var init = exports.init = function (config) {
       'uri': sendurl,
     };
     request(requestOptions, function (err, response, body) {
+      res.setHeader('Content-Type', 'application/json');
       res.send(body);
     });
   });
@@ -348,6 +349,7 @@ var init = exports.init = function (config) {
       'uri': sendurl,
     };
     request(requestOptions, function (err, response, body) {
+      res.setHeader('Content-Type', 'application/json');
       res.send(body);
     });
   });
