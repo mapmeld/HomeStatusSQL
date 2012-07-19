@@ -399,7 +399,7 @@ var init = exports.init = function (config) {
         }
 
         for(address in prevAddresses){
-          if(!prevAddresses[address].loc){
+          if(!prevAddresses[address].lat){
             // don't map unmappable addresses
             continue;
           }
@@ -411,7 +411,7 @@ var init = exports.init = function (config) {
 		  }
 		  kmlplacemarks += '</div>]]></description>\n';
 		  kmlplacemarks += '			<styleUrl>#BasicStyle</styleUrl>\n			<ExtendedData>\n				<Data name="F">\n					<value>F</value>\n				</Data>\n			</ExtendedData>\n';
-		  kmlplacemarks += '			<Point>\n				<coordinates>' + totalrep.rows[pt].value.loc[1] + ',' + totalrep.rows[pt].value.loc[0] + ',0</coordinates>\n			</Point>\n		</Placemark>\n';
+		  kmlplacemarks += '			<Point>\n				<coordinates>' + prevAddresses[address].lng + ',' + prevAddresses[address].lat + ',0</coordinates>\n			</Point>\n		</Placemark>\n';
 		}
 		var kmlend = '	</Folder>\n</Document>\n</kml>';
         res.send(kmlintro + kmlplacemarks + kmlend);
