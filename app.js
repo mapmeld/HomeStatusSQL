@@ -145,6 +145,13 @@ var init = exports.init = function (config) {
     street = street.toLowerCase();
     street = street.replace("street","st");
     street = street.replace("avenue","ave");
+    street = street.replace("lane","ln");
+    street = street.replace("circle","cir");
+    street = street.replace("place","pl");
+    street = street.replace("north","n");
+    street = street.replace("south","s");
+    street = street.replace("east","e");
+    street = street.replace("west","w");
     if(street.indexOf("-") > -1){
       street = street.substring( street.indexOf("-") + 1 );
     }
@@ -243,6 +250,10 @@ var init = exports.init = function (config) {
     street = street.replace("Seventh","7th");
     street = street.replace("Eighth","8th");
     street = street.replace("Ninth","9th");
+    street = street.replace("North","N");
+    street = street.replace("South","S");
+    street = street.replace("East","E");
+    street = street.replace("West","W");
 
     var sendurl = 'http://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(street) + "&maxlat=33.0363&maxlon=-83.2819&minlat=32.5745&minlon=-84.10583";
     /* if(sendurl.toLowerCase().indexOf("macon") == -1){
