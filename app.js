@@ -404,7 +404,7 @@ var init = exports.init = function (config) {
             continue;
           }
           kmlplacemarks += '		<Placemark>\n			<name>' + address + '</name>\n			<address>' + address + '</address>\n';
-          kmlplacemarks += '			<description><![CDATA[<div class="googft-info-window" style="font-family:sans-serif"><b>Neighborhood:</b>' + (totalrep.rows[pt].value.neighborhood || '');
+          kmlplacemarks += '			<description><![CDATA[<div class="googft-info-window" style="font-family:sans-serif">';
           prevAddresses[address].cases.sort( function(a,b){ return b.id * 1 - a.id * 1; } );
 		  for(var pt=0;pt<prevAddresses[address].cases.length;pt++){
 		    kmlplacemarks += '<h4>Case ' + prevAddresses[address].cases[pt].id + '</h4><b>Opened:</b> ' + prevAddresses[address].cases[pt].opendate + '<br><b>Closed:</b> ' + prevAddresses[address].cases[pt].closedate + '<br><b>Inspector:</b> ' + prevAddresses[address].cases[pt].inspector + '<br><b>Cause:</b> ' + prevAddresses[address].cases[pt].reason;
