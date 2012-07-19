@@ -222,12 +222,12 @@ var init = exports.init = function (config) {
         surveybody = JSON.parse(surveybody);
         
         var address, lat, lng;
-        if(casesbody.rows && casesbody.rows.length){
-          address = casesbody.rows[0].value.address;
-          lat = casesbody.rows[0].value.loc[0];
-          lng = casesbody.rows[0].value.loc[1];
+        if(casesbody.address){
+          address = casesbody.address;
+          lat = casesbody.loc[0];
+          lng = casesbody.loc[1];
         }
-        else if(surveybody && surveybody.rows.length){
+        else if(surveybody.rows.length){
           address = surveybody.rows[0].value.address;
           lat = surveybody.rows[0].value.loc[0];
           lng = surveybody.rows[0].value.loc[1];
@@ -239,7 +239,7 @@ var init = exports.init = function (config) {
         var kmlplacemarks = '		<Placemark>\n			<name>' + address + '</name>\n			<address>' + address + '</address>\n';
         kmlplacemarks += '			<description><![CDATA[<div class="googft-info-window" style="font-family:sans-serif">';
         if(casebody.rows.length){
-          kmlplacemarks += '<h3>Code Enforcement</h3><b>Address:</b>' + casesbody.rows[0].value.address + '<br><b>Case ID:</b> ' + casesbody.rows[0].value.ecd_id + '<br><b>Opened:</b> ' + casesbody.rows[0].value.opendate + '<br><b>Closed:</b> ' + casesbody.rows[0].value.closedate + '<br><b>Inspector:</b> ' + casesbody.rows[0].value.inspector + '<br><b>Cause:</b> ' + casesbody.rows[0].value.reason + '<br><b>Neighborhood:</b> ' + (casesbody.rows[0].value.neighborhood || '') + '<br>';
+          kmlplacemarks += '<h3>Code Enforcement</h3><b>Address:</b>' + casesbody.address + '<br><b>Case ID:</b> ' + casesbody.ecd_id + '<br><b>Opened:</b> ' + casesbody.opendate + '<br><b>Closed:</b> ' + casesbody.closedate + '<br><b>Inspector:</b> ' + casesbody.inspector + '<br><b>Cause:</b> ' + casesbody.reason + '<br><b>Neighborhood:</b> ' + (casesbody.neighborhood || '') + '<br>';
         }
         if(surveybody.rows.length){
           kmlplacemarks += '<h3>Survey</h3><b>Inspected:</b>' + surveybody.rows[0].value.inspdate + '<br><b>Major Damage?</b>' + surveybody.rows[0].value.major + '<br><b>Minor Damage?</b>' + surveybody.rows[0].value.minor + '<br><b>Open?</b>' + surveybody.rows[0].value.open + '<br><b>Boarded?</b>' + surveybody.rows[0].value.boarded + '<br><b>Secure?</b>' + surveybody.rows[0].value.secure + '<br><b>Burned?</b>' + surveybody.rows[0].value.burned;
