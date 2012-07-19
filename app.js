@@ -205,6 +205,54 @@ var init = exports.init = function (config) {
     });
   });
   
+  // Combined KML file for Code Enforcement, Survey
+  app.get('/export.kml', function(req, res){
+    var street = req.query['address'];
+    var sendurl = 'http://nickd.iriscouch.com:5984/cases/' + req.query['ecd_id'];
+    var requestOptions = {
+      'uri': sendurl,
+    };
+    request(requestOptions, function (err, response, casesbody) {
+      casesbody = JSON.parse(casesbody);
+      var sendurl = 'http://nickd.iriscouch.com:5984/housing/_design/poll1/_view/Poll1?key=' + encodeURIComponent( '"' + req.query['address'] + '"');
+      var requestOptions = {
+        'uri': sendurl,
+      };
+      request(requestOptions, function (err, response, surveybody) {
+        surveybody = JSON.parse(surveybody);
+        
+        var address, lat, lng;
+        if(casesbody.rows.length){
+          address = casesbody.rows[0].value.address;
+          lat = casesbody.rows[0].value.loc[0];
+          lng = casesbody.rows[0].value.loc[1];
+        }
+        else if(surveybody.rows.length){
+          address = surveybody.rows[0].value.address;
+          lat = surveybody.rows[0].value.loc[0];
+          lng = surveybody.rows[0].value.loc[1];
+        }
+
+        res.setHeader('Content-Type', 'application/kml');
+        var kmlintro = '<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">\n<Document>\n	<name>Macon Housing API</name>\n	<Style id="BasicStyle">\n		<IconStyle>\n			<scale>1.1</scale>\n			<Icon>\n				<href>http://maps.google.com/mapfiles/kml/paddle/red-blank_maps.png</href>\n			</Icon>\n			<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>\n		</IconStyle>\n		<BalloonStyle>\n			<text>$[description]</text>\n		</BalloonStyle>\n	</Style>\n	<Folder id="KMLAPI">\n		<name>KML API Download</name>\n		<Style id="BasicStyle">\n			<IconStyle>\n				<color>ffffffff</color>\n				<scale>1.1</scale>\n				<Icon>\n					<href>http://maps.google.com/mapfiles/kml/paddle/red-blank_maps.png</href>\n				</Icon>\n				<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>\n			</IconStyle>\n			<BalloonStyle>\n				<text>$[description]</text>\n				<textColor>ff000000</textColor>\n				<displayMode>default</displayMode>\n</BalloonStyle>\n</Style>\n';
+        // Placemarks
+        var kmlplacemarks = '		<Placemark>\n			<name>' + address + '</name>\n			<address>' + address + '</address>\n';
+        kmlplacemarks += '			<description><![CDATA[<div class="googft-info-window" style="font-family:sans-serif">';
+        if(casebody.rows.length){
+          kmlplacemarks += '<h3>Code Enforcement</h3><b>Address:</b>' + casesbody.rows[0].value.address + '<br><b>Case ID:</b> ' + casesbody.rows[0].value.ecd_id + '<br><b>Opened:</b> ' + casesbody.rows[0].value.opendate + '<br><b>Closed:</b> ' + casesbody.rows[0].value.closedate + '<br><b>Inspector:</b> ' + casesbody.rows[0].value.inspector + '<br><b>Cause:</b> ' + casesbody.rows[0].value.reason + '<br><b>Neighborhood:</b> ' + (casesbody.rows[0].value.neighborhood || '') + '<br>';
+        }
+        if(surveybody.rows.length){
+          kmlplacemarks += '<h3>Survey</h3><b>Inspected:</b>' + surveybody.rows[0].value.inspdate + '<br><b>Major Damage?</b>' + surveybody.rows[0].value.major + '<br><b>Minor Damage?</b>' + surveybody.rows[0].value.minor + '<br><b>Open?</b>' + surveybody.rows[0].value.open + '<br><b>Boarded?</b>' + surveybody.rows[0].value.boarded + '<br><b>Secure?</b>' + surveybody.rows[0].value.secure + '<br><b>Burned?</b>' + surveybody.rows[0].value.burned;
+        }
+        kmlplacemarks += '</div>]]></description>\n';
+        kmlplacemarks += '			<styleUrl>#BasicStyle</styleUrl>\n			<ExtendedData>\n				<Data name="F">\n					<value>F</value>\n				</Data>\n			</ExtendedData>\n';
+        kmlplacemarks += '			<Point>\n				<coordinates>' + lng + ',' + lat + ',0</coordinates>\n			</Point>\n		</Placemark>\n';
+        var kmlend = '	</Folder>\n</Document>\n</kml>';
+        res.send(kmlintro + kmlplacemarks + kmlend);
+      });      
+    });
+  }
+ 
   // Code Enforcement's recent cases: recent opens and recent closes
   app.get('/recentopen', function(req, res){
     var sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/opendate/_view/opendate?descending=true&limit=5';

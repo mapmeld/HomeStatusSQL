@@ -106,6 +106,8 @@ function initMe(){
 	jQuery("#caseslink")[0].href = b;
 	jQuery.getJSON(b,function(b){
 		$("#loadanim").css({ display: "none" });
+		jQuery("#kmllink")[0].href = '/export.kml?address=' + surveyAddress + '&ecd_id=' + b.rows[0].value.ecd_id;
+
 		if(b.rows.length){
 			b.rows.sort(function(a,b){
 			    if(!isNaN(a.value.address.split(',')[0]) && !isNaN(b.value.address.split(',')[0])){
@@ -302,7 +304,7 @@ function initMe(){
             <li class='nav-header'>Download Data</li>
             <a class="btn" id="kmllink" href="/api">
               <img src="/images/Download-icon.png" style="vertical-align:middle;"/>
-              <span style="font-size:8pt;vertical-align:middle;">Map (Google Earth / KML)</span>
+              <span style="font-size:8pt;vertical-align:middle;">Map (Google Earth/KML)</span>
             </a>
             <!--<br/>
             <a class="btn" id="pnglink" href="/api">
