@@ -238,7 +238,7 @@ var init = exports.init = function (config) {
         // Placemarks
         var kmlplacemarks = '		<Placemark>\n			<name>' + address + '</name>\n			<address>' + address + '</address>\n';
         kmlplacemarks += '			<description><![CDATA[<div class="googft-info-window" style="font-family:sans-serif">';
-        if(casesbody.rows.length){
+        if(casesbody.address){
           kmlplacemarks += '<h3>Code Enforcement</h3><b>Address:</b>' + casesbody.address + '<br><b>Case ID:</b> ' + casesbody.ecd_id + '<br><b>Opened:</b> ' + casesbody.opendate + '<br><b>Closed:</b> ' + casesbody.closedate + '<br><b>Inspector:</b> ' + casesbody.inspector + '<br><b>Cause:</b> ' + casesbody.reason + '<br><b>Neighborhood:</b> ' + (casesbody.neighborhood || '') + '<br>';
         }
         if(surveybody.rows.length){
