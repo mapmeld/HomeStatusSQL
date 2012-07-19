@@ -357,43 +357,43 @@ var init = exports.init = function (config) {
       if(req.query["fmt"] == "kml"){
         // KML API for mapping mash-ups
         res.setHeader('Content-Type', 'application/kml');
-        var body = JSON.parse(body);
         var kmlintro = '<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">\n<Document>\n	<name>Macon Housing API</name>\n	<Style id="BasicStyle">\n		<IconStyle>\n			<scale>1.1</scale>\n			<Icon>\n				<href>http://maps.google.com/mapfiles/kml/paddle/red-blank_maps.png</href>\n			</Icon>\n			<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>\n		</IconStyle>\n		<BalloonStyle>\n			<text>$[description]</text>\n		</BalloonStyle>\n	</Style>\n	<Folder id="KMLAPI">\n		<name>KML API Download</name>\n		<Style id="BasicStyle">\n			<IconStyle>\n				<color>ffffffff</color>\n				<scale>1.1</scale>\n				<Icon>\n					<href>http://maps.google.com/mapfiles/kml/paddle/red-blank_maps.png</href>\n				</Icon>\n				<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>\n			</IconStyle>\n			<BalloonStyle>\n				<text>$[description]</text>\n				<textColor>ff000000</textColor>\n				<displayMode>default</displayMode>\n</BalloonStyle>\n</Style>\n';
 		// Placemarks
 		var kmlplacemarks = '';
 		var prevAddresses = { };
 		
-		for(i=0;i<body.rows.length;i++){
-          if(prevAddresses[body.rows[i].value.address]){
+		for(i=0;i<totalrep.rows.length;i++){
+          if(prevAddresses[totalrep.rows[i].value.address]){
             // already thinking about this address
-            if(!prevAddresses[body.rows[i].value.address].lat && body.rows[i].value.loc){
-              prevAddresses[body.rows[i].value.address].lat = body.rows[i].value.loc[0] * 1.0;
-              prevAddresses[body.rows[i].value.address].lng = body.rows[i].value.loc[1] * 1.0;
+            if(!prevAddresses[totalrep.rows[i].value.address].lat && totalrep.rows[i].value.loc){
+              prevAddresses[totalrep.rows[i].value.address].lat = totalrep.rows[i].value.loc[0] * 1.0;
+              prevAddresses[totalrep.rows[i].value.address].lng = totalrep.rows[i].value.loc[1] * 1.0;
             }
-            prevAddresses[body.rows[i].value.address].cases.push({
-              id: body.rows[i].value.ecd_id,
-              inspector: body.rows[i].value.inspector,
-              opendate: body.rows[i].value.opendate,
-              action: body.rows[i].value.action,
-              closedate: body.rows[i].value.closedate
+            prevAddresses[totalrep.rows[i].value.address].cases.push({
+              id: totalrep.rows[i].value.ecd_id,
+              inspector: totalrep.rows[i].value.inspector,
+              opendate: totalrep.rows[i].value.opendate,
+              action: totalrep.rows[i].value.action,
+              closedate: totalrep.rows[i].value.closedate
             });
           }
           else{
-            if(body.rows[i].value.loc){
-              prevAddresses[body.rows[i].value.address] = {
-                lat: body.rows[i].value.loc[0] * 1.0,
-                lng: body.rows[i].value.loc[1] * 1.0
+            if(totalrep.rows[i].value.loc){
+              prevAddresses[totalrep.rows[i].value.address] = {
+                lat: totalrep.rows[i].value.loc[0] * 1.0,
+                lng: totalrep.rows[i].value.loc[1] * 1.0
               };
             }
             else{
-              prevAddresses[body.rows[i].value.address] = { };
+              prevAddresses[totalrep.rows[i].value.address] = { };
             }
-            prevAddresses[body.rows[i].value.address].cases = [{
-              id: body.rows[i].value.ecd_id,
-              inspector: body.rows[i].value.inspector,
-              opendate: body.rows[i].value.opendate,
-              action: body.rows[i].value.action,
-              closedate: body.rows[i].value.closedate
+            prevAddresses[totalrep.rows[i].value.address].cases = [{
+              id: totalrep.rows[i].value.ecd_id,
+              inspector: totalrep.rows[i].value.inspector,
+              opendate: totalrep.rows[i].value.opendate,
+              action: totalrep.rows[i].value.action,
+              closedate: totalrep.rows[i].value.closedate,
+              cause: totalrep.rows[i].value.cause
             }];
           }
         }
@@ -407,7 +407,7 @@ var init = exports.init = function (config) {
           kmlplacemarks += '			<description><![CDATA[<div class="googft-info-window" style="font-family:sans-serif">';
           prevAddresses[address].cases.sort( function(a,b){ return b.id * 1 - a.id * 1; } );
 		  for(var pt=0;pt<prevAddresses[address].cases.length;pt++){
-		    kmlplacemarks += '<h4>Case ' + prevAddresses[address].cases[pt].id + '</h4><b>Opened:</b> ' + prevAddresses[address].cases[pt].opendate + '<br><b>Closed:</b> ' + prevAddresses[address].cases[pt].closedate + '<br><b>Inspector:</b> ' + prevAddresses[address].cases[pt].inspector + '<br><b>Cause:</b> ' + prevAddresses[address].cases[pt].reason;
+		    kmlplacemarks += '<h4>Case ' + prevAddresses[address].cases[pt].id + '</h4><b>Opened:</b> ' + prevAddresses[address].cases[pt].opendate + '<br><b>Closed:</b> ' + prevAddresses[address].cases[pt].closedate + '<br><b>Inspector:</b> ' + prevAddresses[address].cases[pt].inspector + '<br><b>Action:</b> ' + prevAddresses[address].cases[pt].action + '<br><b>Cause:</b> ' + prevAddresses[address].cases[pt].cause;
 		  }
 		  kmlplacemarks += '</div>]]></description>\n';
 		  kmlplacemarks += '			<styleUrl>#BasicStyle</styleUrl>\n			<ExtendedData>\n				<Data name="F">\n					<value>F</value>\n				</Data>\n			</ExtendedData>\n';
