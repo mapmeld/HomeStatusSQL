@@ -38,7 +38,6 @@ function initMe(){
 	}
 
 	var b="/surveyed?address=" + surveyAddress;
-	jQuery("#surveylink")[0].href = b;
 	jQuery.getJSON(b,function(b){
 		$("#loadanim").css({ display: "none" });
 		if(b.rows.length){
@@ -93,10 +92,8 @@ function initMe(){
 		transformAddress = " " + transformAddress.split(',')[0].toUpperCase().replace("%20",",") + ",%20" + transformAddress.split(',')[1] + ",%20%20GA";
 	}
 	var b="/keydb?address=" + transformAddress;
-	jQuery("#caseslink")[0].href = b;
 	jQuery.getJSON(b,function(b){
 		$("#loadanim").css({ display: "none" });
-		jQuery("#kmllink")[0].href = '/export.kml?address=' + surveyAddress + '&cases=' + transformAddress;
 
 		if(b.rows.length){
 			b.rows.sort(function(a,b){
@@ -209,12 +206,15 @@ function initMe(){
 </form>-->
 
 <div data-role="content">
+  <ul id='reportbox' data-role='listview' data-inset='true'>
+    <li id="scfanim">
+      <img id="loadaniminner" src="/images/loading-gif.gif" style="width:100%;"/>
+    </li>
+  </ul>
   <ul id='resultbar' data-role='listview' data-inset='true'>
     <li id="loadanim">
       <img id="loadaniminner" src="/images/loading-gif.gif" style="width:100%;"/>
     </li>
-    <li>Search Results</li>
-    <li id='streetlink'>This Street</li>
   </ul>
   <ul data-role='listview' data-inset='true'>
     <li id="mobcontent"></li>
