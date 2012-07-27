@@ -5,11 +5,9 @@
 <!--[if IE 8]> <html class="no-js lt-ie9" lang="en"> <![endif]-->
 <head>
 <title>homeSTATUS</title>
-<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.css" />
-<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
-<script src="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.js"></script>
-<meta charset='utf-8'/>
-<meta content='' name='description'/>
+<link rel="stylesheet" href="/stylesheets/jquery.mobile-1.1.1.min.css" />
+<script src="/scripts/jquery-1.7.1.min.js"></script>
+<script src="/scripts/jquery.mobile-1.1.1.min.js"></script>
 <!-- Mobile viewport optimized: h5bp.com/viewport -->
 <meta content='width=device-width' name='viewport'>
 <script type="text/javascript">
@@ -247,20 +245,21 @@ function scfhistory(reports){
 </div>
 </form>-->
 
-<div data-role="content">
-  <ul id='reportbox' data-role='listview' data-inset='true'>
-    <li id="scfanim">
-      <img id="loadaniminner" src="/images/loading-gif.gif" style="width:100%;"/>
-    </li>
-  </ul>
-  <ul id='resultbar' data-role='listview' data-inset='true'>
-    <li id="loadanim">
-      <img id="loadaniminner" src="/images/loading-gif.gif" style="width:100%;"/>
-    </li>
-  </ul>
-  <ul data-role='listview' data-inset='true'>
-    <li id="mobcontent"></li>
-  </ul>
+  <div data-role="content" data-theme="c" data-dividertheme="d">
+    <ul id='reportbox' data-role='listview' data-inset='true'  data-theme="c" data-dividertheme="d">
+      <li id="scfanim">
+        <img id="loadaniminner" src="/images/loading-gif.gif" style="width:100%;"/>
+      </li>
+    </ul>
+    <ul id='resultbar' data-role='listview' data-inset='true'  data-theme="c" data-dividertheme="d">
+      <li id="loadanim">
+        <img id="loadaniminner" src="/images/loading-gif.gif" style="width:100%;"/>
+      </li>
+    </ul>
+    <ul data-role='listview' data-inset='true'  data-theme="c" data-dividertheme="d">
+      <li id="mobcontent"></li>
+    </ul>
+  </div>
 </div>
 </body>
 </html>
