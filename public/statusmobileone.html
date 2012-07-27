@@ -22,17 +22,110 @@ function parseStamp(tstamp){
   pstamp = pstamp.toString().substring(4).substring(0,11);
   return pstamp;
 }
+function replaceAll(src, oldr, newr){
+  while(src.indexOf(oldr) > -1){
+    src = src.replace(oldr, newr);
+  }
+  return src;
+}
 function initMe(){
-	var b="/keydb?address=" + gup("id");
+	var prevAddresses = { };
+	$("#main-search-field").val( replaceAll(replaceAll(gup("id"), "+", " "), "%20", " "));
+
+	var surveyAddress = gup("id");
+	if(surveyAddress.indexOf("%20") == 0){
+		surveyAddress = surveyAddress.replace("%20","").replace(","," ").toLowerCase().split(',')[0];
+	}
+
+	var b="/surveyed?address=" + surveyAddress;
+	jQuery("#surveylink")[0].href = b;
 	jQuery.getJSON(b,function(b){
 		$("#loadanim").css({ display: "none" });
 		if(b.rows.length){
-			b.rows.sort(function(a,b){ return b.value.opendate - a.value.opendate });
+		    var e, f, g;
 			for(i=0;i<b.rows.length;i++){
-				var e=b.rows[i].value.loc[0] * 1.0,
-				f=b.rows[i].value.loc[1] * 1.0;
+			    if(b.rows[i].value.loc){
+			      e=b.rows[i].value.loc[0] * 1.0;
+				  f=b.rows[i].value.loc[1] * 1.0;
+				}
+				
+				if(b.rows[i].value.major){
+				  var li = document.createElement("li");
+				  li.className="active address result";
+				  li.innerHTML="<a href='#'>Major Damage</a>";
+				  document.getElementById("resultbar").appendChild(li);  
+				}
+				if(b.rows[i].value.secure){
+				  var li = document.createElement("li");
+				  li.className="active address result";
+				  li.innerHTML="<a href='#'>Secure</a>";
+				  document.getElementById("resultbar").appendChild(li);  
+				}
+				else{
+				  var li = document.createElement("li");
+				  li.className="active address result";
+				  li.innerHTML="<a href='#'>Not Secure</a>";
+				  document.getElementById("resultbar").appendChild(li);  
+				}
+				if(b.rows[i].value.burned){
+				  var li = document.createElement("li");
+				  li.className="active address result";
+				  li.innerHTML="<a href='#'>Burnt</a>";
+				  document.getElementById("resultbar").appendChild(li);  
+				}
+				if(b.rows[i].value.boarded){
+				  var li = document.createElement("li");
+				  li.className="active address result";
+				  li.innerHTML="<a href='#'>Boarded</a>";
+				  document.getElementById("resultbar").appendChild(li);  
+				}
+				if(b.rows[i].value.minor){
+				  var li = document.createElement("li");
+				  li.className="active address result";
+				  li.innerHTML="<a href='#'>Minor Damage</a>";
+				  document.getElementById("resultbar").appendChild(li);  
+				}
+			}
+		}
+	});
+	var transformAddress = gup("id");
+	if(transformAddress.indexOf("%20%20") == -1){
+		transformAddress = " " + transformAddress.split(',')[0].toUpperCase().replace("%20",",") + ",%20" + transformAddress.split(',')[1] + ",%20%20GA";
+	}
+	var b="/keydb?address=" + transformAddress;
+	jQuery("#caseslink")[0].href = b;
+	jQuery.getJSON(b,function(b){
+		$("#loadanim").css({ display: "none" });
+		jQuery("#kmllink")[0].href = '/export.kml?address=' + surveyAddress + '&cases=' + transformAddress;
+
+		if(b.rows.length){
+			b.rows.sort(function(a,b){
+			    if(!isNaN(a.value.address.split(',')[0]) && !isNaN(b.value.address.split(',')[0])){
+					// compare by numberic
+					return a.value.address.split(',')[0] * 1 - b.value.address.split(',')[0];
+			    }
+			    else{
+			    	// compare by alphabetic
+					if(b.value.address > a.value.address){
+						return -1;
+					}
+					else{
+						return 1;
+					}
+				}
+			});
+			for(i=0;i<b.rows.length;i++){
+			    var e, f;
+			    if(b.rows[i].value.loc){
+			      e=b.rows[i].value.loc[0] * 1.0;
+			      f=b.rows[i].value.loc[1] * 1.0;
+			    }
 				if(prevAddresses[b.rows[i].value.address]){
 				  // already thinking about this address
+                  if(!prevAddresses[b.rows[i].value.address].lat && b.rows[i].value.loc){
+                    prevAddresses[b.rows[i].value.address].lat = b.rows[i].value.loc[0] * 1.0;
+                    prevAddresses[b.rows[i].value.address].lng = b.rows[i].value.loc[1] * 1.0;
+                  }
 				  prevAddresses[b.rows[i].value.address].cases.push({
 				  	id: b.rows[i].value.ecd_id,
 				  	inspector: b.rows[i].value.inspector,
@@ -42,10 +135,15 @@ function initMe(){
 				  });
 				}
 				else{
-				  prevAddresses[b.rows[i].value.address] = {
-				    lat: b.rows[i].value.loc[0] * 1.0,
-				    lng: b.rows[i].value.loc[1] * 1.0
-  				  };
+                  if(b.rows[i].value.loc){
+                    prevAddresses[b.rows[i].value.address] = {
+                      lat: b.rows[i].value.loc[0] * 1.0,
+                      lng: b.rows[i].value.loc[1] * 1.0
+                    };
+                  }
+                  else{
+                    prevAddresses[b.rows[i].value.address] = { };
+                  }
 				  prevAddresses[b.rows[i].value.address].cases = [{
 				  	id: b.rows[i].value.ecd_id,
 				  	inspector: b.rows[i].value.inspector,
@@ -57,8 +155,10 @@ function initMe(){
 			}
 			for(address in prevAddresses){
 				var j="";
+				var notsobad = true;
+				var stillopen = false;
 				if(prevAddresses[address].inspdate){
-  				  j='<h3><a href="/statusone.html?id='+b.rows[i].id+'">'+b.rows[i].id+"</a></h3><h4>"+b.rows[i].value.inspector + " inspected on "+ b.rows[i].value.inspdate +"</h4>";
+  				  j='<h3>'+b.rows[i].id+"</h3><h4>"+b.rows[i].value.inspector + " inspected on "+ b.rows[i].value.inspdate +"</h4>";
   				}
   				else{
   				  var sortedCases = prevAddresses[address].cases.sort( function(a,b){ return b.id * 1 - a.id * 1; } );
@@ -71,30 +171,24 @@ function initMe(){
     			    }
     			    else{
     			      j += " Case remains open.";
+    			      stillopen = true;
     			    }
-    			    var li = document.createElement("li");
-				    li.className="active address result";
-				    li.innerHTML="<a href='#'><img src='http://code.leafletjs.com/leaflet-0.3.1/images/marker.png' width='10px'><i class='home'></i>" + sc.id + "</a>";
-  				    document.getElementById("resultbar").appendChild(li);
+    			    // if only actions were "No Violations" on same day as reported
+    			    if(sc.action != "No Violations" || sc.opendate != sc.closedate){
+    			      notsobad = false;
+    			    }
     			  }
   				}
   				j+="</ul>";
-				$("#mobcontent").html(j);
-				lat += prevAddresses[address].lat;
-				lng += prevAddresses[address].lng;
-				ptcount++;
+  				$("#mobcontent").html(j);
 			}
 		}
 	});
+	
+	// link to the view for this street
 	var streetname = gup("id").split(',')[1];
 	streetname = replaceAll(streetname, "%20", " ");
 	jQuery("#streetlink").html( '<a href="/statusstreet.html?streetname=' + streetname + '">' + streetname + '</a>');
-}
-function replaceAll(src, oldr, newr){
-  while(src.indexOf(oldr) > -1){
-    src = src.replace(oldr, newr);
-  }
-  return src;
 }
 </script>
 </head>
