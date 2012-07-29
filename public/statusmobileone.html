@@ -253,9 +253,15 @@ function scfhistory(reports){
     document.getElementById("reportbox").appendChild(li);
   }
 }
+$(document).ready(function(){
+  initMe();
+  $('[data-role=page]').live('pageshow', function(event) {
+    initMe();
+  });
+});
 </script>
 </head>
-<body onload='initMe()'>
+<body>
 <div data-role="page" class="type-index">
   <div data-role="header" data-theme="f" style="background-color:darkblue;color:white;padding:6px;">
     <a href="#" onclick="history.back();" style="padding-right:10px;">&larr;</a>
