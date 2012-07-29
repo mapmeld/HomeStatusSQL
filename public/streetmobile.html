@@ -93,15 +93,31 @@ function markerByStatus(notsobad, stillopen, pt){
   }
   else if(stillopen){
     var openIcon = new L.Icon();
-  	openIcon.iconSize = new L.Point(35,30);
+    openIcon.iconSize = new L.Point(35,30);
     openIcon.iconAnchor = new L.Point(18,30);
-  	openIcon.shadowSize = new L.Point(42,30);
+    openIcon.shadowSize = new L.Point(42,30);
     openIcon.popupAnchor = new L.Point(0,-28);
-  	openIcon.iconUrl = "http://housepointer.herokuapp.com/images/leaflet-yellow.png";
-  	return new L.Marker( new L.LatLng( pt.lat, pt.lng ), { icon: openIcon });
+    openIcon.iconUrl = "http://housepointer.herokuapp.com/images/leaflet-yellow.png";
+    return new L.Marker( new L.LatLng( pt.lat, pt.lng ), { icon: openIcon });
   }
   // standard marker
   return new L.Marker( new L.LatLng( pt.lat, pt.lng ) );
+}
+function listThisAddress(notsobad, stillopen, address, ismapped){
+  var li = document.createElement("li");
+  li.className="active address result";
+  var icon = "http://code.leafletjs.com/leaflet-0.3.1/images/marker.png";
+  if(notsobad){
+    icon = 'http://aux.iconpedia.net/uploads/2484076891043904041.png';
+  }
+  else if(stillopen){
+    icon = "http://housepointer.herokuapp.com/images/leaflet-yellow.png";
+  }
+  if(!ismapped){
+    li.style.backgroundColor = "#ffaaaa";
+  }
+  li.innerHTML="<a href='#'><img src='" + icon + "' width='10px'><i class='home'></i><a href='/statuscombine.html?id=" + address + "'>" + address.split(',')[0] + " " + address.split(',')[1] + "</a></a>";
+  $(".ui-page-active #resultbar").append(li);
 }
 function initMe(){
   //var tileURL = "http://otile1.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png";
@@ -161,54 +177,26 @@ function initMe(){
         $(".ui-page-active mobcontent").html(j);
         
         // choose icons / map symbols based on cases
-        if(!prevAddresses[address].lat){
-          // no known location - highlight in sidebar
-          var li = document.createElement("li");
-  	      li.className="active address result";
-  	      li.style.backgroundColor = "#ffaaaa";
-  	      var icon = "http://code.leafletjs.com/leaflet-0.3.1/images/marker.png";
-  	      if(notsobad){
-  	        icon = 'http://aux.iconpedia.net/uploads/2484076891043904041.png';
-  	      }
-  	      else if(stillopen){
-  	        icon = "http://housepointer.herokuapp.com/images/leaflet-yellow.png";
-  	      }
-      	  li.innerHTML="<a href='#'><img src='" + icon + "' width='10px'><i class='home'></i><a href='/statusmobileone.html?id=" + address + "'>" + address.split(',')[0] + " " + address.split(',')[1] + "</a></a>";
-  	      $(".ui-page-active #resultbar").append(li);
-          continue;
-        }
-        else{
+        if(prevAddresses[address].lat){
           //var mapMarker = markerByStatus(notsobad, stillopen, prevAddresses[address]);
           //map.addLayer( mapMarker.bindPopup(j) );
+          
+          // average latlngs to center the map
+          lat += prevAddresses[address].lat;
+          lng += prevAddresses[address].lng;
+          ptcount++;
         }
-  	    
-  	    // average latlngs to center the map
-  	    if(prevAddresses[address].lat){
-  	      lat += prevAddresses[address].lat;
-  	      lng += prevAddresses[address].lng;
-  	      ptcount++;
-    	}
-    	
-    	// add address list to sidebar
-    	var li = document.createElement("li");
-    	li.className="active address result";
-    	var icon = "http://code.leafletjs.com/leaflet-0.3.1/images/marker.png";
-    	if(notsobad){
-    	  icon = 'http://aux.iconpedia.net/uploads/2484076891043904041.png';
-    	}
-    	else if(stillopen){
-    	  icon = "http://housepointer.herokuapp.com/images/leaflet-yellow.png";
-    	}
-    	li.innerHTML="<a href='#'><img src='" + icon + "' width='10px'><i class='home'></i><a href='/statusmobileone.html?id=" + address + "'>" + address.split(',')[0] + " " + address.split(',')[1] + "</a></a>";
-    	$(".ui-page-active #resultbar").append(li);
+        
+        // add address list to sidebar
+        listThisAddress(notsobad, stillopen, address, !(!prevAddresses[address].lat));
       }
       
       // center the map on the averaged location
       //map.setView(new L.LatLng( lat / ptcount, lng / ptcount ), 16);
-  	}
-  	else{
-  	  findRoad();
-  	}
+    }
+    else{
+      findRoad();
+    }
   });
   
   // set API links
@@ -304,41 +292,15 @@ function findRoad(){
             j+="</ul>";
         
             // choose icons / map symbols based on cases
-            if(!prevAddresses[address].lat){
-              // no known location - highlight in sidebar
-              var li = document.createElement("li");
-              li.className="active address result";
-              li.style.backgroundColor = "#ffaaaa";
-              var icon = "http://code.leafletjs.com/leaflet-0.3.1/images/marker.png";
-              if(notsobad){
-                icon = 'http://aux.iconpedia.net/uploads/2484076891043904041.png';
-              }
-              else if(stillopen){
-                icon = "http://housepointer.herokuapp.com/images/leaflet-yellow.png";
-              }
-              li.innerHTML="<a href='#'><img src='" + icon + "' width='10px'><i class='home'></i><a href='/statusmobileone.html?id=" + address + "'>" + address.split(',')[0] + " " + address.split(',')[1] + "</a></a>";
-              $(".ui-page-active #resultbar").append(li);
-              continue;
-            }
-            else{
+            if(prevAddresses[address].lat){
               //var mapMarker = markerByStatus(notsobad, stillopen, prevAddresses[address]);
               //map.addLayer( mapMarker.bindPopup(j) );
             }
-  	    
-  	        // add address list to sidebar
-  	        var li = document.createElement("li");
-  	        li.className="active address result";
-  	        var icon = "http://code.leafletjs.com/leaflet-0.3.1/images/marker.png";
-  	        if(notsobad){
-  	          icon = 'http://aux.iconpedia.net/uploads/2484076891043904041.png';
-  	        }
-  	        else if(stillopen){
-  	          icon = "http://housepointer.herokuapp.com/images/leaflet-yellow.png";
-  	        }
-      	    li.innerHTML="<a href='#'><img src='" + icon + "' width='10px'><i class='home'></i><a href='/statusmobileone.html?id=" + address + "'>" + address.split(',')[0] + " " + address.split(',')[1] + "</a></a>";
-  	        $(".ui-page-active #resultbar").append(li);
-  	      }
-  	    }
+            
+            // add address list to sidebar
+            listThisAddress(notsobad, stillopen, address, !(!prevAddresses[address].lat));
+          }
+        }
       });
       //$(".ui-page-active #jsonlink")[0].href = geolink.replace("/geo","/geo.json");
       //$(".ui-page-active #kmllink")[0].href = geolink.replace("/geo","/geo.kml") + "&fmt=kml";

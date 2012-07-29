@@ -94,12 +94,12 @@ function markerByStatus(notsobad, stillopen, pt){
   }
   else if(stillopen){
     var openIcon = new L.Icon();
-  	openIcon.iconSize = new L.Point(35,30);
+    openIcon.iconSize = new L.Point(35,30);
     openIcon.iconAnchor = new L.Point(18,30);
-  	openIcon.shadowSize = new L.Point(42,30);
+    openIcon.shadowSize = new L.Point(42,30);
     openIcon.popupAnchor = new L.Point(0,-28);
-  	openIcon.iconUrl = "http://housepointer.herokuapp.com/images/leaflet-yellow.png";
-  	return new L.Marker( new L.LatLng( pt.lat, pt.lng ), { icon: openIcon });
+    openIcon.iconUrl = "http://housepointer.herokuapp.com/images/leaflet-yellow.png";
+    return new L.Marker( new L.LatLng( pt.lat, pt.lng ), { icon: openIcon });
   }
   // standard marker
   return new L.Marker( new L.LatLng( pt.lat, pt.lng ) );
@@ -112,10 +112,10 @@ function listThisAddress(notsobad, stillopen, address, ismapped){
     icon = 'http://aux.iconpedia.net/uploads/2484076891043904041.png';
   }
   else if(stillopen){
-  	icon = "http://housepointer.herokuapp.com/images/leaflet-yellow.png";
+    icon = "http://housepointer.herokuapp.com/images/leaflet-yellow.png";
   }
   if(!ismapped){
-  	li.style.backgroundColor = "#ffaaaa";
+    li.style.backgroundColor = "#ffaaaa";
   }
   li.innerHTML="<a href='#'><img src='" + icon + "' width='10px'><i class='home'></i><a href='/statuscombine.html?id=" + address + "'>" + address.split(',')[0] + " " + address.split(',')[1] + "</a></a>";
   $("#resultbar").append(li);
@@ -179,23 +179,20 @@ function initMe(){
         if(prevAddresses[address].lat){
           var mapMarker = markerByStatus(notsobad, stillopen, prevAddresses[address]);
           map.addLayer( mapMarker.bindPopup(j) );
-  	      
-  	      // average latlngs to center the map
-  	      lat += prevAddresses[address].lat;
-  	      lng += prevAddresses[address].lng;
-  	      ptcount++;
-    	}
-  	    
-  	    // add address list to sidebar
-  	    listThisAddress(notsobad, stillopen, address, !(!prevAddresses[address].lat));
-  	  }
-  	  
-  	  // center the map on the averaged location
-  	  map.setView(new L.LatLng( lat / ptcount, lng / ptcount ), 16);
-  	}
-  	else{
-  	  findRoad();
-  	}
+          // average latlngs to center the map
+          lat += prevAddresses[address].lat;
+          lng += prevAddresses[address].lng;
+          ptcount++;
+        }
+        // add address list to sidebar
+        listThisAddress(notsobad, stillopen, address, !(!prevAddresses[address].lat));
+      }
+      // center the map on the averaged location
+      map.setView(new L.LatLng( lat / ptcount, lng / ptcount ), 16);
+    }
+    else{
+      findRoad();
+    }
   });
   
   // set API links
@@ -224,10 +221,10 @@ function findRoad(){
       }
     }
     if(topAddress && topAddress.boundingbox){
-  	  var li = document.createElement("li");
-  	  li.className="nav-header";
+      var li = document.createElement("li");
+      li.className="nav-header";
       li.innerHTML="Nearby Cases (if any)";
-  	  $("#resultbar").append(li);
+      $("#resultbar").append(li);
       
       var latspan = topAddress.boundingbox[1] * 1.0 - topAddress.boundingbox[0] * 1.0;
       var lngspan = topAddress.boundingbox[3] * 1.0 - topAddress.boundingbox[2] * 1.0;
@@ -292,11 +289,10 @@ function findRoad(){
               var mapMarker = markerByStatus(notsobad, stillopen, prevAddresses[address]);
               map.addLayer( mapMarker.bindPopup(j) );
             }
-  	    
-  	        // add address list to sidebar
-  	        listThisAddress(notsobad, stillopen, address, !(!prevAddresses[address].lat));
-  	      }
-  	    }
+            // add address list to sidebar
+            listThisAddress(notsobad, stillopen, address, !(!prevAddresses[address].lat));
+          }
+        }
       });
       $("#jsonlink")[0].href = geolink.replace("/geo","/geo.json");
       $("#kmllink")[0].href = geolink.replace("/geo","/geo.kml") + "&fmt=kml";
