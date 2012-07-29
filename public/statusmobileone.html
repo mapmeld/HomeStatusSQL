@@ -37,7 +37,7 @@ function initMe(){
   }
   var b="/surveyed?address=" + surveyAddress;
   jQuery.getJSON(b,function(b){
-    $("#loadanim").css({ display: "none" });
+    $(".ui-page-active #loadanim").css({ display: "none" });
     if(b.rows.length){
       for(i=0;i<b.rows.length;i++){
         var e=b.rows[i].value.loc[0] * 1.0,
@@ -264,8 +264,9 @@ $(document).ready(function(){
 <body>
 <div data-role="page" class="type-index">
   <div data-role="header" data-theme="f" style="background-color:lightblue;padding:6px;">
-    <a href="#" onclick="history.back();" style="padding-right:10px;">&larr;</a>
-    <img height='20px' src='/images/code_flag.png'>Created by Code for America for the City of Macon.
+    <input type="button" onclick="history.back();" style="padding-right:10px;">&larr; Back</a>
+    <img height='20px' src='/images/code_flag.png'>
+    <input type="button" onclick="window.location='/statusmobilehome.html';">Search</a>
   </div>
 <!--
 <form accept-charset="UTF-8" action="/statusstreet.html" method="get"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /></div>
