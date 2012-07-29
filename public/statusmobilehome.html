@@ -28,201 +28,15 @@ function replaceAll(src, oldr, newr){
   return src;
 }
 function initMe(){
-  var prevAddresses = { };
-  $("#main-search-field").val( replaceAll(replaceAll(gup("id"), "+", " "), "%20", " "));
-
-  var surveyAddress = gup("id");
-  if(surveyAddress.indexOf("%20") == 0){
-    surveyAddress = surveyAddress.replace("%20","").replace(","," ").toLowerCase().split(',')[0];
-  }
-  var b="/surveyed?address=" + surveyAddress;
-  jQuery.getJSON(b,function(b){
-    $(".ui-page-active #loadanim").css({ display: "none" });
-    if(b.rows.length){
-      for(i=0;i<b.rows.length;i++){
-        var e=b.rows[i].value.loc[0] * 1.0,
-        f=b.rows[i].value.loc[1] * 1.0,
-        g=16;
-        
-        if(b.rows[i].value.major){
-          var li = document.createElement("li");
-          //li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
-          li.innerHTML="<a href='#'>Major Damage</a>";
-          $(".ui-page-active #resultbar").append(li);  
-        }
-        if(b.rows[i].value.secure){
-          var li = document.createElement("li");
-          //li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
-          li.innerHTML="<a href='#'>Secure</a>";
-          $(".ui-page-active #resultbar").append(li);  
-        }
-        else{
-          var li = document.createElement("li");
-          //li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
-          li.innerHTML="<a href='#'>Not Secure</a>";
-          $(".ui-page-active #resultbar").append(li);  
-        }
-        if(b.rows[i].value.burned){
-          var li = document.createElement("li");
-          //li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
-          li.innerHTML="<a href='#'>Burnt</a>";
-          $(".ui-page-active #resultbar").append(li);  
-        }
-        if(b.rows[i].value.boarded){
-          var li = document.createElement("li");
-          //li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
-          li.innerHTML="<a href='#'>Boarded</a>";
-          $(".ui-page-active #resultbar").append(li);  
-        }
-        if(b.rows[i].value.minor){
-          var li = document.createElement("li");
-          //li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
-          li.innerHTML="<a href='#'>Minor Damage</a>";
-          $(".ui-page-active #resultbar").append(li);  
-        }
-      }
-      hasLocation = true;
-    }
-  });
-  var transformAddress = gup("id");
-  if(transformAddress.indexOf("%20%20") == -1){
-    transformAddress = " " + transformAddress.split(',')[0].toUpperCase().replace("%20",",") + ",%20" + transformAddress.split(',')[1] + ",%20%20GA";
-  }
-  var b="/keydb?address=" + transformAddress;
-  jQuery.getJSON(b,function(b){
-    $(".ui-page-active #loadanim").css({ display: "none" });
-    if(b.rows.length){
-      b.rows.sort(function(a,b){
-          if(!isNaN(a.value.address.split(',')[0]) && !isNaN(b.value.address.split(',')[0])){
-          // compare by numberic
-          return a.value.address.split(',')[0] * 1 - b.value.address.split(',')[0];
-          }
-          else{
-            // compare by alphabetic
-          if(b.value.address > a.value.address){
-            return -1;
-          }
-          else{
-            return 1;
-          }
-        }
-      });
-      for(i=0;i<b.rows.length;i++){
-        var e=b.rows[i].value.loc[0] * 1.0,
-        f=b.rows[i].value.loc[1] * 1.0;
-        if(prevAddresses[b.rows[i].value.address]){
-          // already thinking about this address
-          prevAddresses[b.rows[i].value.address].cases.push({
-            id: b.rows[i].value.ecd_id,
-            inspector: b.rows[i].value.inspector,
-            opendate: b.rows[i].value.opendate,
-            action: b.rows[i].value.action,
-            closedate: b.rows[i].value.closedate
-          });
-        }
-        else{
-          prevAddresses[b.rows[i].value.address] = {
-            lat: b.rows[i].value.loc[0] * 1.0,
-            lng: b.rows[i].value.loc[1] * 1.0
-            };
-          prevAddresses[b.rows[i].value.address].cases = [{
-            id: b.rows[i].value.ecd_id,
-            inspector: b.rows[i].value.inspector,
-            opendate: b.rows[i].value.opendate,
-            action: b.rows[i].value.action,
-            closedate: b.rows[i].value.closedate
-          }];
-        }
-      }
-      for(address in prevAddresses){
-        var j="";
-        var notsobad = true;
-        var stillopen = false;
-        if(prevAddresses[address].inspdate){
-            j='<h3>'+b.rows[i].id+"</h3><h4>"+b.rows[i].value.inspector + " inspected on "+ b.rows[i].value.inspdate +"</h4>";
-          }
-          else{
-            var sortedCases = prevAddresses[address].cases.sort( function(a,b){ return b.id * 1 - a.id * 1; } );
-            j='<h3>'+address.split(',')[0]+" "+address.split(',')[1]+"</h3><ul>";
-            for(var i=0; i < sortedCases.length; i++){
-              var sc = sortedCases[i];
-              j += "<li>"+sc.inspector + " inspected. Case opened "+ parseStamp(sc.opendate) + ".";
-              if(sc.closedate.length > 5){
-                j += " Resolved with " + sc.action + " on " + parseStamp(sc.closedate) + "</li>";
-              }
-              else{
-                j += " Case remains open.";
-                //stillopen = true;
-              }
-              // if only actions were "No Violations" on same day as reported
-              if(sc.action != "No Violations" || sc.opendate != sc.closedate){
-                notsobad = false;
-              }
-            }
-          }
-          j+="</ul>";
-          hasLocation = true;
-          $("#mobcontent").html(j);
-      }
-    }
-  });
-  var s = document.createElement("script");
-  s.type = "text/javascript";
-  s.src = "http://seeclickfix.com/api/issues/" + gup("report") + ".json?callback=loadSCFReport";
-  $(document).append(s);
+  loadSCFReport();
 }
-function loadSCFReport(reports){
-  var report = reports[0];
-  $(".ui-page-active #scfanim").css({ display: "none" });
-  
-  var iconProp = document.createElement("li");
-  //iconProp.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
-  iconProp.className="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-li-has-thumb ui-btn-up-c";
-  iconProp["data-corners"] = "false";
-  iconProp["data-shadow"] = "false";
-  iconProp["data-iconshadow"] = "true";
-  iconProp["data-wrapperels"] = "div";
-  iconProp["data-icon"] = "arrow-r";
-  iconProp["data-iconpos"] = "right";
-  iconProp["data-theme"] = "c";
-  iconProp.innerHTML = "<h3><img src='" + report.square_image + "' style='vertical-align:middle;width:20px;display:inline;'/><span style='vertical-align:middle;padding-left:10px;'>" + report.summary + "</span></h3>";
-  $(".ui-page-active #reportbox").append(iconProp);
-  
-  var propertyList = ["issue_id","created_at","description","reporter_display","status","updated_at"];  
-  for(var p=0;p<propertyList.length;p++){
-    var property = propertyList[p];
-    var li = document.createElement("li");
-    //li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
-    li.className="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-li-has-thumb ui-btn-up-c";
-    li["data-corners"] = "false";
-    li["data-shadow"] = "false";
-    li["data-iconshadow"] = "true";
-    li["data-wrapperels"] = "div";
-    li["data-icon"] = "arrow-r";
-    li["data-iconpos"] = "right";
-    li["data-theme"] = "c";
-    li.innerHTML = "<p>" + property + ": " + report[property] + "</p>";
-    $(".ui-page-active #reportbox").append(li);
-  }
-
-  var surveyAddress = gup("id");
-  if(surveyAddress.indexOf("%20") == 0){
-    surveyAddress = surveyAddress.replace("%20","").replace(","," ").toLowerCase().split(',')[0];
-  }
-  
-  // look at the last 10,000 hours (416 days) to build SeeClickFix report history
-  reportAddress = report.address;
+function loadSCFReport(){
   var s = document.createElement("script");
   s.type = "text/javascript";
-  s.src = "http://seeclickfix.com/api/issues.json?at=" + reportAddress + "&start=10000&callback=scfhistory";
+  s.src = "http://seeclickfix.com/api/issues.json?at=Macon,+GA&num_results=10&callback=scfhistory";
   $(document).append(s);
 }
 function scfhistory(reports){
-  for(var r=reports.length-1;r>=0;r--){
-    if(reports[r].address != reportAddress){
-      reports.splice(r,1);
-    }
-  }
 
   if(reports.length > 1){
     // add report history
@@ -264,13 +78,11 @@ $(document).ready(function(){
 <body>
 <div data-role="page" class="type-index">
   <div data-role="header" data-theme="f" style="background-color:lightblue;padding:6px;">
-    <input type="button" onclick="history.back();" style="padding-right:10px;display:inline;">&larr; Back</a>
-    <img height='20px' src='/images/code_flag.png' style="display:inline;">
-    <input type="button" onclick="window.location='/statusmobilehome.html';" style="display:inline;">Search</a>
+    <h1>Know a Lot <img height='20px' src='/images/code_flag.png'></h1>
   </div>
 
   <div data-role="content" data-theme="c" data-dividertheme="d">
-    <form accept-charset="UTF-8" action="/statusstreet.html" method="get"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /></div>
+    <form accept-charset="UTF-8" action="/mobilestreet.html" method="get"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /></div>
       <div class='search-field'>
         <input id="main-search-field" name="streetname" placeholder="Adams Ave" type="text" value="" />
       </div>
@@ -278,7 +90,14 @@ $(document).ready(function(){
         <input class="btn" name="commit" type="submit" value="Map Addresses" />
       </div>
     </form>
+    <h3 style="background-color:lightblue;padding:6px;">SeeClickFix Reports</h3>
+    <ul id='reportbox' data-role='listview' data-inset='true'  data-theme="c" data-dividertheme="d">
+      <li id="scfanim">
+        <img id="loadaniminner" src="/images/loading-gif.gif" style="width:100%;"/>
+      </li>
+    </ul>
   </div>
+  
 </div>
 </body>
 </html>
