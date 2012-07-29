@@ -37,22 +37,19 @@ function loadSCFReport(){
   $(document).append(s);
 }
 function scfhistory(reports){
+  $(".ui-page-active #scfanim").css({ display: "none" });
 
-  if(reports.length > 1){
+  if(reports.length){
     // add report history
     var historyTitle = document.createElement("li");
     historyTitle.className="nav-header";
     historyTitle.style.backgroundColor = "lightblue";
     historyTitle.style.padding = "6px";
-    historyTitle.innerHTML = "Report History";
+    historyTitle.innerHTML = "SeeClickFix Reports";
     $(".ui-page-active #reportbox").append(historyTitle);
   }
 
   for(var r=0;r<reports.length;r++){
-    if(reports[r].id == gup("report")){
-      // this is the main report and already described
-      continue;
-    }
     var li = document.createElement("li");
     li.className="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-li-has-thumb ui-btn-up-c";
     li["data-corners"] = "false";
@@ -90,7 +87,6 @@ $(document).ready(function(){
         <input class="btn" name="commit" type="submit" value="Map Addresses" />
       </div>
     </form>
-    <h3 style="background-color:lightblue;padding:6px;">SeeClickFix Reports</h3>
     <ul id='reportbox' data-role='listview' data-inset='true'  data-theme="c" data-dividertheme="d">
       <li id="scfanim">
         <img id="loadaniminner" src="/images/loading-gif.gif" style="width:100%;"/>
