@@ -254,7 +254,7 @@ function scfhistory(reports){
 }
 $(document).ready(function(){
   initMe();
-  $('[data-role=page]').live('pageshow', function(event) {
+  $('[data-role=page]').live('pagechange', function(event) {
     initMe();
   });
 });
