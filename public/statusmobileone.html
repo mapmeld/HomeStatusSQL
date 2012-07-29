@@ -201,7 +201,7 @@ function loadSCFReport(reports){
     li["data-icon"] = "arrow-r";
     li["data-iconpos"] = "right";
     li["data-theme"] = "c";
-    li.innerHTML = "<h4>" + property + "</h4><p>" + report[property] + "</p>";
+    li.innerHTML = "<p>" + property + ": " + report[property] + "</p>";
     document.getElementById("reportbox").appendChild(li);
   }
 
@@ -254,7 +254,7 @@ function scfhistory(reports){
 </head>
 <body onload='initMe()'>
 <div data-role="page" class="type-index">
-  <div data-role="header" data-theme="f">
+  <div data-role="header" data-theme="f" style="background-color:darkblue;color:white;padding:6px;">
     <img height='20px' src='/images/code_flag.png'>Created by Code for America for the City of Macon.
     <a href="/mobilesearch.html" data-icon="search" data-iconpos="notext" data-rel="dialog" data-transition="fade">Search</a>
   </div>
