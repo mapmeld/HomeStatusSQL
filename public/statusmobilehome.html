@@ -268,30 +268,16 @@ $(document).ready(function(){
     <img height='20px' src='/images/code_flag.png' style="display:inline;">
     <input type="button" onclick="window.location='/statusmobilehome.html';" style="display:inline;">Search</a>
   </div>
-<!--
-<form accept-charset="UTF-8" action="/statusstreet.html" method="get"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /></div>
-<div class='search-field'>
-<input id="main-search-field" name="streetname" placeholder="Example: Adams Ave" type="text" value="" />
-</div>
-<div class='search-button'>
-<input class="btn" name="commit" type="submit" value="Map Addresses" />
-</div>
-</form>-->
 
   <div data-role="content" data-theme="c" data-dividertheme="d">
-    <ul id='reportbox' data-role='listview' data-inset='true'  data-theme="c" data-dividertheme="d">
-      <li id="scfanim">
-        <img id="loadaniminner" src="/images/loading-gif.gif" style="width:100%;"/>
-      </li>
-    </ul>
-    <ul id='resultbar' data-role='listview' data-inset='true'  data-theme="c" data-dividertheme="d">
-      <li id="loadanim">
-        <img id="loadaniminner" src="/images/loading-gif.gif" style="width:100%;"/>
-      </li>
-    </ul>
-    <ul data-role='listview' data-inset='true'  data-theme="c" data-dividertheme="d">
-      <li id="mobcontent"></li>
-    </ul>
+    <form accept-charset="UTF-8" action="/statusstreet.html" method="get"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /></div>
+      <div class='search-field'>
+        <input id="main-search-field" name="streetname" placeholder="Adams Ave" type="text" value="" />
+      </div>
+      <div class='search-button'>
+        <input class="btn" name="commit" type="submit" value="Map Addresses" />
+      </div>
+    </form>
   </div>
 </div>
 </body>
