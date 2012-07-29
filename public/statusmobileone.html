@@ -228,6 +228,9 @@ function scfhistory(reports){
     // add report history
     var historyTitle = document.createElement("li");
     historyTitle.className="nav-header";
+    historyTitle.style.backgroundColor = "darkblue";
+    historyTitle.style.color = "white";
+    historyTitle.style.padding = "6px";
     historyTitle.innerHTML = "Report History";
     document.getElementById("reportbox").appendChild(historyTitle);
   }
@@ -246,7 +249,7 @@ function scfhistory(reports){
     li["data-icon"] = "arrow-r";
     li["data-iconpos"] = "right";
     li["data-theme"] = "c";
-    li.innerHTML = "<h3>" + reports[r].summary + "</h3><p>" + reports[r].created_at + "</p>";
+    li.innerHTML = "<a href='/statusmobileone.html?id=" + gup("id") + "&report=" + reports[r].id + "'><h3>" + reports[r].summary + "</h3><p>" + reports[r].created_at + "</p></a>";
     document.getElementById("reportbox").appendChild(li);
   }
 }
@@ -255,8 +258,8 @@ function scfhistory(reports){
 <body onload='initMe()'>
 <div data-role="page" class="type-index">
   <div data-role="header" data-theme="f" style="background-color:darkblue;color:white;padding:6px;">
+    <a href="#" onclick="history.back();" style="padding-right:10px;">&larr;</a>
     <img height='20px' src='/images/code_flag.png'>Created by Code for America for the City of Macon.
-    <a href="/mobilesearch.html" data-icon="search" data-iconpos="notext" data-rel="dialog" data-transition="fade">Search</a>
   </div>
 <!--
 <form accept-charset="UTF-8" action="/statusstreet.html" method="get"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /></div>
