@@ -135,34 +135,28 @@ function initMe(){
         }
       }
       for(address in prevAddresses){
-        var j="";
         var notsobad = true;
         var stillopen = false;
-        if(prevAddresses[address].inspdate){
-            j='<h3>'+b.rows[i].id+"</h3><h4>"+b.rows[i].value.inspector + " inspected on "+ b.rows[i].value.inspdate +"</h4>";
+        var sortedCases = prevAddresses[address].cases.sort( function(a,b){ return b.id * 1 - a.id * 1; } );
+        var j='<h3>'+address.split(',')[0]+" "+address.split(',')[1]+"</h3><ul>";
+        for(var i=0; i < sortedCases.length; i++){
+          var sc = sortedCases[i];
+          j += "<li>"+sc.inspector + " inspected. Case opened "+ parseStamp(sc.opendate) + ".";
+          if(sc.closedate.length > 5){
+            j += " Resolved with " + sc.action + " on " + parseStamp(sc.closedate) + "</li>";
           }
           else{
-            var sortedCases = prevAddresses[address].cases.sort( function(a,b){ return b.id * 1 - a.id * 1; } );
-            j='<h3>'+address.split(',')[0]+" "+address.split(',')[1]+"</h3><ul>";
-            for(var i=0; i < sortedCases.length; i++){
-              var sc = sortedCases[i];
-              j += "<li>"+sc.inspector + " inspected. Case opened "+ parseStamp(sc.opendate) + ".";
-              if(sc.closedate.length > 5){
-                j += " Resolved with " + sc.action + " on " + parseStamp(sc.closedate) + "</li>";
-              }
-              else{
-                j += " Case remains open.";
-                //stillopen = true;
-              }
-              // if only actions were "No Violations" on same day as reported
-              if(sc.action != "No Violations" || sc.opendate != sc.closedate){
-                notsobad = false;
-              }
-            }
+            j += " Case remains open.";
+            stillopen = true;
           }
-          j+="</ul>";
-          hasLocation = true;
-          $(".ui-page-active #mobcontent").html(j);
+          // if only actions were "No Violations" on same day as reported
+          if(sc.action != "No Violations" || sc.opendate != sc.closedate){
+            notsobad = false;
+          }
+        }
+        j+="</ul>";
+        hasLocation = true;
+        $(".ui-page-active #mobcontent").html(j);
       }
     }
   });
