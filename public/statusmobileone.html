@@ -48,37 +48,37 @@ function initMe(){
           var li = document.createElement("li");
           //li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
           li.innerHTML="<a href='#'>Major Damage</a>";
-          document.getElementById("resultbar").appendChild(li);  
+          $("#resultbar").append(li);  
         }
         if(b.rows[i].value.secure){
           var li = document.createElement("li");
           //li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
           li.innerHTML="<a href='#'>Secure</a>";
-          document.getElementById("resultbar").appendChild(li);  
+          $("#resultbar").append(li);  
         }
         else{
           var li = document.createElement("li");
           //li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
           li.innerHTML="<a href='#'>Not Secure</a>";
-          document.getElementById("resultbar").appendChild(li);  
+          $("#resultbar").append(li);  
         }
         if(b.rows[i].value.burned){
           var li = document.createElement("li");
           //li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
           li.innerHTML="<a href='#'>Burnt</a>";
-          document.getElementById("resultbar").appendChild(li);  
+          $("#resultbar").append(li);  
         }
         if(b.rows[i].value.boarded){
           var li = document.createElement("li");
           //li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
           li.innerHTML="<a href='#'>Boarded</a>";
-          document.getElementById("resultbar").appendChild(li);  
+          $("#resultbar").append(li);  
         }
         if(b.rows[i].value.minor){
           var li = document.createElement("li");
           //li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
           li.innerHTML="<a href='#'>Minor Damage</a>";
-          document.getElementById("resultbar").appendChild(li);  
+          $("#resultbar").append(li);  
         }
       }
       hasLocation = true;
@@ -169,7 +169,7 @@ function initMe(){
   var s = document.createElement("script");
   s.type = "text/javascript";
   s.src = "http://seeclickfix.com/api/issues/" + gup("report") + ".json?callback=loadSCFReport";
-  document.body.appendChild(s);
+  $(document).append(s);
 }
 function loadSCFReport(reports){
   var report = reports[0];
@@ -186,7 +186,7 @@ function loadSCFReport(reports){
   iconProp["data-iconpos"] = "right";
   iconProp["data-theme"] = "c";
   iconProp.innerHTML = "<img src='" + report.square_image + "' style='vertical-align:middle;width:20px;'/><h3 style='vertical-align:middle'>" + report.summary + "</h3>";
-  document.getElementById("reportbox").appendChild(iconProp);
+  $("#reportbox").append(iconProp);
   
   var propertyList = ["issue_id","created_at","description","reporter_display","status","updated_at"];  
   for(var p=0;p<propertyList.length;p++){
@@ -202,7 +202,7 @@ function loadSCFReport(reports){
     li["data-iconpos"] = "right";
     li["data-theme"] = "c";
     li.innerHTML = "<p>" + property + ": " + report[property] + "</p>";
-    document.getElementById("reportbox").appendChild(li);
+    $("#reportbox").append(li);
   }
 
   var surveyAddress = gup("id");
@@ -215,7 +215,7 @@ function loadSCFReport(reports){
   var s = document.createElement("script");
   s.type = "text/javascript";
   s.src = "http://seeclickfix.com/api/issues.json?at=" + reportAddress + "&start=10000&callback=scfhistory";
-  document.body.appendChild(s);
+  $(document).append(s);
 }
 function scfhistory(reports){
   for(var r=reports.length-1;r>=0;r--){
@@ -231,7 +231,7 @@ function scfhistory(reports){
     historyTitle.style.backgroundColor = "lightblue";
     historyTitle.style.padding = "6px";
     historyTitle.innerHTML = "Report History";
-    document.getElementById("reportbox").appendChild(historyTitle);
+    $("#reportbox").append(historyTitle);
   }
 
   for(var r=0;r<reports.length;r++){
@@ -249,7 +249,7 @@ function scfhistory(reports){
     li["data-iconpos"] = "right";
     li["data-theme"] = "c";
     li.innerHTML = "<a href='/statusmobileone.html?id=" + gup("id") + "&report=" + reports[r].id + "'><h3>" + reports[r].summary + "</h3><p>" + reports[r].created_at + "</p></a>";
-    document.getElementById("reportbox").appendChild(li);
+    $("#reportbox").append(li);
   }
 }
 $(document).ready(function(){
