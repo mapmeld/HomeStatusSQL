@@ -185,7 +185,7 @@ function loadSCFReport(reports){
   iconProp["data-icon"] = "arrow-r";
   iconProp["data-iconpos"] = "right";
   iconProp["data-theme"] = "c";
-  iconProp.innerHTML = "<img src='" + report.square_image + "' style='vertical-align:middle;width:20px;'/><h3 style='vertical-align:middle'>" + report.summary + "</h3>";
+  iconProp.innerHTML = "<h3><img src='" + report.square_image + "' style='vertical-align:middle;width:20px;display:inline;'/><span style='vertical-align:middle;padding-left:10px;'>" + report.summary + "</span></h3>";
   $(".ui-page-active #reportbox").append(iconProp);
   
   var propertyList = ["issue_id","created_at","description","reporter_display","status","updated_at"];  
