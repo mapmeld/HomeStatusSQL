@@ -4,15 +4,14 @@
 <!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
 <!--[if IE 8]> <html class="no-js lt-ie9" lang="en"> <![endif]-->
 <head>
-  <title>homeSTATUS</title>
-  <link href="/stylesheets/antiblight.css" media="all" rel="stylesheet" type="text/css" />
-  <link href='/stylesheets/leaflet.css' rel='stylesheet'>
-  <meta charset='utf-8'/>
-  <meta content='' name='description'/>
-  <!-- Mobile viewport optimized: h5bp.com/viewport -->
-  <meta content='width=device-width' name='viewport'>
-  <script type="text/javascript">
-var map;
+<title>homeSTATUS</title>
+<link rel="stylesheet" href="/stylesheets/jquery.mobile-1.1.1.min.css" />
+<script src="/scripts/jquery-1.7.1.min.js"></script>
+<script src="/scripts/jquery.mobile-1.1.1.min.js"></script>
+<!-- Mobile viewport optimized: h5bp.com/viewport -->
+<meta content='width=device-width' name='viewport'>
+<script type="text/javascript">
+var map, hasLocation;
 var prevAddresses = { };
 if(!console || !console.log){
   console = { log: function(e){ } };
@@ -104,41 +103,25 @@ function markerByStatus(notsobad, stillopen, pt){
   // standard marker
   return new L.Marker( new L.LatLng( pt.lat, pt.lng ) );
 }
-function listThisAddress(notsobad, stillopen, address, ismapped){
-  var li = document.createElement("li");
-  li.className="active address result";
-  var icon = "http://code.leafletjs.com/leaflet-0.3.1/images/marker.png";
-  if(notsobad){
-    icon = 'http://aux.iconpedia.net/uploads/2484076891043904041.png';
-  }
-  else if(stillopen){
-  	icon = "http://housepointer.herokuapp.com/images/leaflet-yellow.png";
-  }
-  if(!ismapped){
-  	li.style.backgroundColor = "#ffaaaa";
-  }
-  li.innerHTML="<a href='#'><img src='" + icon + "' width='10px'><i class='home'></i><a href='/statuscombine.html?id=" + address + "'>" + address.split(',')[0] + " " + address.split(',')[1] + "</a></a>";
-  $("#resultbar").append(li);
-}
 function initMe(){
-  var tileURL = "http://otile1.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png";
-  var attribution = "Map data &copy; 2012 OpenStreetMap contributors, Tiles by MapQuest";
-  var baseMapLayer = new L.TileLayer(tileURL, {maxZoom: 18, attribution: attribution});
-  map = new L.Map("map", { minZoom: 11, maxZoom: 18 });
-  map.addLayer( baseMapLayer );
+  //var tileURL = "http://otile1.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png";
+  //var attribution = "Map data &copy; 2012 OpenStreetMap contributors, Tiles by MapQuest";
+  //var baseMapLayer = new L.TileLayer(tileURL, {maxZoom: 18, attribution: attribution});
+  //map = new L.Map("map", { minZoom: 11, maxZoom: 18 });
+  //map.addLayer( baseMapLayer );
   var e=32.840943,
     f=-83.62587,
     g=12,
     lat=0,
     lng=0,
     ptcount=0;
-  map.setView(new L.LatLng(e,f),g);
+  //map.setView(new L.LatLng(e,f),g);
 
-  $("#main-search-field").val( replaceAll(replaceAll(gup("streetname"), "+", " "),"%20"," ") );
+  //$(".ui-page-active #main-search-field").val( replaceAll(replaceAll(gup("streetname"), "+", " "),"%20"," ") );
 
   var b="/searchdb?streetname=" + gup("streetname");
   jQuery.getJSON(b,function(b){
-    $("#loadanim").css({ display: "none" });
+    $(".ui-page-active #loadanim").css({ display: "none" });
     if(b.rows.length){
 
       // sort all cases by address
@@ -156,7 +139,7 @@ function initMe(){
           return b.id * 1 - a.id * 1;
         });
         // write the top of a map popup
-        j='<h3><a href="/statuscombine.html?id='+address+'">'+address.split(',')[0]+" "+address.split(',')[1]+"</a></h3><ul>";
+        j='<h3><a href="/statusmobileone.html?id='+address+'">'+address.split(',')[0]+" "+address.split(',')[1]+"</a></h3><ul>";
         // make a list of cases
         for(var i=0;i<sortedCases.length;i++){
           var sc = sortedCases[i];
@@ -175,23 +158,53 @@ function initMe(){
         }
         j+="</ul>";
         
+        $(".ui-page-active mobcontent").html(j);
+        
         // choose icons / map symbols based on cases
-        if(prevAddresses[address].lat){
-          var mapMarker = markerByStatus(notsobad, stillopen, prevAddresses[address]);
-          map.addLayer( mapMarker.bindPopup(j) );
-  	      
-  	      // average latlngs to center the map
+        if(!prevAddresses[address].lat){
+          // no known location - highlight in sidebar
+          var li = document.createElement("li");
+  	      li.className="active address result";
+  	      li.style.backgroundColor = "#ffaaaa";
+  	      var icon = "http://code.leafletjs.com/leaflet-0.3.1/images/marker.png";
+  	      if(notsobad){
+  	        icon = 'http://aux.iconpedia.net/uploads/2484076891043904041.png';
+  	      }
+  	      else if(stillopen){
+  	        icon = "http://housepointer.herokuapp.com/images/leaflet-yellow.png";
+  	      }
+      	  li.innerHTML="<a href='#'><img src='" + icon + "' width='10px'><i class='home'></i><a href='/statusmobileone.html?id=" + address + "'>" + address.split(',')[0] + " " + address.split(',')[1] + "</a></a>";
+  	      $(".ui-page-active #resultbar").append(li);
+          continue;
+        }
+        else{
+          //var mapMarker = markerByStatus(notsobad, stillopen, prevAddresses[address]);
+          //map.addLayer( mapMarker.bindPopup(j) );
+        }
+  	    
+  	    // average latlngs to center the map
+  	    if(prevAddresses[address].lat){
   	      lat += prevAddresses[address].lat;
   	      lng += prevAddresses[address].lng;
   	      ptcount++;
     	}
-  	    
-  	    // add address list to sidebar
-  	    listThisAddress(notsobad, stillopen, address, !(!prevAddresses[address].lat));
-  	  }
-  	  
-  	  // center the map on the averaged location
-  	  map.setView(new L.LatLng( lat / ptcount, lng / ptcount ), 16);
+    	
+    	// add address list to sidebar
+    	var li = document.createElement("li");
+    	li.className="active address result";
+    	var icon = "http://code.leafletjs.com/leaflet-0.3.1/images/marker.png";
+    	if(notsobad){
+    	  icon = 'http://aux.iconpedia.net/uploads/2484076891043904041.png';
+    	}
+    	else if(stillopen){
+    	  icon = "http://housepointer.herokuapp.com/images/leaflet-yellow.png";
+    	}
+    	li.innerHTML="<a href='#'><img src='" + icon + "' width='10px'><i class='home'></i><a href='/statusmobileone.html?id=" + address + "'>" + address.split(',')[0] + " " + address.split(',')[1] + "</a></a>";
+    	$(".ui-page-active #resultbar").append(li);
+      }
+      
+      // center the map on the averaged location
+      //map.setView(new L.LatLng( lat / ptcount, lng / ptcount ), 16);
   	}
   	else{
   	  findRoad();
@@ -199,9 +212,9 @@ function initMe(){
   });
   
   // set API links
-  $("#jsonlink")[0].href = b.replace("searchdb","searchdb.json");
-  $("#kmllink")[0].href = b.replace("searchdb","searchdb.kml") + "&fmt=kml";
-  //$("#pnglink")[0].href = b.replace("searchdb","searchdb.png") + "&fmt=png";
+  //$(".ui-page-active #jsonlink")[0].href = b.replace("searchdb","searchdb.json");
+  //$(".ui-page-active #kmllink")[0].href = b.replace("searchdb","searchdb.kml") + "&fmt=kml";
+  //$(".ui-page-active #pnglink")[0].href = b.replace("searchdb","searchdb.png") + "&fmt=png";
 }
 function findRoad(){
   // no cases on searched road
@@ -211,8 +224,8 @@ function findRoad(){
   var li = document.createElement("li");
   li.className="nav-header";
   li.innerHTML="No Results on Street";
-  $("#resultbar").append(li);
-  $("#loadanim").css({ display: "block" });
+  $(".ui-page-active #resultbar").append(li);
+  $(".ui-page-active #loadanim").css({ display: "block" });
 
   var local = "/osmgeo?streetname=" + gup("streetname");
   jQuery.getJSON(local, function(r){
@@ -224,10 +237,10 @@ function findRoad(){
       }
     }
     if(topAddress && topAddress.boundingbox){
-  	  var li = document.createElement("li");
-  	  li.className="nav-header";
+      var li = document.createElement("li");
+      li.className="nav-header";
       li.innerHTML="Nearby Cases (if any)";
-  	  $("#resultbar").append(li);
+      $(".ui-page-active #resultbar").append(li);
       
       var latspan = topAddress.boundingbox[1] * 1.0 - topAddress.boundingbox[0] * 1.0;
       var lngspan = topAddress.boundingbox[3] * 1.0 - topAddress.boundingbox[2] * 1.0;
@@ -242,15 +255,18 @@ function findRoad(){
       }
       var ctrlat = (topAddress.boundingbox[0] * 1.0 + topAddress.boundingbox[1] * 1.0) / 2;
       var ctrlng = (topAddress.boundingbox[2] * 1.0 + topAddress.boundingbox[3] * 1.0) / 2;
-      var southwest = new L.LatLng( (ctrlat - latspan / 2).toFixed(6), (ctrlng - lngspan / 2).toFixed(6) );
-      var northeast = new L.LatLng( (ctrlat + latspan / 2).toFixed(6), (ctrlng + lngspan / 2).toFixed(6) );
       
-      var zoomBounds = new L.LatLngBounds( southwest, northeast );
-      map.fitBounds(zoomBounds);
+      var southwest = { lat: (ctrlat - latspan / 2).toFixed(6), lng: (ctrlng - lngspan / 2).toFixed(6) };
+      var northeast = { lat: (ctrlat + latspan / 2).toFixed(6), lng: (ctrlng + lngspan / 2).toFixed(6) };
+      //var southwest = new L.LatLng( (ctrlat - latspan / 2).toFixed(6), (ctrlng - lngspan / 2).toFixed(6) );
+      //var northeast = new L.LatLng( (ctrlat + latspan / 2).toFixed(6), (ctrlng + lngspan / 2).toFixed(6) );
+      
+      //var zoomBounds = new L.LatLngBounds( southwest, northeast );
+      //map.fitBounds(zoomBounds);
       
       var geolink = "/geo?bbox=" + southwest.lat + "," + southwest.lng + "," + northeast.lat + "," + northeast.lng;
       jQuery.getJSON(geolink, function(b){
-        $("#loadanim").css({ display: "none" });
+        $(".ui-page-active #loadanim").css({ display: "none" });
         if(b.rows.length){
 
           // sort addresses by street name, and then again by number
@@ -268,7 +284,7 @@ function findRoad(){
               return b.id * 1 - a.id * 1;
             });
             // write the top of a map popup
-            j='<h3><a href="/statuscombine.html?id='+address+'">'+address.split(',')[0]+" "+address.split(',')[1]+"</a></h3><ul>";
+            j='<h3><a href="/statusmobileone.html?id='+address+'">'+address.split(',')[0]+" "+address.split(',')[1]+"</a></h3><ul>";
             // make a list of cases
             for(var i=0;i<sortedCases.length;i++){
               var sc = sortedCases[i];
@@ -288,107 +304,85 @@ function findRoad(){
             j+="</ul>";
         
             // choose icons / map symbols based on cases
-            if(prevAddresses[address].lat){
-              var mapMarker = markerByStatus(notsobad, stillopen, prevAddresses[address]);
-              map.addLayer( mapMarker.bindPopup(j) );
+            if(!prevAddresses[address].lat){
+              // no known location - highlight in sidebar
+              var li = document.createElement("li");
+              li.className="active address result";
+              li.style.backgroundColor = "#ffaaaa";
+              var icon = "http://code.leafletjs.com/leaflet-0.3.1/images/marker.png";
+              if(notsobad){
+                icon = 'http://aux.iconpedia.net/uploads/2484076891043904041.png';
+              }
+              else if(stillopen){
+                icon = "http://housepointer.herokuapp.com/images/leaflet-yellow.png";
+              }
+              li.innerHTML="<a href='#'><img src='" + icon + "' width='10px'><i class='home'></i><a href='/statusmobileone.html?id=" + address + "'>" + address.split(',')[0] + " " + address.split(',')[1] + "</a></a>";
+              $(".ui-page-active #resultbar").append(li);
+              continue;
+            }
+            else{
+              //var mapMarker = markerByStatus(notsobad, stillopen, prevAddresses[address]);
+              //map.addLayer( mapMarker.bindPopup(j) );
             }
   	    
   	        // add address list to sidebar
-  	        listThisAddress(notsobad, stillopen, address, !(!prevAddresses[address].lat));
+  	        var li = document.createElement("li");
+  	        li.className="active address result";
+  	        var icon = "http://code.leafletjs.com/leaflet-0.3.1/images/marker.png";
+  	        if(notsobad){
+  	          icon = 'http://aux.iconpedia.net/uploads/2484076891043904041.png';
+  	        }
+  	        else if(stillopen){
+  	          icon = "http://housepointer.herokuapp.com/images/leaflet-yellow.png";
+  	        }
+      	    li.innerHTML="<a href='#'><img src='" + icon + "' width='10px'><i class='home'></i><a href='/statusmobileone.html?id=" + address + "'>" + address.split(',')[0] + " " + address.split(',')[1] + "</a></a>";
+  	        $(".ui-page-active #resultbar").append(li);
   	      }
   	    }
       });
-      $("#jsonlink")[0].href = geolink.replace("/geo","/geo.json");
-      $("#kmllink")[0].href = geolink.replace("/geo","/geo.kml") + "&fmt=kml";
-      //$("#pnglink")[0].href = geolink.replace("/geo","/geo.png") + "&fmt=png";
+      //$(".ui-page-active #jsonlink")[0].href = geolink.replace("/geo","/geo.json");
+      //$(".ui-page-active #kmllink")[0].href = geolink.replace("/geo","/geo.kml") + "&fmt=kml";
+      //$(".ui-page-active #pnglink")[0].href = geolink.replace("/geo","/geo.png") + "&fmt=png";
     }
   });
 }
-  </script>
+$(document).ready(function(){
+  initMe();
+  $('[data-role=page]').live('pageinit', function(event) {
+    console.log(event);
+    initMe();
+  });
+});
+</script>
 </head>
-<body data-action='search' data-controller='addresses' onload='initMe()'>
-  <div class='container-addresses container-addresses-search' id='wrapper'>
-    <div class='navbar'>
-      <div class='navbar-inner'>
-        <div class='container'>
-          <p>
-            <img height='20px' src='/images/code_flag.png'>
-            Created by Code for America in partnership with the City of Macon.
-            <a href='http://www.codeforamerica.org' target='_blank'>Learn more</a>.
-          </p>
-        </div>
-      </div>
-    </div>
-    <header class='page-header'>
-      <h1 id='logo'>
-        <a href="/">homeSTATUS</a>
-      </h1>
-      <div class='top-search-bar'>
-        <div class='search-form'>
-          <form accept-charset="UTF-8" action="/statusstreet.html" method="get">
-            <div style="margin:0;padding:0;display:inline">
-              <input name="utf8" type="hidden" value="&#x2713;" />
-            </div>
-            <div class='search-field'>
-              <input id="main-search-field" name="streetname" placeholder="Example: Adams Ave" type="text" value="" />
-            </div>
-            <div class='search-button'>
-              <input class="btn" name="commit" type="submit" value="Map Addresses" />
-            </div>
-          </form>
-        </div>
-      </div>
-    </header>
-    <div class='search-results'>
-      <div class='left-bar'>
-        <div class='well' style='padding: 8px 0;'>
-          <ul id='resultbar' class='nav list'>
-            <li class='nav-header'>Search Results</li>
-            <img id="loadanim" src="/images/loading-gif.gif" style="width:100%;"/>
-          </ul>
-          <div class='exportlinks nav'>
-            <li class='nav-header'>Download Data</li>
-            <a class="btn" id="kmllink" href="/api">
-              <img src="/images/Download-icon.png" style="vertical-align:middle;"/>
-              <span style="font-size:8pt;vertical-align:middle;">Map (Google Earth/KML)</span>
-            </a>
-            <!--<br/>
-            <a class="btn" id="pnglink" href="/api">
-              <img src="/images/Download-icon.png" style="vertical-align:middle;"/>
-              <span style="font-size:8pt;vertical-align:middle;">PNG (image)</span>
-            </a>-->
-            <br/>
-            <a class="btn" id="jsonlink" href="/api">
-              <img src="/images/Download-icon.png" style="vertical-align:middle;"/>
-              <span style="font-size:8pt;vertical-align:middle;">JSON</span>
-            </a>
-          </div>
-          <div class='clearfix'></div>
-        </div>
-      </div>
-      <div class='right-bar'>
-        <h3>Results show only properties with cases:</h3>
-        <div id='map' style='height: 400px;'></div>
-      </div>
-    </div>
-    <footer>
-      <div class='footer'>
-        <p>
-          <a href='/about'>About</a>
-          -
-          <a href='/terms-of-service'>Terms of Service</a>
-          -
-          <a href='/stats'>Statistics</a>
-          -
-          <a href='/feedback'>Send feedback</a>
-        </p>
-      </div>
-    </footer>
-    <script src='/scripts/leaflet.js' type='text/javascript'></script>
-    <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js' type='text/javascript'></script>
-    <!--[if lte IE 8]>
-      <link rel="stylesheet" href="/stylesheets/leaflet.ie.css" />
-    <![endif]-->
+<body>
+<div data-role="page" class="type-index">
+  <div data-role="header" data-theme="f" style="background-color:lightblue;padding:6px;">
+    <a href="javascript:history.back();" data-role="button" data-icon="arrow-l">
+      <span class="ui-btn-inner">
+        <span class="ui-btn-text">Back</span>
+        <span class="ui-icon ui-icon-arrow-l ui-icon-shadow"> </span>
+      </span>
+    </a>
+    <h1><img height='20px' src='/images/code_flag.png'></h1>
+    <a href="/statusmobilehome.html" data-ajax='false' data-role="button" data-icon="search">
+      <span class="ui-btn-inner">
+        <span class="ui-btn-text">Search</span>
+        <span class="ui-icon ui-icon-search ui-icon-shadow"> </span>
+      </span>
+    </a>
   </div>
+
+  <div data-role="content" data-theme="c" data-dividertheme="d">
+    <ul id='resultbar' data-role='listview' data-inset='true'  data-theme="c" data-dividertheme="d">
+      <li id="loadanim">
+        <img id="loadaniminner" src="/images/loading-gif.gif" style="width:100%;"/>
+      </li>
+    </ul>
+    <ul data-role='listview' data-inset='true'  data-theme="c" data-dividertheme="d">
+      <li id="mobcontent"></li>
+    </ul>
+  </div>
+</div>
 </body>
 </html>

@@ -29,7 +29,7 @@ function replaceAll(src, oldr, newr){
 }
 function initMe(){
   var prevAddresses = { };
-  $("#main-search-field").val( replaceAll(replaceAll(gup("id"), "+", " "), "%20", " "));
+  //$(".ui-page-active #main-search-field").val( replaceAll(replaceAll(gup("id"), "+", " "), "%20", " "));
 
   var surveyAddress = gup("id");
   if(surveyAddress.indexOf("%20") == 0){
@@ -162,14 +162,17 @@ function initMe(){
           }
           j+="</ul>";
           hasLocation = true;
-          $("#mobcontent").html(j);
+          $(".ui-page-active #mobcontent").html(j);
       }
     }
   });
-  var s = document.createElement("script");
-  s.type = "text/javascript";
-  s.src = "http://seeclickfix.com/api/issues/" + gup("report") + ".json?callback=loadSCFReport";
-  $(document).append(s);
+  if(gup("report")){
+    // request this report from SeeClickFix
+    var s = document.createElement("script");
+    s.type = "text/javascript";
+    s.src = "http://seeclickfix.com/api/issues/" + gup("report") + ".json?callback=loadSCFReport";
+    $(document).append(s);
+  }
 }
 function loadSCFReport(reports){
   var report = reports[0];
