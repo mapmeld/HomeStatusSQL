@@ -46,37 +46,37 @@ function initMe(){
         
         if(b.rows[i].value.major){
           var li = document.createElement("li");
-          li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
+          //li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
           li.innerHTML="<a href='#'>Major Damage</a>";
           document.getElementById("resultbar").appendChild(li);  
         }
         if(b.rows[i].value.secure){
           var li = document.createElement("li");
-          li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
+          //li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
           li.innerHTML="<a href='#'>Secure</a>";
           document.getElementById("resultbar").appendChild(li);  
         }
         else{
           var li = document.createElement("li");
-          li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
+          //li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
           li.innerHTML="<a href='#'>Not Secure</a>";
           document.getElementById("resultbar").appendChild(li);  
         }
         if(b.rows[i].value.burned){
           var li = document.createElement("li");
-          li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
+          //li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
           li.innerHTML="<a href='#'>Burnt</a>";
           document.getElementById("resultbar").appendChild(li);  
         }
         if(b.rows[i].value.boarded){
           var li = document.createElement("li");
-          li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
+          //li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
           li.innerHTML="<a href='#'>Boarded</a>";
           document.getElementById("resultbar").appendChild(li);  
         }
         if(b.rows[i].value.minor){
           var li = document.createElement("li");
-          li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
+          //li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
           li.innerHTML="<a href='#'>Minor Damage</a>";
           document.getElementById("resultbar").appendChild(li);  
         }
@@ -176,16 +176,32 @@ function loadSCFReport(reports){
   $("#scfanim").css({ display: "none" });
   
   var iconProp = document.createElement("li");
-  iconProp.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
-  iconProp.innerHTML = "<img src='" + report.square_image + "' style='vertical-align:middle;width:20px;'/><span style='vertical-align:middle'>" + report.summary + "</span>";
+  //iconProp.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
+  iconProp.className="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-li-has-thumb ui-btn-up-c";
+  iconProp["data-corners"] = "false";
+  iconProp["data-shadow"] = "false";
+  iconProp["data-iconshadow"] = "true";
+  iconProp["data-wrapperels"] = "div";
+  iconProp["data-icon"] = "arrow-r";
+  iconProp["data-iconpos"] = "right";
+  iconProp["data-theme"] = "c";
+  iconProp.innerHTML = "<img src='" + report.square_image + "' style='vertical-align:middle;width:20px;'/><h3 style='vertical-align:middle'>" + report.summary + "</h3>";
   document.getElementById("reportbox").appendChild(iconProp);
   
   var propertyList = ["issue_id","created_at","description","reporter_display","status","updated_at"];  
   for(var p=0;p<propertyList.length;p++){
     var property = propertyList[p];
     var li = document.createElement("li");
-    li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
-    li.innerHTML = "<strong>" + property + "</strong>: " + report[property];
+    //li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
+    li.className="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-li-has-thumb ui-btn-up-c";
+    li["data-corners"] = "false";
+    li["data-shadow"] = "false";
+    li["data-iconshadow"] = "true";
+    li["data-wrapperels"] = "div";
+    li["data-icon"] = "arrow-r";
+    li["data-iconpos"] = "right";
+    li["data-theme"] = "c";
+    li.innerHTML = "<h4>" + property + "</h4><p>" + report[property] + "</p>";
     document.getElementById("reportbox").appendChild(li);
   }
 
