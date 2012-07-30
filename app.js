@@ -112,6 +112,10 @@ var init = exports.init = function (config) {
     res.redirect('/statushome.html');
   });
   
+  app.get('/m', function(req, res){
+    res.redirect('/statusmobilehome.html')
+  });
+  
   // Sample posting to housing DB
   /* app.get('/sendstuff', function(req,res){
     urlReq("http://nickd.iriscouch.com:5984/housing", {
