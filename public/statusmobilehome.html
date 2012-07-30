@@ -72,10 +72,10 @@ function scfhistory(reports){
     li["data-iconpos"] = "right";
     li["data-theme"] = "c";
     if(caseAddress.length){
-      li.innerHTML = "<div class='ui-btn-inner ui-li'><div class='ui-btn-text'><a class='ui-link-inherit' data-ajax='false' href='/statusmobileone.html?id=%20" + caseAddress + "&report=" + reports[r].id + "'><h3>" + reports[r].summary + "</h3><p>" + reports[r].created_at + "</p></a></div><span class='ui-icon ui-icon-arrow-r ui-icon-shadow'> </span></div>";
+      li.innerHTML = "<div class='ui-btn-inner ui-li'><div class='ui-btn-text'><a class='ui-link-inherit' data-ajax='false' href='/statusmobileone.html?id=%20" + caseAddress + "&report=" + reports[r].id + "'><h3 style='white-space:normal;'>" + reports[r].summary + "</h3><p>" + reports[r].created_at + "</p></a></div><span class='ui-icon ui-icon-arrow-r ui-icon-shadow'> </span></div>";
     }
     else{
-      li.innerHTML = "<div class='ui-btn-inner ui-li'><div class='ui-btn-text'><a class='ui-link-inherit' data-ajax='false' href='/readreport.html?report=" + reports[r].id + "'><h3>" + reports[r].summary + "</h3><p>" + reports[r].created_at + "</p></a></div><span class='ui-icon ui-icon-arrow-r ui-icon-shadow'> </span></div>";    
+      li.innerHTML = "<div class='ui-btn-inner ui-li'><div class='ui-btn-text'><a class='ui-link-inherit' data-ajax='false' href='/readreport.html?report=" + reports[r].id + "'><h3 style='white-space:normal;'>" + reports[r].summary + "</h3><p>" + reports[r].created_at + "</p></a></div><span class='ui-icon ui-icon-arrow-r ui-icon-shadow'> </span></div>";    
     }
     $(".ui-page-active #reportbox").append(li);
   }

@@ -138,7 +138,7 @@ function initMe(){
         var notsobad = true;
         var stillopen = false;
         var sortedCases = prevAddresses[address].cases.sort( function(a,b){ return b.id * 1 - a.id * 1; } );
-        var j='<h3>'+address.split(',')[0]+" "+address.split(',')[1]+"</h3><ul>";
+        var j='<h3 style="white-space:normal;">'+address.split(',')[0]+" "+address.split(',')[1]+"</h3><ul>";
         for(var i=0; i < sortedCases.length; i++){
           var sc = sortedCases[i];
           j += "<li>"+sc.inspector + " inspected. Case opened "+ parseStamp(sc.opendate) + ".";
@@ -182,7 +182,7 @@ function loadSCFReport(reports){
   iconProp["data-icon"] = "arrow-r";
   iconProp["data-iconpos"] = "right";
   iconProp["data-theme"] = "c";
-  iconProp.innerHTML = "<h3><img src='" + report.square_image + "' style='vertical-align:middle;width:20px;display:inline;'/><span style='vertical-align:middle;padding-left:10px;'>" + report.summary + "</span></h3>";
+  iconProp.innerHTML = "<h3 style='white-space:normal;'><img src='" + report.square_image + "' style='vertical-align:middle;width:20px;display:inline;'/><span style='vertical-align:middle;padding-left:10px;'>" + report.summary + "</span></h3>";
   $(".ui-page-active #reportbox").append(iconProp);
   
   var propertyList = ["issue_id","created_at","description","reporter_display","status","updated_at"];  
@@ -245,7 +245,7 @@ function scfhistory(reports){
     li["data-icon"] = "arrow-r";
     li["data-iconpos"] = "right";
     li["data-theme"] = "c";
-    li.innerHTML = "<div class='ui-btn-inner ui-li'><div class='ui-btn-text'><a class='ui-link-inherit' data-ajax='false' href='/statusmobileone.html?id=" + gup("id") + "&report=" + reports[r].id + "'><h3>" + reports[r].summary + "</h3><p>" + reports[r].created_at + "</p></a></div><span class='ui-icon ui-icon-arrow-r ui-icon-shadow'> </span></div>";
+    li.innerHTML = "<div class='ui-btn-inner ui-li'><div class='ui-btn-text'><a class='ui-link-inherit' data-ajax='false' href='/statusmobileone.html?id=" + gup("id") + "&report=" + reports[r].id + "'><h3 style='white-space:normal;'>" + reports[r].summary + "</h3><p>" + reports[r].created_at + "</p></a></div><span class='ui-icon ui-icon-arrow-r ui-icon-shadow'> </span></div>";
     $(".ui-page-active #reportbox").append(li);
   }
 }
