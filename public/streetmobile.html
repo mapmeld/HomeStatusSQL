@@ -31,7 +31,7 @@ function replaceAll(src, oldr, newr){
 function streetNameThenNumber(a,b){
   if(a.value.address.split(",")[1] == b.value.address.split(",")[1]){
     // streets match, sort by number
-    return a.value.address.split(',')[0] * 1 - b.value.address.split(',')[0] * 1;
+    return a.value.address.split(',')[0].split(" ")[0] * 1 - b.value.address.split(',')[0].split(" ")[0] * 1;
   }
   else{
     // streets don't match
@@ -103,7 +103,7 @@ function markerByStatus(notsobad, stillopen, pt){
   // standard marker
   return new L.Marker( new L.LatLng( pt.lat, pt.lng ) );
 }
-function listThisAddress(notsobad, stillopen, address, ismapped){
+/*function listThisAddress(notsobad, stillopen, address, ismapped){
   var li = document.createElement("li");
   li.className="active address result";
   var icon = "http://housepointer.herokuapp.com/scripts/images/marker.png";
@@ -118,7 +118,7 @@ function listThisAddress(notsobad, stillopen, address, ismapped){
   }
   li.innerHTML="<a href='#'><img src='" + icon + "' width='10px'><i class='home'></i><a href='/statuscombine.html?id=" + address + "'>" + address.split(',')[0] + " " + address.split(',')[1] + "</a></a>";
   $(".ui-page-active #resultbar").append(li);
-}
+}*/
 function initMe(){
   //var tileURL = "http://otile1.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png";
   //var attribution = "Map data &copy; 2012 OpenStreetMap contributors, Tiles by MapQuest";
