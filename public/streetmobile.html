@@ -31,7 +31,7 @@ function replaceAll(src, oldr, newr){
 function streetNameThenNumber(a,b){
   if(a.value.address.split(",")[1] == b.value.address.split(",")[1]){
     // streets match, sort by number
-    return a.value.address.split(',')[0].split(" ")[0] * 1 - b.value.address.split(',')[0].split(" ")[0] * 1;
+    return a.value.address.split(',')[0].split("-")[0] * 1 - b.value.address.split(',')[0].split("-")[0] * 1;
   }
   else{
     // streets don't match
