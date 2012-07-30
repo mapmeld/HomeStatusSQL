@@ -106,7 +106,7 @@ function markerByStatus(notsobad, stillopen, pt){
 function listThisAddress(notsobad, stillopen, address, ismapped){
   var li = document.createElement("li");
   li.className="active address result";
-  var icon = "http://code.leafletjs.com/leaflet-0.3.1/images/marker.png";
+  var icon = "http://housepointer.herokuapp.com/scripts/images/marker.png";
   if(notsobad){
     icon = 'http://aux.iconpedia.net/uploads/2484076891043904041.png';
   }
@@ -147,7 +147,6 @@ function initMe(){
       prevAddresses = casesToAddresses(b);
 
       for(address in prevAddresses){
-        var j="";
         var notsobad = true;
         var stillopen = false;
         // sort cases for this address by their date
@@ -155,7 +154,7 @@ function initMe(){
           return b.id * 1 - a.id * 1;
         });
         // write the top of a map popup
-        j='<h3><a href="/statusmobileone.html?id='+address+'">'+address.split(',')[0]+" "+address.split(',')[1]+"</a></h3><ul>";
+        var j='<h3><a href="/statusmobileone.html?id='+address+'">'+address.split(',')[0]+" "+address.split(',')[1]+"</a></h3><ul>";
         // make a list of cases
         for(var i=0;i<sortedCases.length;i++){
           var sc = sortedCases[i];
@@ -174,7 +173,7 @@ function initMe(){
         }
         j+="</ul>";
         
-        $(".ui-page-active mobcontent").html(j);
+        $(".ui-page-active #mobcontent").html(j);
         
         // choose icons / map symbols based on cases
         if(prevAddresses[address].lat){
