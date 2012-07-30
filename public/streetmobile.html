@@ -173,7 +173,18 @@ function initMe(){
         }
         j+="</ul>";
         
-        $(".ui-page-active #mobcontent").html(j);
+        var li = document.createElement("li");
+        li.className = "ui-li ui-li-static ui-body-c ui-corner-top ui-corner-bottom";
+        if(notsobad){
+          li.innerHTML = "<img src='http://aux.iconpedia.net/uploads/2484076891043904041.png' style='margin:5px;width:20px;'/>" + j;
+        }
+        else if(stillopen){
+          li.innerHTML = "<img src='http://housepointer.herokuapp.com/images/leaflet-yellow.png' style='margin:5px;width:20px;'/>" + j;        
+        }
+        else{
+          li.innerHTML = "<img src='http://housepointer.herokuapp.com/scripts/images/marker.png' style='margin:5px;width:20px;'/>" + j;
+        }
+        $(".ui-page-active #mobcontent").append(li);
         
         // choose icons / map symbols based on cases
         if(prevAddresses[address].lat){
@@ -187,7 +198,7 @@ function initMe(){
         }
         
         // add address list to sidebar
-        listThisAddress(notsobad, stillopen, address, !(!prevAddresses[address].lat));
+        //listThisAddress(notsobad, stillopen, address, !(!prevAddresses[address].lat));
       }
       
       // center the map on the averaged location
@@ -340,8 +351,7 @@ $(document).ready(function(){
         <img id="loadaniminner" src="/images/loading-gif.gif" style="width:100%;"/>
       </li>
     </ul>
-    <ul data-role='listview' data-inset='true'  data-theme="c" data-dividertheme="d">
-      <li id="mobcontent"></li>
+    <ul id='mobcontent' data-role='listview' data-inset='true'  data-theme="c" data-dividertheme="d">
     </ul>
   </div>
 </div>
