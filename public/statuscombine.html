@@ -102,7 +102,12 @@ function initMe(){
   map = new L.Map("map");
   map.addLayer( baseMapLayer );
   map.setView(new L.LatLng(32.840943,-83.62587),12);
-  $("#main-search-field").val( replaceAll(replaceAll(gup("id"), "+", " "), "%20", " "));
+  if(gup("id").indexOf("%20") == 0){
+    $("#main-search-field").val( replaceAll(replaceAll(gup("id").replace(","," ").replace("%20","").split(",")[0], "+", " "), "%20", " "));
+  }
+  else{
+    $("#main-search-field").val( replaceAll(replaceAll(gup("id"), "+", " "), "%20", " "));
+  }
 
   var surveyAddress = gup("id");
   if(surveyAddress.indexOf("%20") == 0){
