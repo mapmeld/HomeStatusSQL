@@ -182,7 +182,7 @@ function initMe(){
   }
   else if(gup("id")){
     // check for SeeClickFix reports at this address
-    var reportAddress = gup("id");
+    reportAddress = gup("id");
     if(reportAddress.indexOf("%20") == 0){
       reportAddress = replaceAll(reportAddress.replace("%20",""), "%20", " ").replace(","," ").split(',')[0];
     }
