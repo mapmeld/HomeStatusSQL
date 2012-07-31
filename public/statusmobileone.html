@@ -179,10 +179,7 @@ function initMe(){
   if(gup("report")){
     // request this report from SeeClickFix
     console.log("specific report");
-    var s = document.createElement("script");
-    s.type = "text/javascript";
-    s.src = "http://seeclickfix.com/api/issues/" + gup("report") + ".json?callback=loadSCFReport";
-    $(document).append(s);
+    promoteReport(gup("report"));
   }
   else if(gup("id")){
     // check for SeeClickFix reports at this address
@@ -206,8 +203,9 @@ function initMe(){
   }
 }
 function loadSCFReport(reports){
+  $(".ui-page-active #reportbox").html("");
   var report = reports[0];
-  $(".ui-page-active #scfanim").css({ display: "none" });
+  //$(".ui-page-active #scfanim").css({ display: "none" });
 
   var iconProp = document.createElement("li");
   iconProp.className="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-li-has-thumb ui-btn-up-c";
@@ -275,9 +273,15 @@ function scfhistory(reports){
   for(var r=0;r<reports.length;r++){
     var li = document.createElement("li");
     li.className="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-li-has-thumb ui-btn-up-c";
-    li.innerHTML = "<div class='ui-btn-inner ui-li'><div class='ui-btn-text'><a class='ui-link-inherit' href='/statusmobileone.html?id=" + gup("id") + "&report=" + reports[r].id + "'><h3 style='white-space:normal;'>" + reports[r].summary + "</h3><p>" + reports[r].created_at + "</p></a></div><span class='ui-icon ui-icon-arrow-r ui-icon-shadow'> </span></div>";
+    li.innerHTML = "<div class='ui-btn-inner ui-li'><div class='ui-btn-text'><a class='ui-link-inherit' href='#' onclick='promoteReport(" + reports[r].id + ");'><h3 style='white-space:normal;'>" + reports[r].summary + "</h3><p>" + reports[r].created_at + "</p></a></div><span class='ui-icon ui-icon-arrow-r ui-icon-shadow'> </span></div>";
     $(".ui-page-active #reportbox").append(li);
   }
+}
+function promoteReport(rid){
+  var s = document.createElement("script");
+  s.type = "text/javascript";
+  s.src = "http://seeclickfix.com/api/issues/" + rid + ".json?callback=loadSCFReport";
+  $(document).append(s);
 }
 $(document).ready(function(){
   initMe();
