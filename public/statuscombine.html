@@ -101,7 +101,6 @@ function initMe(){
   map = new L.Map("map");
   map.addLayer( baseMapLayer );
   map.setView(new L.LatLng(32.840943,-83.62587),12);
-  var prevAddresses = { };
   $("#main-search-field").val( replaceAll(replaceAll(gup("id"), "+", " "), "%20", " "));
 
   var surveyAddress = gup("id");
