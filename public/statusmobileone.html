@@ -184,11 +184,15 @@ function initMe(){
     // check for SeeClickFix reports at this address
     var reportAddress = gup("id");
     if(reportAddress.indexOf("%20") == 0){
-      reportAddress = reportAddress.replace("%20","").replace(","," ").split(',')[0];
+      reportAddress = replaceAll(reportAddress.replace("%20",""), "%20", " ").replace(","," ").split(',')[0];
+    }
+    if(reportAddress.indexOf("0") == 0){
+      reportAddress = reportAddress.replace("0","");
     }
     var s = document.createElement("script");
     s.type = "text/javascript";
     s.src = "http://seeclickfix.com/api/issues.json?at=" + reportAddress + "&start=10000&callback=scfhistory";
+    reportAddress = reportAddress.toLowerCase();
     $(document).append(s);
   }
   else{
@@ -250,11 +254,12 @@ function loadSCFReport(reports){
   var s = document.createElement("script");
   s.type = "text/javascript";
   s.src = "http://seeclickfix.com/api/issues.json?at=" + reportAddress + "&start=10000&callback=scfhistory";
+  reportAddress = reportAddress.toLowerCase();
   $(document).append(s);
 }
 function scfhistory(reports){
   for(var r=reports.length-1;r>=0;r--){
-    if(reports[r].address != reportAddress){
+    if(reports[r].address.toLowerCase().indexOf(reportAddress) == -1){
       reports.splice(r,1);
     }
   }
