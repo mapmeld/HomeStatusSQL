@@ -173,6 +173,7 @@ function initMe(){
     // has location, but not an address
     $(".ui-page-active #loadanim").css({ display: "none" });
   }
+  console.log($.mobile.activePage.data('url'));
   if(gup("report")){
     // request this report from SeeClickFix
     console.log("specific report");
