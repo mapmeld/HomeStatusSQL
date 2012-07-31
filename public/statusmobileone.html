@@ -182,9 +182,9 @@ function initMe(){
   }
   else if(gup("id")){
     // check for SeeClickFix reports at this address
-    var surveyAddress = gup("id");
-    if(surveyAddress.indexOf("%20") == 0){
-      surveyAddress = surveyAddress.replace("%20","").replace(","," ").toLowerCase().split(',')[0];
+    var reportAddress = gup("id");
+    if(reportAddress.indexOf("%20") == 0){
+      reportAddress = reportAddress.replace("%20","").replace(","," ").split(',')[0];
     }
     var s = document.createElement("script");
     s.type = "text/javascript";
