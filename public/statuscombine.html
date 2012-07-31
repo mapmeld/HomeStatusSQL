@@ -13,6 +13,7 @@
   <meta content='width=device-width' name='viewport'/>
   <script type="text/javascript">
 var map;
+var prevAddresses = { };
 if(!console || !console.log){
   console = { log: function(e){ } };
 }
@@ -57,15 +58,15 @@ function markerByStatus(notsobad, stillopen, pt){
   return new L.Marker( new L.LatLng( pt.lat, pt.lng ) );
 }
 function casesToAddresses(b){
-  var prevAddresses = {};
+  var pa = {};
   for(i=0;i<b.rows.length;i++){
-    if(prevAddresses[b.rows[i].value.address]){
+    if(pa[b.rows[i].value.address]){
       // already thinking about this address
-      if(!prevAddresses[b.rows[i].value.address].lat && b.rows[i].value.loc){
-        prevAddresses[b.rows[i].value.address].lat = b.rows[i].value.loc[0] * 1.0;
-        prevAddresses[b.rows[i].value.address].lng = b.rows[i].value.loc[1] * 1.0;
+      if(!pa[b.rows[i].value.address].lat && b.rows[i].value.loc){
+        pa[b.rows[i].value.address].lat = b.rows[i].value.loc[0] * 1.0;
+        pa[b.rows[i].value.address].lng = b.rows[i].value.loc[1] * 1.0;
       }
-      prevAddresses[b.rows[i].value.address].cases.push({
+      pa[b.rows[i].value.address].cases.push({
         id: b.rows[i].value.ecd_id,
         inspector: b.rows[i].value.inspector,
         opendate: b.rows[i].value.opendate,
@@ -75,15 +76,15 @@ function casesToAddresses(b){
     }
     else{
       if(b.rows[i].value.loc){
-        prevAddresses[b.rows[i].value.address] = {
+        pa[b.rows[i].value.address] = {
           lat: b.rows[i].value.loc[0] * 1.0,
           lng: b.rows[i].value.loc[1] * 1.0
         };
       }
       else{
-        prevAddresses[b.rows[i].value.address] = { };
+        pa[b.rows[i].value.address] = { };
       }
-      prevAddresses[b.rows[i].value.address].cases = [{
+      pa[b.rows[i].value.address].cases = [{
         id: b.rows[i].value.ecd_id,
         inspector: b.rows[i].value.inspector,
         opendate: b.rows[i].value.opendate,
@@ -92,7 +93,7 @@ function casesToAddresses(b){
       }];
     }
   }
-  return prevAddresses;
+  return pa;
 }
 function initMe(){
   var tileURL = "http://otile1.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png";
@@ -102,8 +103,6 @@ function initMe(){
   map.addLayer( baseMapLayer );
   map.setView(new L.LatLng(32.840943,-83.62587),12);
   $("#main-search-field").val( replaceAll(replaceAll(gup("id"), "+", " "), "%20", " "));
-
-  prevAddresses = {};
 
   var surveyAddress = gup("id");
   if(surveyAddress.indexOf("%20") == 0){
