@@ -154,7 +154,7 @@ function initMe(){
           return b.id * 1 - a.id * 1;
         });
         // write the top of a map popup
-        var j='<h3><a href="/statusmobileone.html?id='+address+'">'+address.split(',')[0]+" "+address.split(',')[1]+"</a></h3><ul>";
+        var j='<h3><a data-ajax="false" href="/statusmobileone.html?id='+address+'">'+address.split(',')[0]+" "+address.split(',')[1]+"</a></h3><ul>";
         // make a list of cases
         for(var i=0;i<sortedCases.length;i++){
           var sc = sortedCases[i];
@@ -282,7 +282,7 @@ function findRoad(){
               return b.id * 1 - a.id * 1;
             });
             // write the top of a map popup
-            j='<h3><a href="/statusmobileone.html?id='+address+'">'+address.split(',')[0]+" "+address.split(',')[1]+"</a></h3><ul>";
+            j='<h3><a data-ajax="false" href="/statusmobileone.html?id='+address+'">'+address.split(',')[0]+" "+address.split(',')[1]+"</a></h3><ul>";
             // make a list of cases
             for(var i=0;i<sortedCases.length;i++){
               var sc = sortedCases[i];
