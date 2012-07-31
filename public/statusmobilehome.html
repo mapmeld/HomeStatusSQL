@@ -75,7 +75,9 @@ function scfhistory(reports){
       li.innerHTML = "<div class='ui-btn-inner ui-li'><div class='ui-btn-text'><a class='ui-link-inherit' data-ajax='false' href='/statusmobileone.html?id=%20" + caseAddress + "&report=" + reports[r].id + "'><h3 style='white-space:normal;'>" + reports[r].summary + "</h3><p>" + reports[r].created_at + "</p></a></div><span class='ui-icon ui-icon-arrow-r ui-icon-shadow'> </span></div>";
     }
     else{
-      li.innerHTML = "<div class='ui-btn-inner ui-li'><div class='ui-btn-text'><a class='ui-link-inherit' data-ajax='false' href='/statusmobileone.html?loc=other&report=" + reports[r].id + "'><h3 style='white-space:normal;'>" + reports[r].summary + "</h3><p>" + reports[r].created_at + "</p></a></div><span class='ui-icon ui-icon-arrow-r ui-icon-shadow'> </span></div>";    
+      // has location, but not an address
+      // send without an id
+      li.innerHTML = "<div class='ui-btn-inner ui-li'><div class='ui-btn-text'><a class='ui-link-inherit' data-ajax='false' href='/statusmobileone.html?report=" + reports[r].id + "'><h3 style='white-space:normal;'>" + reports[r].summary + "</h3><p>" + reports[r].created_at + "</p></a></div><span class='ui-icon ui-icon-arrow-r ui-icon-shadow'> </span></div>";    
     }
     $(".ui-page-active #reportbox").append(li);
   }

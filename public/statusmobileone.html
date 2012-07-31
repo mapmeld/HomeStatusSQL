@@ -31,7 +31,7 @@ function initMe(){
   var prevAddresses = { };
   //$(".ui-page-active #main-search-field").val( replaceAll(replaceAll(gup("id"), "+", " "), "%20", " "));
 
-  if(gup("loc") != "other"){
+  if(gup("id")){
     var surveyAddress = gup("id");
     if(surveyAddress.indexOf("%20") == 0){
       surveyAddress = surveyAddress.replace("%20","").replace(","," ").toLowerCase().split(',')[0];
@@ -163,6 +163,10 @@ function initMe(){
         }
       }
     });
+  }
+  else{
+    // has location, but not an address
+    $(".ui-page-active #loadanim").css({ display: "none" });
   }
   if(gup("report")){
     // request this report from SeeClickFix
