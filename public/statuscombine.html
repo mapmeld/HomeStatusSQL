@@ -12,7 +12,7 @@
   <!-- Mobile viewport optimized: h5bp.com/viewport -->
   <meta content='width=device-width' name='viewport'/>
   <script type="text/javascript">
-var map, prevAddresses;
+var map;
 if(!console || !console.log){
   console = { log: function(e){ } };
 }
@@ -57,6 +57,7 @@ function markerByStatus(notsobad, stillopen, pt){
   return new L.Marker( new L.LatLng( pt.lat, pt.lng ) );
 }
 function casesToAddresses(b){
+  var prevAddresses = {};
   for(i=0;i<b.rows.length;i++){
     if(prevAddresses[b.rows[i].value.address]){
       // already thinking about this address
@@ -101,6 +102,8 @@ function initMe(){
   map.addLayer( baseMapLayer );
   map.setView(new L.LatLng(32.840943,-83.62587),12);
   $("#main-search-field").val( replaceAll(replaceAll(gup("id"), "+", " "), "%20", " "));
+
+  prevAddresses = {};
 
   var surveyAddress = gup("id");
   if(surveyAddress.indexOf("%20") == 0){
