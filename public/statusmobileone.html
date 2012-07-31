@@ -161,7 +161,7 @@ function initMe(){
           
           var streetname = gup("id").split(',')[1];
           streetname = replaceAll(streetname, "%20", " ");
-          j+= '<br/><strong><a data-ajax="false" href="/streetmobile.html?streetname=' + streetname + '">' + streetname + '</a></strong>';
+          j+= '<br/><strong><a data-ajax="false" href="/streetmobile.html?streetname=' + streetname + '">View all on ' + streetname + '</a></strong>';
 
           hasLocation = true;
           $(".ui-page-active #mobcontent").html(j);
@@ -258,6 +258,8 @@ function loadSCFReport(reports){
   $(document).append(s);
 }
 function scfhistory(reports){
+  $(".ui-page-active #scfanim").css({ display: "none" });
+
   for(var r=reports.length-1;r>=0;r--){
     if(reports[r].address.toLowerCase().indexOf(reportAddress) == -1){
       reports.splice(r,1);
