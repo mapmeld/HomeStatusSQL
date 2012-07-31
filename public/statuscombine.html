@@ -203,7 +203,7 @@ function initMe(){
           continue;
         }
         else{
-          var mapMarker = markerByStatus(notsobad, stillopen, prevAdddresses[address]);
+          var mapMarker = markerByStatus(notsobad, stillopen, prevAddresses[address]);
           map.addLayer( mapMarker.bindPopup(j) );
           var earlyPopup = new L.Popup();
           earlyPopup.setLatLng(new L.LatLng(prevAddresses[address].lat + 0.0005, prevAddresses[address].lng));
