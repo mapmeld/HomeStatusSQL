@@ -264,9 +264,13 @@ function scfhistory(reports){
     if(reports[r].address.toLowerCase().indexOf(reportAddress) == -1){
       reports.splice(r,1);
     }
+    else if(reports[r].id == gup("report")){
+      // this is the main report and already described on the page
+      reports.splice(r,1);
+    }
   }
 
-  if(reports.length > 1){
+  if(reports.length > 0){
     // add report history
     var historyTitle = document.createElement("li");
     historyTitle.className="nav-header";
@@ -277,10 +281,6 @@ function scfhistory(reports){
   }
 
   for(var r=0;r<reports.length;r++){
-    if(reports[r].id == gup("report")){
-      // this is the main report and already described
-      continue;
-    }
     var li = document.createElement("li");
     li.className="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-li-has-thumb ui-btn-up-c";
     li["data-corners"] = "false";
