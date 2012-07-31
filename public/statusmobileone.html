@@ -31,139 +31,138 @@ function initMe(){
   var prevAddresses = { };
   //$(".ui-page-active #main-search-field").val( replaceAll(replaceAll(gup("id"), "+", " "), "%20", " "));
 
-  var surveyAddress = gup("id");
-  if(surveyAddress.indexOf("%20") == 0){
-    surveyAddress = surveyAddress.replace("%20","").replace(","," ").toLowerCase().split(',')[0];
-  }
   if(gup("loc") != "other"){
-  var b="/surveyed?address=" + surveyAddress;
-  jQuery.getJSON(b,function(b){
-    $(".ui-page-active #loadanim").css({ display: "none" });
-    if(b.rows.length){
-      for(i=0;i<b.rows.length;i++){
-        var e=b.rows[i].value.loc[0] * 1.0,
-        f=b.rows[i].value.loc[1] * 1.0,
-        g=16;
-        
-        if(b.rows[i].value.major){
-          var li = document.createElement("li");
-          //li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
-          li.innerHTML="<a href='#'>Major Damage</a>";
-          $(".ui-page-active #resultbar").append(li);  
-        }
-        if(b.rows[i].value.secure){
-          var li = document.createElement("li");
-          //li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
-          li.innerHTML="<a href='#'>Secure</a>";
-          $(".ui-page-active #resultbar").append(li);  
-        }
-        else{
-          var li = document.createElement("li");
-          //li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
-          li.innerHTML="<a href='#'>Not Secure</a>";
-          $(".ui-page-active #resultbar").append(li);  
-        }
-        if(b.rows[i].value.burned){
-          var li = document.createElement("li");
-          //li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
-          li.innerHTML="<a href='#'>Burnt</a>";
-          $(".ui-page-active #resultbar").append(li);  
-        }
-        if(b.rows[i].value.boarded){
-          var li = document.createElement("li");
-          //li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
-          li.innerHTML="<a href='#'>Boarded</a>";
-          $(".ui-page-active #resultbar").append(li);  
-        }
-        if(b.rows[i].value.minor){
-          var li = document.createElement("li");
-          //li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
-          li.innerHTML="<a href='#'>Minor Damage</a>";
-          $(".ui-page-active #resultbar").append(li);  
-        }
-      }
-      hasLocation = true;
+    var surveyAddress = gup("id");
+    if(surveyAddress.indexOf("%20") == 0){
+      surveyAddress = surveyAddress.replace("%20","").replace(","," ").toLowerCase().split(',')[0];
     }
-  });
-  }
-  var transformAddress = gup("id");
-  if(transformAddress.indexOf("%20%20") == -1){
-    transformAddress = " " + transformAddress.split(',')[0].toUpperCase().replace("%20",",") + ",%20" + transformAddress.split(',')[1] + ",%20%20GA";
-  }
+    var b="/surveyed?address=" + surveyAddress;
+    jQuery.getJSON(b,function(b){
+      $(".ui-page-active #loadanim").css({ display: "none" });
+      if(b.rows.length){
+        for(i=0;i<b.rows.length;i++){
+          var e=b.rows[i].value.loc[0] * 1.0,
+          f=b.rows[i].value.loc[1] * 1.0,
+          g=16;
+        
+          if(b.rows[i].value.major){
+            var li = document.createElement("li");
+            //li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
+            li.innerHTML="<a href='#'>Major Damage</a>";
+            $(".ui-page-active #resultbar").append(li);  
+          }
+          if(b.rows[i].value.secure){
+            var li = document.createElement("li");
+            //li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
+            li.innerHTML="<a href='#'>Secure</a>";
+            $(".ui-page-active #resultbar").append(li);  
+          }
+          else{
+            var li = document.createElement("li");
+            //li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
+            li.innerHTML="<a href='#'>Not Secure</a>";
+            $(".ui-page-active #resultbar").append(li);  
+          }
+          if(b.rows[i].value.burned){
+            var li = document.createElement("li");
+            //li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
+            li.innerHTML="<a href='#'>Burnt</a>";
+            $(".ui-page-active #resultbar").append(li);  
+          }
+          if(b.rows[i].value.boarded){
+            var li = document.createElement("li");
+            //li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
+            li.innerHTML="<a href='#'>Boarded</a>";
+            $(".ui-page-active #resultbar").append(li);  
+          }
+          if(b.rows[i].value.minor){
+            var li = document.createElement("li");
+            //li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
+            li.innerHTML="<a href='#'>Minor Damage</a>";
+            $(".ui-page-active #resultbar").append(li);  
+          }
+        }
+        hasLocation = true;
+      }
+    });
 
-  if(gup("loc") != "other"){
-  var b="/keydb?address=" + transformAddress;
-  jQuery.getJSON(b,function(b){
-    $(".ui-page-active #loadanim").css({ display: "none" });
-    if(b.rows.length){
-      b.rows.sort(function(a,b){
+    var transformAddress = gup("id");
+    if(transformAddress.indexOf("%20%20") == -1){
+      transformAddress = " " + transformAddress.split(',')[0].toUpperCase().replace("%20",",") + ",%20" + transformAddress.split(',')[1] + ",%20%20GA";
+    }
+
+    var b="/keydb?address=" + transformAddress;
+    jQuery.getJSON(b,function(b){
+      $(".ui-page-active #loadanim").css({ display: "none" });
+      if(b.rows.length){
+        b.rows.sort(function(a,b){
           if(!isNaN(a.value.address.split(',')[0]) && !isNaN(b.value.address.split(',')[0])){
-          // compare by numberic
-          return a.value.address.split(',')[0] * 1 - b.value.address.split(',')[0];
+            // compare by numberic
+            return a.value.address.split(',')[0] * 1 - b.value.address.split(',')[0];
           }
           else{
             // compare by alphabetic
-          if(b.value.address > a.value.address){
-            return -1;
+            if(b.value.address > a.value.address){
+              return -1;
+            }
+            else{
+              return 1;
+            }
+          }
+        });
+        for(i=0;i<b.rows.length;i++){
+          var e=b.rows[i].value.loc[0] * 1.0,
+          f=b.rows[i].value.loc[1] * 1.0;
+          if(prevAddresses[b.rows[i].value.address]){
+            // already thinking about this address
+            prevAddresses[b.rows[i].value.address].cases.push({
+              id: b.rows[i].value.ecd_id,
+              inspector: b.rows[i].value.inspector,
+              opendate: b.rows[i].value.opendate,
+              action: b.rows[i].value.action,
+              closedate: b.rows[i].value.closedate
+            });
           }
           else{
-            return 1;
-          }
-        }
-      });
-      for(i=0;i<b.rows.length;i++){
-        var e=b.rows[i].value.loc[0] * 1.0,
-        f=b.rows[i].value.loc[1] * 1.0;
-        if(prevAddresses[b.rows[i].value.address]){
-          // already thinking about this address
-          prevAddresses[b.rows[i].value.address].cases.push({
-            id: b.rows[i].value.ecd_id,
-            inspector: b.rows[i].value.inspector,
-            opendate: b.rows[i].value.opendate,
-            action: b.rows[i].value.action,
-            closedate: b.rows[i].value.closedate
-          });
-        }
-        else{
-          prevAddresses[b.rows[i].value.address] = {
-            lat: b.rows[i].value.loc[0] * 1.0,
-            lng: b.rows[i].value.loc[1] * 1.0
+            prevAddresses[b.rows[i].value.address] = {
+              lat: b.rows[i].value.loc[0] * 1.0,
+              lng: b.rows[i].value.loc[1] * 1.0
             };
-          prevAddresses[b.rows[i].value.address].cases = [{
-            id: b.rows[i].value.ecd_id,
-            inspector: b.rows[i].value.inspector,
-            opendate: b.rows[i].value.opendate,
-            action: b.rows[i].value.action,
-            closedate: b.rows[i].value.closedate
-          }];
-        }
-      }
-      for(address in prevAddresses){
-        var notsobad = true;
-        var stillopen = false;
-        var sortedCases = prevAddresses[address].cases.sort( function(a,b){ return b.id * 1 - a.id * 1; } );
-        var j='<h3 style="white-space:normal;">'+address.split(',')[0]+" "+address.split(',')[1]+"</h3><ul>";
-        for(var i=0; i < sortedCases.length; i++){
-          var sc = sortedCases[i];
-          j += "<li>"+sc.inspector + " inspected. Case opened "+ parseStamp(sc.opendate) + ".";
-          if(sc.closedate.length > 5){
-            j += " Resolved with " + sc.action + " on " + parseStamp(sc.closedate) + "</li>";
-          }
-          else{
-            j += " Case remains open.";
-            stillopen = true;
-          }
-          // if only actions were "No Violations" on same day as reported
-          if(sc.action != "No Violations" || sc.opendate != sc.closedate){
-            notsobad = false;
+            prevAddresses[b.rows[i].value.address].cases = [{
+              id: b.rows[i].value.ecd_id,
+              inspector: b.rows[i].value.inspector,
+              opendate: b.rows[i].value.opendate,
+              action: b.rows[i].value.action,
+              closedate: b.rows[i].value.closedate
+            }];
           }
         }
-        j+="</ul>";
-        hasLocation = true;
-        $(".ui-page-active #mobcontent").html(j);
+        for(address in prevAddresses){
+          var notsobad = true;
+          var stillopen = false;
+          var sortedCases = prevAddresses[address].cases.sort( function(a,b){ return b.id * 1 - a.id * 1; } );
+          var j='<h3 style="white-space:normal;">'+address.split(',')[0]+" "+address.split(',')[1]+"</h3><ul>";
+          for(var i=0; i < sortedCases.length; i++){
+            var sc = sortedCases[i];
+            j += "<li>"+sc.inspector + " inspected. Case opened "+ parseStamp(sc.opendate) + ".";
+            if(sc.closedate.length > 5){
+              j += " Resolved with " + sc.action + " on " + parseStamp(sc.closedate) + "</li>";
+            }
+            else{
+              j += " Case remains open.";
+              stillopen = true;
+            }
+            // if only actions were "No Violations" on same day as reported
+            if(sc.action != "No Violations" || sc.opendate != sc.closedate){
+              notsobad = false;
+            }
+          }
+          j+="</ul>";
+          hasLocation = true;
+          $(".ui-page-active #mobcontent").html(j);
+        }
       }
-    }
-  });
+    });
   }
   if(gup("report")){
     // request this report from SeeClickFix
