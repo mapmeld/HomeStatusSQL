@@ -175,6 +175,7 @@ function initMe(){
   }
   if(gup("report")){
     // request this report from SeeClickFix
+    console.log("specific report");
     var s = document.createElement("script");
     s.type = "text/javascript";
     s.src = "http://seeclickfix.com/api/issues/" + gup("report") + ".json?callback=loadSCFReport";
@@ -189,6 +190,7 @@ function initMe(){
     if(reportAddress.indexOf("0") == 0){
       reportAddress = reportAddress.replace("0","");
     }
+    console.log("searching for nearby reports");
     var s = document.createElement("script");
     s.type = "text/javascript";
     s.src = "http://seeclickfix.com/api/issues.json?at=" + reportAddress + ",%20Macon,%20GA&start=10000&callback=scfhistory";
@@ -233,14 +235,8 @@ function loadSCFReport(reports){
     var li = document.createElement("li");
     //li.className="ui-li ui-li-static ui-body-c ui-li-has-thumb ui-corner-top ui-corner-bottom";
     li.className="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-li-has-thumb ui-btn-up-c";
-    li["data-corners"] = "false";
-    li["data-shadow"] = "false";
-    li["data-iconshadow"] = "true";
-    li["data-wrapperels"] = "div";
-    li["data-icon"] = "arrow-r";
-    li["data-iconpos"] = "right";
-    li["data-theme"] = "c";
     li.innerHTML = "<p>" + property + ": " + report[property] + "</p>";
+    console.log('adding property: ' + property);
     $(".ui-page-active #reportbox").append(li);
   }
 
