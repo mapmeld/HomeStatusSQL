@@ -189,12 +189,13 @@ function initMe(){
           map.setView(new L.LatLng(prevAddresses[address].lat + 0.0007, prevAddresses[address].lng), 16);
           hasLocation = true;
           if(notsobad){
-            var miniIcon = new L.Icon();
-            miniIcon.iconSize = new L.Point(28, 30);
-            miniIcon.iconAnchor = new L.Point(15, 30);
-            miniIcon.shadowSize = new L.Point(34, 30);
-            miniIcon.popupAnchor = new L.Point(-2, -35);
-            miniIcon.iconUrl = "http://aux.iconpedia.net/uploads/2484076891043904041.png";
+            var miniIcon = new L.Icon({
+              iconSize: [28, 30],
+              iconAnchor: [15, 30],
+              shadowSize: [34, 30],
+              popupAnchor: [-2, -35],
+              iconUrl: "http://aux.iconpedia.net/uploads/2484076891043904041.png"
+            });
             map.addLayer(
               new L.Marker(
                 new L.LatLng( prevAddresses[address].lat, prevAddresses[address].lng),
@@ -203,8 +204,9 @@ function initMe(){
             );
           }
           else if(stillopen){
-            var openIcon = new L.Icon();
-            openIcon.iconUrl = "http://housepointer.herokuapp.com/images/leaflet-yellow.png";
+            var openIcon = new L.Icon({
+              iconUrl: "http://housepointer.herokuapp.com/images/leaflet-yellow.png"
+            });
             map.addLayer(
               new L.Marker(
                 new L.LatLng( prevAddresses[address].lat, prevAddresses[address].lng),
@@ -237,12 +239,13 @@ function loadSCFReport(reports){
   
   if(!hasLocation){
     map.setView(new L.LatLng(report.lat + 0.0007, report.lng), 16);
-    var miniIcon = new L.Icon();
-    miniIcon.iconSize = new L.Point(28, 30);
-    miniIcon.iconAnchor = new L.Point(15, 30);
-    miniIcon.shadowSize = new L.Point(34, 30);
-    miniIcon.popupAnchor = new L.Point(-2, -35);
-    miniIcon.iconUrl = "http://aux.iconpedia.net/uploads/2484076891043904041.png";
+    var miniIcon = new L.Icon({
+      iconSize: [28, 30],
+      iconAnchor: [15, 30],
+      shadowSize: [34, 30],
+      popupAnchor: [-2, -35],
+      iconUrl: "http://aux.iconpedia.net/uploads/2484076891043904041.png"
+    });
     map.addLayer(
       new L.Marker(
         new L.LatLng( report.lat, report.lng),
