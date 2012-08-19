@@ -7,6 +7,14 @@
   <title>homeSTATUS</title>
   <link href="/stylesheets/antiblight.css" media="all" rel="stylesheet" type="text/css" />
   <link href='/stylesheets/leaflet.css' rel='stylesheet'>
+  <link rel="stylesheet" href="/pancontrol/stylesheets/L.Control.Pan.css" type="text/css"/>
+  <script src='/scripts/leaflet.js' type='text/javascript'></script>
+  <script type="text/javascript" src="/pancontrol/scripts/L.Control.Pan.js"></script>
+  <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js' type='text/javascript'></script>
+  <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/stylesheets/leaflet.ie.css" />
+    <link rel="stylesheet" href="/pancontrol/stylesheets/L.Control.Pan.ie.css" type="text/css"/>
+  <![endif]-->
   <meta charset='utf-8'/>
   <meta content='' name='description'/>
   <!-- Mobile viewport optimized: h5bp.com/viewport -->
@@ -99,7 +107,11 @@ function initMe(){
   var tileURL = "http://otile1.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png";
   var attribution = "Map data &copy; 2012 OpenStreetMap contributors, Tiles by MapQuest";
   var baseMapLayer = new L.TileLayer(tileURL, {maxZoom: 18, attribution: attribution});
-  map = new L.Map("map");
+
+  map = new L.Map('map', { zoomControl: false, panControl: false });
+  L.control.pan().addTo(map);
+  L.control.zoom().addTo(map);
+
   map.addLayer( baseMapLayer );
   map.setView(new L.LatLng(32.840943,-83.62587),12);
   if(gup("id").indexOf("%20") == 0){
@@ -309,11 +321,6 @@ function initMe(){
         </p>
       </div>
     </footer>
-    <script src='/scripts/leaflet.js' type='text/javascript'></script>
-    <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js' type='text/javascript'></script>
-    <!--[if lte IE 8]>
-    <link rel="stylesheet" href="/stylesheets/leaflet.ie.css" />
-    <![endif]-->
   </div>
 </body>
 </html>
