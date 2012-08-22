@@ -39,7 +39,7 @@ function replaceAll(src, oldr, newr){
 }
 function listNote(note){
   var li = document.createElement("li");
-  li.className="active address result";
+  li.className="address result surveynote";
   li.innerHTML="<a href='#'>" + note + "</a>";
   //$("#resultbar").append(li);
   $(".recent").append(li);
@@ -119,7 +119,7 @@ function initMe(){
   var baseMapLayer = new L.TileLayer(tileURL, {maxZoom: 18, attribution: attribution});
 
   map = new L.Map('map', { zoomControl: false, panControl: false });
-  L.control.pan().addTo(map);
+  //L.control.pan().addTo(map);
   L.control.zoom().addTo(map);
 
   map.addLayer( baseMapLayer );
@@ -130,6 +130,7 @@ function initMe(){
   else{
     $("#main-search-field").val( replaceAll(replaceAll(gup("id"), "+", " "), "%20", " "));
   }
+  $("#myaddress").html( $("#main-search-field").val() );
 
   var surveyAddress = gup("id");
   if(surveyAddress.indexOf("%20") == 0){
@@ -210,28 +211,17 @@ function initMe(){
             notsobad = false;
           }
           
-          $(".cases").prepend("<div class='case'><div class='case-history'><div class='case-number'><h4>Case Details for " + sc.id + "</h4><div class='clearfix'></div></div><table class='table table-condensed timeline'><tbody><tr><td><span class='arrow'></span></td><td class='status'>Inspected</td><td><table class='table-nolines'><tr><td class='date'>" + parseStamp(sc.opendate) + "</td><td>Property was inspected by " + sc.inspector + "</td></tr></table></td></tr>" + resolutin + "</tbody></table></div></div>");
+          $(".cases").append("<div class='case'><div class='case-history'><div class='case-number'><h4>Case Details for " + sc.id + "</h4><div class='clearfix'></div></div><table class='table table-condensed timeline'><tbody><tr><td><span class='arrow'></span></td><td class='status'>Inspected</td><td><table class='table-nolines'><tr><td class='date'>" + parseStamp(sc.opendate) + "</td><td>Property was inspected by " + sc.inspector + "</td></tr></table></td></tr>" + resolution + "</tbody></table></div></div>");
         }
+        $(".cases").append("<div class='clearfix'></div><div class='case'></div>");
         j+="</ul>";
         if(prevAddresses[address].lat){
           map.setView(new L.LatLng(prevAddresses[address].lat + 0.0007, prevAddresses[address].lng), 16);
         }
         if(!prevAddresses[address].lat){
           // no known location - highlight in sidebar
-          /*var li = document.createElement("li");
-          li.className="active address result";
-          li.style.backgroundColor = "#ffaaaa";
-          var icon = "http://codeforamerica.github.com/NeighborDiff/images/bluemarker.png";
-          if(notsobad){
-            icon = 'http://codeforamerica.github.com/NeighborDiff/images/orangemarker.png';
-          }
-          else if(stillopen){
-            icon = "http://codeforamerica.github.com/NeighborDiff/images/redmarker.png";
-          }
-          li.innerHTML="<a href='#'><img src='" + icon + "' width='10px'><i class='home'></i><a href='/statuscombine.html?id=" + address + "'>" + address.split(',')[0] + " " + address.split(',')[1] + "</a></a>";*/
           j+="<br/><br/><strong>Address not mapped.</strong>";
           $("#resultbar").html(j);
-          //$("#resultbar").append(li);
           continue;
         }
         else{
@@ -252,8 +242,17 @@ function initMe(){
   streetname = replaceAll(streetname, "%20", " ");
   jQuery("#streetlink").html( '<a href="/statusstreet.html?address=' + streetname + '">' + streetname + '</a>');
 }
-  </script>
     </script>
+    <style type="text/css">
+.surveynote{
+  list-style-type: none;
+  display: inline;
+  margin: 8px;
+}
+.exportlinks a{
+  background: none repeat scroll 0 0 #62CC11;
+}
+    </style>
   </head>
   <body data-action='show' data-controller='addresses' onload='initMe()'>
     <div class='container-addresses container-addresses-show' id='wrapper'>
@@ -315,8 +314,6 @@ function initMe(){
             </div>
             <div class='property_history'>
               <div class='cases'>
-                <div class='clearfix'></div>
-                <div class='case'></div>
               </div>
             </div>
           </div>
@@ -324,6 +321,33 @@ function initMe(){
             <div class='map centered'>
               <div id='address'>
                 <div id='map' style='height: 200px;'></div>
+                <br/>
+                <span>Search other cases on</span>
+                <span id="streetlink"></span>
+                <br/>
+                <div class='exportlinks nav'>
+                  <li class='nav-header'>Download Data</li>
+                  <a class="btn" id="kmllink" href="/api">
+                    <img src="/images/Download-icon.png" style="vertical-align:middle;"/>
+                    <span style="font-size:8pt;vertical-align:middle;">Map (Google Earth/KML)</span>
+                  </a>
+                  <!--<br/><br/>
+                  <a class="btn" id="pnglink" href="/api">
+                    <img src="/images/Download-icon.png" style="vertical-align:middle;"/>
+                    <span style="font-size:8pt;vertical-align:middle;">PNG (image)</span>
+                  </a>-->
+                  <br/><br/>
+                  <a class="btn" id="surveylink" href="/api">
+                    <img src="/images/Download-icon.png" style="vertical-align:middle;"/>
+                    <span style="font-size:8pt;vertical-align:middle;">Survey Notes (JSON)</span>
+                  </a>
+                  <br/><br/>
+                  <a class="btn" id="caseslink" href="/api">
+                    <img src="/images/Download-icon.png" style="vertical-align:middle;"/>
+                    <span style="font-size:8pt;vertical-align:middle;">Code Enforcement (JSON)</span>
+                  </a>
+                </div>
+                <div class="clearfix"></div>
               </div>
             </div>
             <!-- <div class='assessor centered'>
@@ -334,29 +358,6 @@ function initMe(){
             </div>-->
           </div>
         </section>
-
-        <div class='exportlinks nav'>
-          <li class='nav-header'>Download Data</li>
-          <a class="btn" id="kmllink" href="/api">
-            <img src="/images/Download-icon.png" style="vertical-align:middle;"/>
-            <span style="font-size:8pt;vertical-align:middle;">Map (Google Earth/KML)</span>
-          </a>
-          <!--<br/><br/>
-          <a class="btn" id="pnglink" href="/api">
-            <img src="/images/Download-icon.png" style="vertical-align:middle;"/>
-            <span style="font-size:8pt;vertical-align:middle;">PNG (image)</span>
-          </a>-->
-          <br/><br/>
-          <a class="btn" id="surveylink" href="/api">
-            <img src="/images/Download-icon.png" style="vertical-align:middle;"/>
-            <span style="font-size:8pt;vertical-align:middle;">Survey Notes (JSON)</span>
-          </a>
-          <br/><br/>
-          <a class="btn" id="caseslink" href="/api">
-            <img src="/images/Download-icon.png" style="vertical-align:middle;"/>
-            <span style="font-size:8pt;vertical-align:middle;">Code Enforcement (JSON)</span>
-          </a>
-        </div>
         <div class="clearfix"></div>
       </div>
     </div>
