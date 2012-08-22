@@ -48,7 +48,7 @@ jQuery(document).ready(showRecent);
   </script>
 </head>
 <body data-action='index' data-controller='home'>
-  <div class='container-home container-home-index' id='wrapper'>
+  <div class='container-home container-home-index' id='wrapper' style='padding-bottom:100px;'>
     <div class='navbar'>
       <div class='navbar-inner'>
         <div class='container'>
@@ -112,20 +112,25 @@ jQuery(document).ready(showRecent);
           </div>
         </div>
         <div class='clear'></div>
-        <div class="homesearch" style="background:none;box-shadow:none;">
-          <div style="float:left;">
-            <h4>Recently Opened</h4>
-            <ul id="recently_opened">
-            </ul>
-            <br/>
-            <!--
-              <a href="/statusopen.html">Map Open Cases</a>
-            -->
-          </div>
-          <div style="float:right;">
-            <h4>Recently Closed</h4>
-            <ul id="recently_closed">
-            </ul>
+        <br/>
+        <br/>
+        <div class="row">
+          <div class="home-search" style="text-align:left;">
+            <div class="span4">
+              <h4>Recently Opened</h4>
+              <ul id="recently_opened">
+              </ul>
+              <br/>
+              <!--
+                <a href="/statusopen.html">Map Open Cases</a>
+              -->
+            </div>
+            <div class="span4">
+              <h4>Recently Closed</h4>
+              <ul id="recently_closed">
+              </ul>
+              <br/>
+            </div>
           </div>
         </div>
       </div>
