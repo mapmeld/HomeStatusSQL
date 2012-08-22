@@ -146,7 +146,7 @@ function initMe(){
         if(b.rows[i].value.loc){
           e=b.rows[i].value.loc[0] * 1.0;
           f=b.rows[i].value.loc[1] * 1.0;
-          map.addLayer(new L.Marker(new L.LatLng(e,f)));
+          //map.addLayer(new L.Marker(new L.LatLng(e,f)));
         }
         if(b.rows[i].value.major){
           listNote("Major Damage");
@@ -269,11 +269,11 @@ function initMe(){
            <img alt="Blightstatus-logo" src="/images/logo.png" />
           </a>
           <div class='nav-collapse collapse'>
-            <ul class='nav top-account pull-right'>
+            <!--<ul class='nav top-account pull-right'>
               <li>
                 <a href="/pages/about">Account</a>
               </li>
-            </ul>
+            </ul>-->
             <ul class='nav top-links'>
               <li>
                 <a href="/pages/about">About</a>
@@ -311,7 +311,7 @@ function initMe(){
               <div class='nav-header'>
                 <h2>Property Info</h2>
               </div>
-              <ul class='nav list'>
+              <ul id="resultbar" class='nav list'>
                 <li class='nav-header'>This Street</li>
                 <li id='streetlink'></li>
                 <li class='nav-header'>Survey Notes?</li>
