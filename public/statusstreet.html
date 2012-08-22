@@ -114,6 +114,10 @@ function markerByStatus(notsobad, stillopen, pt){
   }
   // standard marker
   var standardIcon = new L.Icon({
+  	iconSize: [35, 30],
+    iconAnchor: [18, 30],
+  	shadowSize: [42, 30],
+    popupAnchor: [0, -28],
     iconUrl: "http://codeforamerica.github.com/NeighborDiff/images/orangemarker.png"
   });
   return new L.Marker( new L.LatLng( pt.lat, pt.lng ), { icon: standardIcon });
@@ -322,6 +326,9 @@ function findRoad(){
   <style type='text/css'>
 .exportlinks a{
   background: none repeat scroll 0 0 #62CC11;
+}
+.address.result img {
+  width: 26px;
 }
   </style>
 </head>
