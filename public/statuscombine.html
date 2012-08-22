@@ -241,7 +241,7 @@ function initMe(){
   </script>
 </head>
 <body data-action='search' data-controller='addresses' onload='initMe()'>
-  <div class='container-addresses container-addresses-search' id='wrapper'>
+  <div class='container-addresses container-addresses-search' id='wrapper' style='padding-bottom:100px;'>
     <div class='navbar'>
       <div class='navbar-inner'>
         <div class='container'>
@@ -294,12 +294,12 @@ function initMe(){
           <div class='span3 left-bar'>
             <div class='well' style='padding: 8px 0;'>
               <div class='nav-header'>
-                <h2>Search Results</h2>
-                <p>(only showing properties with cases history)</p>
+                <h2>Property Info</h2>
               </div>
               <ul class='nav list'>
-                <li id='streetlink' class='nav-header'>This Street</li>
-                <li class='nav-header'>Survey Notes</li>
+                <li class='nav-header'>This Street</li>
+                <li id='streetlink'></li>
+                <li class='nav-header'>Survey Notes?</li>
                 <img id="loadanim" src="/images/loading-gif.gif"/>
               </ul>
               <div class="clearfix"></div>
@@ -309,16 +309,17 @@ function initMe(){
                   <img src="/images/Download-icon.png" style="vertical-align:middle;"/>
                   <span style="font-size:8pt;vertical-align:middle;">Map (Google Earth/KML)</span>
                 </a>
-                <!--<br/>
+                <!--<br/><br/>
                 <a class="btn" id="pnglink" href="/api">
                   <img src="/images/Download-icon.png" style="vertical-align:middle;"/>
                   <span style="font-size:8pt;vertical-align:middle;">PNG (image)</span>
                 </a>-->
-                <br/>
+                <br/><br/>
                 <a class="btn" id="surveylink" href="/api">
                   <img src="/images/Download-icon.png" style="vertical-align:middle;"/>
                   <span style="font-size:8pt;vertical-align:middle;">Survey Notes (JSON)</span>
                 </a>
+                <br/><br/>
                 <a class="btn" id="caseslink" href="/api">
                   <img src="/images/Download-icon.png" style="vertical-align:middle;"/>
                   <span style="font-size:8pt;vertical-align:middle;">Code Enforcement (JSON)</span>
