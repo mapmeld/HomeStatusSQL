@@ -50,7 +50,7 @@ function markerByStatus(notsobad, stillopen, pt){
       iconAnchor: [15, 30],
       shadowSize: [34, 30],
       popupAnchor: [0, -25],
-      iconUrl: "http://aux.iconpedia.net/uploads/2484076891043904041.png"
+      iconUrl: "http://codeforamerica.github.com/NeighborDiff/images/bluemarker.png"
     });
     return new L.Marker( new L.LatLng( pt.lat, pt.lng ), { icon: miniIcon });
   }
@@ -60,12 +60,15 @@ function markerByStatus(notsobad, stillopen, pt){
       iconAnchor: [18, 30],
   	  shadowSize: [42, 30],
       popupAnchor: [0, -28],
-  	  iconUrl: "http://housepointer.herokuapp.com/images/leaflet-yellow.png"
+  	  iconUrl: "http://codeforamerica.github.com/NeighborDiff/images/redmarker.png"
   	});
     return new L.Marker( new L.LatLng( pt.lat, pt.lng ), { icon: openIcon });
   }
   // standard marker
-  return new L.Marker( new L.LatLng( pt.lat, pt.lng ) );
+  var standardIcon = new L.Icon({
+    iconUrl: "http://codeforamerica.github.com/NeighborDiff/images/orangemarker.png"
+  });
+  return new L.Marker( new L.LatLng( pt.lat, pt.lng ), { icon: standardIcon });
 }
 function casesToAddresses(b){
   var pa = {};
@@ -208,12 +211,12 @@ function initMe(){
           /*var li = document.createElement("li");
           li.className="active address result";
           li.style.backgroundColor = "#ffaaaa";
-          var icon = "http://housepointer.herokuapp.com/scripts/images/marker.png";
+          var icon = "http://codeforamerica.github.com/NeighborDiff/images/bluemarker.png";
           if(notsobad){
-            icon = 'http://aux.iconpedia.net/uploads/2484076891043904041.png';
+            icon = 'http://codeforamerica.github.com/NeighborDiff/images/orangemarker.png';
           }
           else if(stillopen){
-            icon = "http://housepointer.herokuapp.com/images/leaflet-yellow.png";
+            icon = "http://codeforamerica.github.com/NeighborDiff/images/redmarker.png";
           }
           li.innerHTML="<a href='#'><img src='" + icon + "' width='10px'><i class='home'></i><a href='/statuscombine.html?id=" + address + "'>" + address.split(',')[0] + " " + address.split(',')[1] + "</a></a>";*/
           j+="<br/><br/><strong>Address not mapped.</strong>";
@@ -236,7 +239,7 @@ function initMe(){
   // link to the view for this street
   var streetname = gup("id").split(',')[1];
   streetname = replaceAll(streetname, "%20", " ");
-  jQuery("#streetlink").html( '<a href="/statusstreet.html?streetname=' + streetname + '">' + streetname + '</a>');
+  jQuery("#streetlink").html( '<a href="/statusstreet.html?address=' + streetname + '">' + streetname + '</a>');
 }
   </script>
 </head>
