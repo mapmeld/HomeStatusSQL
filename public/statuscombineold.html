@@ -3,20 +3,23 @@
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
 <!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
 <!--[if IE 8]> <html class="no-js lt-ie9" lang="en"> <![endif]-->
-  <head>
-    <title>blightSTATUS</title>
-    <link href="/stylesheets/antiblight2.css" media="all" rel="stylesheet" type="text/css" />
-    <link href='/stylesheets/leaflet.css' rel='stylesheet'>
-    <script src='/scripts/leaflet.js' type='text/javascript'></script>
-    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js' type='text/javascript'></script>
-    <!--[if lte IE 8]>
-      <link rel="stylesheet" href="/stylesheets/leaflet.ie.css" />
-    <![endif]-->
-    <meta charset='utf-8'>
-    <meta content='' name='description'>
-    <!-- Mobile viewport optimized: h5bp.com/viewport -->
-    <meta content='width=device-width' name='viewport'>
-    <script type="text/javascript">
+<head>
+  <title>homeSTATUS</title>
+  <link href="/stylesheets/antiblight2.css" media="all" rel="stylesheet" type="text/css" />
+  <link href='/stylesheets/leaflet.css' rel='stylesheet'>
+  <link rel="stylesheet" href="/pancontrol/stylesheets/L.Control.Pan.css" type="text/css"/>
+  <script src='/scripts/leaflet.js' type='text/javascript'></script>
+  <script type="text/javascript" src="/pancontrol/scripts/L.Control.Pan.js"></script>
+  <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js' type='text/javascript'></script>
+  <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/stylesheets/leaflet.ie.css" />
+    <link rel="stylesheet" href="/pancontrol/stylesheets/L.Control.Pan.ie.css" type="text/css"/>
+  <![endif]-->
+  <meta charset='utf-8'/>
+  <meta content='' name='description'/>
+  <!-- Mobile viewport optimized: h5bp.com/viewport -->
+  <meta content='width=device-width' name='viewport'/>
+  <script type="text/javascript">
 var map;
 var prevAddresses = { };
 if(!console || !console.log){
@@ -36,10 +39,9 @@ function replaceAll(src, oldr, newr){
 }
 function listNote(note){
   var li = document.createElement("li");
-  li.className="address result surveynote";
+  li.className="active address result";
   li.innerHTML="<a href='#'>" + note + "</a>";
-  //$("#resultbar").append(li);
-  $(".recent").append(li);
+  $("#resultbar").append(li);
 }
 function markerByStatus(notsobad, stillopen, pt){
   if(notsobad){
@@ -116,7 +118,7 @@ function initMe(){
   var baseMapLayer = new L.TileLayer(tileURL, {maxZoom: 18, attribution: attribution});
 
   map = new L.Map('map', { zoomControl: false, panControl: false });
-  //L.control.pan().addTo(map);
+  L.control.pan().addTo(map);
   L.control.zoom().addTo(map);
 
   map.addLayer( baseMapLayer );
@@ -127,7 +129,6 @@ function initMe(){
   else{
     $("#main-search-field").val( replaceAll(replaceAll(gup("id"), "+", " "), "%20", " "));
   }
-  $("#myaddress").html( $("#main-search-field").val() );
 
   var surveyAddress = gup("id");
   if(surveyAddress.indexOf("%20") == 0){
@@ -192,43 +193,48 @@ function initMe(){
         var j = '<h3>'+address.split(',')[0]+" "+address.split(',')[1]+"</h3><ul>";
         for(var i=0; i < sortedCases.length; i++){
           var sc = sortedCases[i];
-          var resolution;
           j += "<li>"+sc.inspector + " inspected. Case opened "+ parseStamp(sc.opendate) + ".";
           if(sc.closedate.length > 5){
             j += " Resolved with " + sc.action + " on " + parseStamp(sc.closedate) + "</li>";
-            resolution = "<tr><td><span class='arrow'></span></td><td class='status'>" + sc.action + "</td><td><table class='table-nolines'><tr><td class='date'>" + parseStamp(sc.closedate) + "</td><td>Case closed</td></tr></table></td></tr>"
           }
           else{
             j += " Case remains open.";
             stillopen = true;
-            resolution = "";
           }
           // if only actions were "No Violations" on same day as reported
           if(sc.action != "No Violations" || sc.opendate != sc.closedate){
             notsobad = false;
           }
-          
-          $(".cases").append("<div class='case'><div class='case-history'><div class='case-number'><h4>Case Details for " + sc.id + "</h4><div class='clearfix'></div></div><table class='table table-condensed timeline'><tbody><tr><td><span class='arrow'></span></td><td class='status'>Inspected</td><td><table class='table-nolines'><tr><td class='date'>" + parseStamp(sc.opendate) + "</td><td>Property was inspected by " + sc.inspector + "</td></tr></table></td></tr>" + resolution + "</tbody></table></div></div>");
         }
-        $(".cases").append("<div class='clearfix'></div><div class='case'></div>");
         j+="</ul>";
         if(prevAddresses[address].lat){
           map.setView(new L.LatLng(prevAddresses[address].lat + 0.0007, prevAddresses[address].lng), 16);
         }
         if(!prevAddresses[address].lat){
           // no known location - highlight in sidebar
+          /*var li = document.createElement("li");
+          li.className="active address result";
+          li.style.backgroundColor = "#ffaaaa";
+          var icon = "http://codeforamerica.github.com/NeighborDiff/images/bluemarker.png";
+          if(notsobad){
+            icon = 'http://codeforamerica.github.com/NeighborDiff/images/orangemarker.png';
+          }
+          else if(stillopen){
+            icon = "http://codeforamerica.github.com/NeighborDiff/images/redmarker.png";
+          }
+          li.innerHTML="<a href='#'><img src='" + icon + "' width='10px'><i class='home'></i><a href='/statuscombine.html?id=" + address + "'>" + address.split(',')[0] + " " + address.split(',')[1] + "</a></a>";*/
           j+="<br/><br/><strong>Address not mapped.</strong>";
           $("#resultbar").html(j);
+          //$("#resultbar").append(li);
           continue;
         }
         else{
           var mapMarker = markerByStatus(notsobad, stillopen, prevAddresses[address]);
-          mapMarker.bindPopup(j);
-          map.addLayer( mapMarker );
-          //var earlyPopup = new L.Popup();
-          //earlyPopup.setLatLng(new L.LatLng(prevAddresses[address].lat + 0.0005, prevAddresses[address].lng));
-          //earlyPopup.setContent(j);
-          //map.openPopup(earlyPopup);
+          map.addLayer( mapMarker.bindPopup(j) );
+          var earlyPopup = new L.Popup();
+          earlyPopup.setLatLng(new L.LatLng(prevAddresses[address].lat + 0.0005, prevAddresses[address].lng));
+          earlyPopup.setContent(j);
+          map.openPopup(earlyPopup);
         }
       }
     }
@@ -239,127 +245,124 @@ function initMe(){
   streetname = replaceAll(streetname, "%20", " ");
   jQuery("#streetlink").html( '<a href="/statusstreet.html?address=' + streetname + '">' + streetname + '</a>');
 }
-    </script>
-    <style type="text/css">
-.surveynote{
-  list-style-type: none;
-  display: inline;
-  margin: 8px;
-}
+  </script>
+  <style type='text/css'>
 .exportlinks a{
   background: none repeat scroll 0 0 #62CC11;
 }
-    </style>
-  </head>
-  <body data-action='show' data-controller='addresses' onload='initMe()'>
-    <div class='container-addresses container-addresses-show' id='wrapper'>
-      <div class='navbar'>
-        <div class='navbar-inner'>
-          <div class='container'>
-            <button class='btn btn-navbar' data-target='.nav-collapse' data-toggle='collapse' type='button'>
-              <span class='icon-bar'></span>
-              <span class='icon-bar'></span>
-              <span class='icon-bar'></span>
-            </button>
-            <a class='brand' href='/'>
-              <img alt="Blightstatus-logo" src="/images/logo.png" />
-            </a>
-            <div class='nav-collapse collapse'>
-              <!--<ul class='nav top-account pull-right'>
-                <li>
-                  <a href="/pages/about">Account</a>
-                </li>
-              </ul>-->
-              <ul class='nav top-links'>
-                <li>
-                  <a href="/pages/about">About</a>
-                </li>
-                <li>
-                  <a href="/pages/help">Help</a>
-                </li>
-              </ul>
-              <ul class='nav top-search'>
-                <li>
-                  <div class='search-form'>
-                    <form accept-charset="UTF-8" action="/statusstreet.html" method="get">
-                      <div style="margin:0;padding:0;display:inline">
-                        <input name="utf8" type="hidden" value="&#x2713;" />
-                      </div>
-                      <div class='search-field'>
-                        <input id="main-search-field" name="address" placeholder="Search address or street name" type="text" value="" />
-                      </div>
-                      <div class='search-button'>
-                        <input class="btn btn-primary btn-primary-search" data-disable-with="Search" name="commit" type="submit" value="Search" />
-                      </div>
-                    </form>
-                  </div>
-                </li>
-              </ul>
-            </div>
+.address.result img {
+  width: 26px;
+}
+li.active{
+  margin-left: 12px;
+}
+#streetlink{
+  margin-left: 12px;
+}
+  </style>
+</head>
+<body data-action='search' data-controller='addresses' onload='initMe()'>
+  <div class='container-addresses container-addresses-search' id='wrapper' style='padding-bottom:100px;'>
+    <div class='navbar'>
+      <div class='navbar-inner'>
+        <div class='container'>
+          <button class='btn btn-navbar' data-target='.nav-collapse' data-toggle='collapse' type='button'>
+            <span class='icon-bar'></span>
+            <span class='icon-bar'></span>
+            <span class='icon-bar'></span>
+          </button>
+          <a class='brand' href='/'>
+           <img alt="Blightstatus-logo" src="/images/logo.png" />
+          </a>
+          <div class='nav-collapse collapse'>
+            <!--<ul class='nav top-account pull-right'>
+              <li>
+                <a href="/pages/about">Account</a>
+              </li>
+            </ul>-->
+            <ul class='nav top-links'>
+              <li>
+                <a href="/pages/about">About</a>
+              </li>
+              <li>
+                <a href="/pages/help">Help</a>
+              </li>
+            </ul>
+            <ul class='nav top-search'>
+              <li>
+                <div class='search-form'>
+                  <form accept-charset="UTF-8" action="/statusstreet.html" method="get">
+                    <div style="margin:0;padding:0;display:inline">
+                      <input name="utf8" type="hidden" value="&#x2713;" />
+                    </div>
+                    <div class='search-field'>
+                      <input id="main-search-field" name="address" placeholder="Search address or street name" type="text" value="" />
+                    </div>
+                    <div class='search-button'>
+                      <input class="btn btn-primary btn-primary-search" data-disable-with="Search" name="commit" type="submit" value="Search" />
+                    </div>
+                  </form>
+                </div>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
-      <div class='container'>
-        <section class='row-fluid'>
-          <div class='span8 main'>
-            <div class='address-title'>
-              <h1 id="myaddress"></h1>
-            </div>
-            <div class='status-update'>
-              <div class='recent'>
-              </div>
-            </div>
-            <div class='property_history'>
-              <div class='cases'>
-              </div>
-            </div>
-          </div>
-          <div class='span4'>
-            <div class='map centered'>
-              <div id='address'>
-                <div id='map' style='height: 200px;'></div>
-                <br/>
-                <span>Search other cases on</span>
-                <span id="streetlink"></span>
-                <br/>
-                <br/>
-                <br/>
-                <div class='exportlinks nav'>
-                  <li class='nav-header'>Download Data</li>
-                  <a class="btn" id="kmllink" href="/api">
-                    <img src="/images/Download-icon.png" style="vertical-align:middle;"/>
-                    <span style="font-size:8pt;vertical-align:middle;">Map (Google Earth/KML)</span>
-                  </a>
-                  <!--<br/><br/>
-                  <a class="btn" id="pnglink" href="/api">
-                    <img src="/images/Download-icon.png" style="vertical-align:middle;"/>
-                    <span style="font-size:8pt;vertical-align:middle;">PNG (image)</span>
-                  </a>-->
-                  <br/><br/>
-                  <a class="btn" id="surveylink" href="/api">
-                    <img src="/images/Download-icon.png" style="vertical-align:middle;"/>
-                    <span style="font-size:8pt;vertical-align:middle;">Survey Notes (JSON)</span>
-                  </a>
-                  <br/><br/>
-                  <a class="btn" id="caseslink" href="/api">
-                    <img src="/images/Download-icon.png" style="vertical-align:middle;"/>
-                    <span style="font-size:8pt;vertical-align:middle;">Code Enforcement (JSON)</span>
-                  </a>
-                </div>
-                <div class="clearfix"></div>
-              </div>
-            </div>
-            <!-- <div class='assessor centered'>
-              <div class='parcel-link'>
-                <a href="http://qpublic4.qpublic.net/la_orleans_display.php?KEY=2113-PERDIDOST">parcel, tax, and ownership details</a>
-              </div>
-              <p>via the Orleans Parish Assessor’s website</p>
-            </div>-->
-          </div>
-        </section>
-        <div class="clearfix"></div>
-      </div>
     </div>
+    <div class='container-fluid'>
+      <section class='search-results'>
+        <div class='row-fluid'>
+          <div class='span3 left-bar'>
+            <div class='well' style='padding: 8px 0;'>
+              <div class='nav-header'>
+                <h2>Property Info</h2>
+              </div>
+              <ul id="resultbar" class='nav list'>
+                <li class='nav-header'>This Street</li>
+                <li id='streetlink'></li>
+                <li class='nav-header'>Survey Notes?</li>
+                <img id="loadanim" src="/images/loading-gif.gif"/>
+              </ul>
+              <div class="clearfix"></div>
+              <div class='exportlinks nav'>
+                <li class='nav-header'>Download Data</li>
+                <a class="btn" id="kmllink" href="/api">
+                  <img src="/images/Download-icon.png" style="vertical-align:middle;"/>
+                  <span style="font-size:8pt;vertical-align:middle;">Map (Google Earth/KML)</span>
+                </a>
+                <!--<br/><br/>
+                <a class="btn" id="pnglink" href="/api">
+                  <img src="/images/Download-icon.png" style="vertical-align:middle;"/>
+                  <span style="font-size:8pt;vertical-align:middle;">PNG (image)</span>
+                </a>-->
+                <br/><br/>
+                <a class="btn" id="surveylink" href="/api">
+                  <img src="/images/Download-icon.png" style="vertical-align:middle;"/>
+                  <span style="font-size:8pt;vertical-align:middle;">Survey Notes (JSON)</span>
+                </a>
+                <br/><br/>
+                <a class="btn" id="caseslink" href="/api">
+                  <img src="/images/Download-icon.png" style="vertical-align:middle;"/>
+                  <span style="font-size:8pt;vertical-align:middle;">Code Enforcement (JSON)</span>
+                </a>
+              </div>
+              <div class='clearfix'></div>
+            </div>
+          </div>
+          
+          <div class='span9 right-bar'>
+            <div id='map' style='height: 400px;'></div>
+            <!--
+            <div class='toggle'>
+              <input id="map-search-mode" name="map-search-mode" type="checkbox" value="1" />
+              Redo search when map is moved
+            </div>
+            -->
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
   <footer>
     <div class='container'>
       <div class='row-fluid'>
