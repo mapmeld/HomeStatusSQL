@@ -20,7 +20,6 @@
     <!-- Mobile viewport optimized: h5bp.com/viewport -->
     <meta content='width=device-width' name='viewport'>
     <script type="text/javascript">
-  <script type="text/javascript">
 var map;
 var prevAddresses = { };
 if(!console || !console.log){
@@ -335,6 +334,30 @@ function initMe(){
             </div>-->
           </div>
         </section>
+
+        <div class='exportlinks nav'>
+          <li class='nav-header'>Download Data</li>
+          <a class="btn" id="kmllink" href="/api">
+            <img src="/images/Download-icon.png" style="vertical-align:middle;"/>
+            <span style="font-size:8pt;vertical-align:middle;">Map (Google Earth/KML)</span>
+          </a>
+          <!--<br/><br/>
+          <a class="btn" id="pnglink" href="/api">
+            <img src="/images/Download-icon.png" style="vertical-align:middle;"/>
+            <span style="font-size:8pt;vertical-align:middle;">PNG (image)</span>
+          </a>-->
+          <br/><br/>
+          <a class="btn" id="surveylink" href="/api">
+            <img src="/images/Download-icon.png" style="vertical-align:middle;"/>
+            <span style="font-size:8pt;vertical-align:middle;">Survey Notes (JSON)</span>
+          </a>
+          <br/><br/>
+          <a class="btn" id="caseslink" href="/api">
+            <img src="/images/Download-icon.png" style="vertical-align:middle;"/>
+            <span style="font-size:8pt;vertical-align:middle;">Code Enforcement (JSON)</span>
+          </a>
+        </div>
+        <div class="clearfix"></div>
       </div>
     </div>
   <footer>
