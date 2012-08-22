@@ -135,7 +135,7 @@ function listThisAddress(notsobad, stillopen, address, ismapped){
   if(!ismapped){
     li.style.backgroundColor = "#ffaaaa";
   }
-  li.innerHTML="<a href='#'><img src='" + icon + "' width='10px'><i class='home'></i><a href='/statuscombine.html?id=" + address + "'>" + address.split(',')[0] + " " + address.split(',')[1] + "</a></a>";
+  li.innerHTML="<img src='" + icon + "' width='10px'><span class='search-address'><a href='/statuscombine.html?id=" + address + "'>" + address.split(',')[0] + " " + address.split(',')[1] + "</a></span>";
   $("#resultbar").append(li);
 }
 function initMe(){

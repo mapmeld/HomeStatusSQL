@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9" lang="en"> <![endif]-->
+  <head>
+    <title>blightSTATUS</title>
+    <link href="/stylesheets/antiblight2.css" media="all" rel="stylesheet" type="text/css" />
+    <link href='/stylesheets/leaflet.css' rel='stylesheet'>
+    <link rel="stylesheet" href="/pancontrol/stylesheets/L.Control.Pan.css" type="text/css"/>
+    <script src='/scripts/leaflet.js' type='text/javascript'></script>
+    <script type="text/javascript" src="/pancontrol/scripts/L.Control.Pan.js"></script>
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js' type='text/javascript'></script>
+    <!--[if lte IE 8]>
+      <link rel="stylesheet" href="/stylesheets/leaflet.ie.css" />
+      <link rel="stylesheet" href="/pancontrol/stylesheets/L.Control.Pan.ie.css" type="text/css"/>
+    <![endif]-->
+    <meta charset='utf-8'>
+    <meta content='' name='description'>
+    <!-- Mobile viewport optimized: h5bp.com/viewport -->
+    <meta content='width=device-width' name='viewport'>
+    <script type="text/javascript">
+  <script type="text/javascript">
+var map;
+var prevAddresses = { };
+if(!console || !console.log){
+  console = { log: function(e){ } };
+}
+function gup(nm){nm=nm.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");var rxS="[\\?&]"+nm+"=([^&#]*)";var rx=new RegExp(rxS);var rs=rx.exec(window.location.href);if(!rs){return null;}else{return rs[1];}}
+function parseStamp(tstamp){
+  var pstamp = new Date(tstamp.substring(4,6) + "/" + tstamp.substring(6) + "/" + tstamp.substring(0,4));
+  pstamp = pstamp.toString().substring(4).substring(0,11);
+  return pstamp;
+}
+function replaceAll(src, oldr, newr){
+  while(src.indexOf(oldr) > -1){
+    src = src.replace(oldr, newr);
+  }
+  return src;
+}
+function listNote(note){
+  var li = document.createElement("li");
+  li.className="active address result";
+  li.innerHTML="<a href='#'>" + note + "</a>";
+  //$("#resultbar").append(li);
+  $(".recent").append(li);
+}
+function markerByStatus(notsobad, stillopen, pt){
+  if(notsobad){
+    var miniIcon = new L.Icon({
+      iconSize: [28, 30],
+      iconAnchor: [15, 30],
+      shadowSize: [34, 30],
+      popupAnchor: [0, -25],
+      iconUrl: "http://codeforamerica.github.com/NeighborDiff/images/bluemarker.png"
+    });
+    return new L.Marker( new L.LatLng( pt.lat, pt.lng ), { icon: miniIcon });
+  }
+  else if(stillopen){
+    var openIcon = new L.Icon({
+  	  iconSize: [35, 30],
+      iconAnchor: [18, 30],
+  	  shadowSize: [42, 30],
+      popupAnchor: [0, -28],
+  	  iconUrl: "http://codeforamerica.github.com/NeighborDiff/images/redmarker.png"
+  	});
+    return new L.Marker( new L.LatLng( pt.lat, pt.lng ), { icon: openIcon });
+  }
+  // standard marker
+  var standardIcon = new L.Icon({
+  	iconSize: [35, 30],
+    iconAnchor: [18, 30],
+  	shadowSize: [42, 30],
+    popupAnchor: [0, -28],
+    iconUrl: "http://codeforamerica.github.com/NeighborDiff/images/orangemarker.png"
+  });
+  return new L.Marker( new L.LatLng( pt.lat, pt.lng ), { icon: standardIcon });
+}
+function casesToAddresses(b){
+  var pa = {};
+  for(i=0;i<b.rows.length;i++){
+    if(pa[b.rows[i].value.address]){
+      // already thinking about this address
+      if(!pa[b.rows[i].value.address].lat && b.rows[i].value.loc){
+        pa[b.rows[i].value.address].lat = b.rows[i].value.loc[0] * 1.0;
+        pa[b.rows[i].value.address].lng = b.rows[i].value.loc[1] * 1.0;
+      }
+      pa[b.rows[i].value.address].cases.push({
+        id: b.rows[i].value.ecd_id,
+        inspector: b.rows[i].value.inspector,
+        opendate: b.rows[i].value.opendate,
+        action: b.rows[i].value.action,
+        closedate: b.rows[i].value.closedate
+      });
+    }
+    else{
+      if(b.rows[i].value.loc){
+        pa[b.rows[i].value.address] = {
+          lat: b.rows[i].value.loc[0] * 1.0,
+          lng: b.rows[i].value.loc[1] * 1.0
+        };
+      }
+      else{
+        pa[b.rows[i].value.address] = { };
+      }
+      pa[b.rows[i].value.address].cases = [{
+        id: b.rows[i].value.ecd_id,
+        inspector: b.rows[i].value.inspector,
+        opendate: b.rows[i].value.opendate,
+        action: b.rows[i].value.action,
+        closedate: b.rows[i].value.closedate
+      }];
+    }
+  }
+  return pa;
+}
+function initMe(){
+  var tileURL = "http://otile1.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png";
+  var attribution = "Map data &copy; 2012 OpenStreetMap contributors, Tiles by MapQuest";
+  var baseMapLayer = new L.TileLayer(tileURL, {maxZoom: 18, attribution: attribution});
+
+  map = new L.Map('map', { zoomControl: false, panControl: false });
+  L.control.pan().addTo(map);
+  L.control.zoom().addTo(map);
+
+  map.addLayer( baseMapLayer );
+  map.setView(new L.LatLng(32.840943,-83.62587),12);
+  if(gup("id").indexOf("%20") == 0){
+    $("#main-search-field").val( replaceAll(replaceAll(gup("id").replace(","," ").replace("%20","").split(",")[0], "+", " "), "%20", " "));
+  }
+  else{
+    $("#main-search-field").val( replaceAll(replaceAll(gup("id"), "+", " "), "%20", " "));
+  }
+
+  var surveyAddress = gup("id");
+  if(surveyAddress.indexOf("%20") == 0){
+    surveyAddress = surveyAddress.replace("%20","").replace(","," ").toLowerCase().split(',')[0];
+  }
+
+  // 2008+ survey
+  var b="/surveyed?address=" + surveyAddress;
+  jQuery("#surveylink")[0].href = b;
+  jQuery.getJSON(b,function(b){
+    $("#loadanim").css({ display: "none" });
+    if(b.rows.length){
+      var e, f, g;
+      for(i=0;i<b.rows.length;i++){
+        if(b.rows[i].value.loc){
+          e=b.rows[i].value.loc[0] * 1.0;
+          f=b.rows[i].value.loc[1] * 1.0;
+          //map.addLayer(new L.Marker(new L.LatLng(e,f)));
+        }
+        if(b.rows[i].value.major){
+          listNote("Major Damage");
+        }
+        if(b.rows[i].value.minor){
+          listNote("Minor Damage");
+        }
+        if(b.rows[i].value.secure){
+          listNote("Secure");
+        }
+        else{
+          listNote("Not Secure");
+        }
+        if(b.rows[i].value.burned){
+          listNote("Burned");
+        }
+        if(b.rows[i].value.boarded){
+          listNote("Boarded");
+        }
+      }
+      if(e && f){
+        map.setView(new L.LatLng(e + 0.0007,f),16);
+      }
+    }
+  });
+
+  // look up code enforcement case history
+  var transformAddress = gup("id");
+  if(transformAddress.indexOf("%20%20") == -1){
+    transformAddress = " " + transformAddress.split(',')[0].toUpperCase().replace("%20",",") + ",%20" + transformAddress.split(',')[1] + ",%20%20GA";
+  }
+  var b="/keydb?address=" + transformAddress;
+  jQuery("#caseslink")[0].href = b;
+  jQuery.getJSON(b,function(b){
+    $("#loadanim").css({ display: "none" });
+    jQuery("#kmllink")[0].href = '/export.kml?address=' + surveyAddress + '&cases=' + transformAddress;
+    if(b.rows.length){
+      prevAddresses = casesToAddresses(b);
+      
+      for(address in prevAddresses){
+        var notsobad = true;
+        var stillopen = false;
+        var sortedCases = prevAddresses[address].cases.sort( function(a,b){ return b.id * 1 - a.id * 1; } );
+        var j = '<h3>'+address.split(',')[0]+" "+address.split(',')[1]+"</h3><ul>";
+        for(var i=0; i < sortedCases.length; i++){
+          var sc = sortedCases[i];
+          var resolution;
+          j += "<li>"+sc.inspector + " inspected. Case opened "+ parseStamp(sc.opendate) + ".";
+          if(sc.closedate.length > 5){
+            j += " Resolved with " + sc.action + " on " + parseStamp(sc.closedate) + "</li>";
+            resolution = "<tr><td><span class='arrow'></span></td><td class='status'>" + sc.action + "</td><td><table class='table-nolines'><tr><td class='date'>" + parseStamp(sc.closedate) + "</td><td>Case closed</td></tr></table></td></tr>"
+          }
+          else{
+            j += " Case remains open.";
+            stillopen = true;
+            resolution = "";
+          }
+          // if only actions were "No Violations" on same day as reported
+          if(sc.action != "No Violations" || sc.opendate != sc.closedate){
+            notsobad = false;
+          }
+          
+          $(".cases").prepend("<div class='case'><div class='case-history'><div class='case-number'><h4>Case Details for " + sc.id + "</h4><div class='clearfix'></div></div><table class='table table-condensed timeline'><tbody><tr><td><span class='arrow'></span></td><td class='status'>Inspected</td><td><table class='table-nolines'><tr><td class='date'>" + parseStamp(sc.opendate) + "</td><td>Property was inspected by " + sc.inspector + "</td></tr></table></td></tr>" + resolutin + "</tbody></table></div></div>");
+        }
+        j+="</ul>";
+        if(prevAddresses[address].lat){
+          map.setView(new L.LatLng(prevAddresses[address].lat + 0.0007, prevAddresses[address].lng), 16);
+        }
+        if(!prevAddresses[address].lat){
+          // no known location - highlight in sidebar
+          /*var li = document.createElement("li");
+          li.className="active address result";
+          li.style.backgroundColor = "#ffaaaa";
+          var icon = "http://codeforamerica.github.com/NeighborDiff/images/bluemarker.png";
+          if(notsobad){
+            icon = 'http://codeforamerica.github.com/NeighborDiff/images/orangemarker.png';
+          }
+          else if(stillopen){
+            icon = "http://codeforamerica.github.com/NeighborDiff/images/redmarker.png";
+          }
+          li.innerHTML="<a href='#'><img src='" + icon + "' width='10px'><i class='home'></i><a href='/statuscombine.html?id=" + address + "'>" + address.split(',')[0] + " " + address.split(',')[1] + "</a></a>";*/
+          j+="<br/><br/><strong>Address not mapped.</strong>";
+          $("#resultbar").html(j);
+          //$("#resultbar").append(li);
+          continue;
+        }
+        else{
+          var mapMarker = markerByStatus(notsobad, stillopen, prevAddresses[address]);
+          mapMarker.bindPopup(j);
+          map.addLayer( mapMarker );
+          //var earlyPopup = new L.Popup();
+          //earlyPopup.setLatLng(new L.LatLng(prevAddresses[address].lat + 0.0005, prevAddresses[address].lng));
+          //earlyPopup.setContent(j);
+          //map.openPopup(earlyPopup);
+        }
+      }
+    }
+  });
+  
+  // link to the view for this street
+  var streetname = gup("id").split(',')[1];
+  streetname = replaceAll(streetname, "%20", " ");
+  jQuery("#streetlink").html( '<a href="/statusstreet.html?address=' + streetname + '">' + streetname + '</a>');
+}
+  </script>
+    </script>
+  </head>
+  <body data-action='show' data-controller='addresses' onload='initMe()'>
+    <div class='container-addresses container-addresses-show' id='wrapper'>
+      <div class='navbar'>
+        <div class='navbar-inner'>
+          <div class='container'>
+            <button class='btn btn-navbar' data-target='.nav-collapse' data-toggle='collapse' type='button'>
+              <span class='icon-bar'></span>
+              <span class='icon-bar'></span>
+              <span class='icon-bar'></span>
+            </button>
+            <a class='brand' href='/'>
+              <img alt="Blightstatus-logo" src="/images/logo.png" />
+            </a>
+            <div class='nav-collapse collapse'>
+              <!--<ul class='nav top-account pull-right'>
+                <li>
+                  <a href="/pages/about">Account</a>
+                </li>
+              </ul>-->
+              <ul class='nav top-links'>
+                <li>
+                  <a href="/pages/about">About</a>
+                </li>
+                <li>
+                  <a href="/pages/help">Help</a>
+                </li>
+              </ul>
+              <ul class='nav top-search'>
+                <li>
+                  <div class='search-form'>
+                    <form accept-charset="UTF-8" action="/statusstreet.html" method="get">
+                      <div style="margin:0;padding:0;display:inline">
+                        <input name="utf8" type="hidden" value="&#x2713;" />
+                      </div>
+                      <div class='search-field'>
+                        <input id="main-search-field" name="address" placeholder="Search address or street name" type="text" value="" />
+                      </div>
+                      <div class='search-button'>
+                        <input class="btn btn-primary btn-primary-search" data-disable-with="Search" name="commit" type="submit" value="Search" />
+                      </div>
+                    </form>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class='container'>
+        <section class='row-fluid'>
+          <div class='span8 main'>
+            <div class='address-title'>
+              <h1 id="myaddress"></h1>
+            </div>
+            <div class='status-update'>
+              <div class='recent'>
+              </div>
+            </div>
+            <div class='property_history'>
+              <div class='cases'>
+                <div class='clearfix'></div>
+                <div class='case'></div>
+              </div>
+            </div>
+          </div>
+          <div class='span4'>
+            <div class='map centered'>
+              <div id='address'>
+                <div id='map' style='height: 200px;'></div>
+              </div>
+            </div>
+            <!-- <div class='assessor centered'>
+              <div class='parcel-link'>
+                <a href="http://qpublic4.qpublic.net/la_orleans_display.php?KEY=2113-PERDIDOST">parcel, tax, and ownership details</a>
+              </div>
+              <p>via the Orleans Parish Assessor’s website</p>
+            </div>-->
+          </div>
+        </section>
+      </div>
+    </div>
+  <footer>
+    <div class='container'>
+      <div class='row-fluid'>
+        <div class='span4'>
+          <h3>We're in Beta!</h3>
+          <p>We're busy at work building and improving this website, so we want your feedback! Please feel free to ask a question, report a problem, or suggest a feature.</p>
+          <p>If you are a developer and want to help us build this thing, check out the developer site.</p>
+          <p>Thanks!</p>
+        </div>
+        <div class='span3'>
+          <h3>Contact Us</h3>
+          <p>
+            Website
+            <br/>
+            <a href="http://codeforamerica.org">http://codeforamerica.org</a>
+            <br/>
+          </p>
+          <p>
+            Email
+            <br/>
+            <a href="mailto:macon@codeforamerica.org">macon@codeforamerica.org</a>
+            <br/>
+          </p>
+          <p>
+            Twitter
+            <br/>
+            <a href="@blightstatus">http://twitter.com/blightstatus</a>
+            <br/>
+          </p>
+        </div>
+        <div class='span2'>
+          <h3>Partners</h3>
+          <p>
+            <a href='http://codeforamerica.org'>
+              <img alt="Codeforamerica" src="http://commons.codeforamerica.org//sites/all/themes/civiccommons/images/codeforamerica.png" />
+            </a>
+          </p>
+          <p>
+            <a href='http://maconga.gov'>City of Macon</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </footer>
+</html>
