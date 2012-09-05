@@ -289,6 +289,10 @@ var init = exports.init = function (config) {
   
   // Combined KML file for Code Enforcement, Survey
   app.get('/export.kml', function(req, res){
+    if(req.query['streetname']){
+      res.redirect('/searchdb.kml?fmt=kml&streetname=' + req.query['streetname']);
+      return;
+    }
     var street = req.query['address'];
     var sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/clearaddress/_view/clearaddress?key=' + encodeURIComponent( '"' + street + '"');
     var requestOptions = {
@@ -329,7 +333,7 @@ var init = exports.init = function (config) {
           }
         }
         if(surveybody.rows.length){
-          kmlplacemarks += '<h3>Survey</h3><b>Inspected:</b>' + surveybody.rows[0].value.inspdate + '<br><b>Major Damage?</b>' + surveybody.rows[0].value.major + '<br><b>Minor Damage?</b>' + surveybody.rows[0].value.minor + '<br><b>Open?</b>' + surveybody.rows[0].value.open + '<br><b>Boarded?</b>' + surveybody.rows[0].value.boarded + '<br><b>Secure?</b>' + surveybody.rows[0].value.secure + '<br><b>Burned?</b>' + surveybody.rows[0].value.burned;
+          kmlplacemarks += '<h3>Survey</h3><b>Inspected:</b> ' + surveybody.rows[0].value.inspdate + '<br><b>Major Damage?</b> ' + surveybody.rows[0].value.major + '<br><b>Minor Damage?</b> ' + surveybody.rows[0].value.minor + '<br><b>Open?</b> ' + surveybody.rows[0].value.open + '<br><b>Boarded?</b> ' + surveybody.rows[0].value.boarded + '<br><b>Secure?</b> ' + surveybody.rows[0].value.secure + '<br><b>Burned?</b> ' + surveybody.rows[0].value.burned;
         }
         kmlplacemarks += '</div>]]></description>\n';
         kmlplacemarks += '			<styleUrl>#BasicStyle</styleUrl>\n			<ExtendedData>\n				<Data name="F">\n					<value>F</value>\n				</Data>\n			</ExtendedData>\n';
