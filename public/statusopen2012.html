@@ -5,16 +5,17 @@
 <!--[if IE 8]> <html class="no-js lt-ie9" lang="en"> <![endif]-->
 <head>
   <title>homeSTATUS</title>
-  <link href="/stylesheets/antiblight.css" media="all" rel="stylesheet" type="text/css" />
-  <link href='/stylesheets/leaflet.css' rel='stylesheet'>
+  <link href="/stylesheets/antiblight2.css" media="all" rel="stylesheet" type="text/css"/>
+  <link href='/stylesheets/leaflet.css' rel='stylesheet' type='text/css'/>
   <link rel="stylesheet" href="/pancontrol/stylesheets/L.Control.Pan.css" type="text/css"/>
+  <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/stylesheets/leaflet.ie.css" type="text/css"/>
+    <link rel="stylesheet" href="/pancontrol/stylesheets/L.Control.Pan.ie.css" type="text/css"/>
+  <![endif]-->
   <script src='/scripts/leaflet.js' type='text/javascript'></script>
   <script type="text/javascript" src="/pancontrol/scripts/L.Control.Pan.js"></script>
   <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js' type='text/javascript'></script>
-  <!--[if lte IE 8]>
-    <link rel="stylesheet" href="/stylesheets/leaflet.ie.css" />
-    <link rel="stylesheet" href="/pancontrol/stylesheets/L.Control.Pan.ie.css" type="text/css"/>
-  <![endif]-->
+
   <meta charset='utf-8'/>
   <meta content='' name='description'/>
   <!-- Mobile viewport optimized: h5bp.com/viewport -->
@@ -72,15 +73,6 @@ function findRoad(){
   jQuery.getJSON(geolink, function(b){
     $("#loadanim").css({ display: "none" });
     if(b.rows.length){
-      // test: don't show any cases opened over eight months ago
-      // these are handled differently by ECD
-      /* var now = new Date();
-      for(var a=b.rows.length-1;a>=0;a--){
-        var opendate = new Date(b.rows[a].value.opendate.substring(0,4) + "/" + b.rows[a].value.opendate.substring(4,6) + "/" + b.rows[a].value.opendate.substring(6));
-        if(now - opendate > 242 * 24 * 60 * 60 * 1000){
-          b.rows.splice(a,1);
-        }
-      } */
       // sort addresses by street name, and then again by number
       b.rows.sort(function(a,b){
         if(a.value.address.split(",")[1] == b.value.address.split(",")[1]){
@@ -164,12 +156,13 @@ function findRoad(){
         j+="</ul>";
         
         // choose icons / map symbols based on cases
-        var openIcon = new L.Icon();
-  	    openIcon.iconSize = new L.Point(35,30);
-        openIcon.iconAnchor = new L.Point(18,30);
-  	    openIcon.shadowSize = new L.Point(42,30);
-        openIcon.popupAnchor = new L.Point(0,-28);
-  	    openIcon.iconUrl = "http://housepointer.herokuapp.com/images/leaflet-yellow.png";
+        var openIcon = new L.Icon({
+  	      iconSize: [35, 30],
+          iconAnchor: [18, 30],
+  	      shadowSize: [42, 30],
+          popupAnchor: [0, -28],
+  	      iconUrl: "http://codeforamerica.github.com/NeighborDiff/images/redmarker.png"
+  	    });
   	    var openMarker = new L.Marker( new L.LatLng( prevAddresses[address].lat, prevAddresses[address].lng ), { icon: openIcon }).bindPopup(j);
   	    map.addLayer(openMarker);
   	    markers.push(openMarker);
@@ -177,9 +170,9 @@ function findRoad(){
   	    // add address list to sidebar
   	    var li = document.createElement("li");
   	    li.className="active address result";
-  	    var icon = "http://housepointer.herokuapp.com/images/leaflet-yellow.png";
+  	    var icon = "http://codeforamerica.github.com/NeighborDiff/images/redmarker.png";
       	li.innerHTML="<a href='#'><img src='" + icon + "' width='10px'><i class='home'></i><a href='/statuscombine.html?id=" + address + "'>" + address.split(',')[0] + " " + address.split(',')[1] + "</a></a>";
-  	    $("#resultbar")[0].appendChild(li);
+  	    $("#resultbar").append(li);
   	  }
   	}
   });
@@ -188,85 +181,165 @@ function findRoad(){
   //$("#pnglink")[0].href = geolink.replace("/geo","/geo.png") + "&fmt=png";
 }
   </script>
+  <style type='text/css'>
+.exportlinks a{
+  background: none repeat scroll 0 0 #62CC11;
+}
+.address.result img {
+  width: 26px;
+}
+ul#resultbar{
+  max-height: 330px;
+  overflow-y: scroll;
+}
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 7px;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgba(0,0,0,.5);
+  -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+}
+  </style>
 </head>
 <body data-action='search' data-controller='addresses' onload='initMe()'>
   <div class='container-addresses container-addresses-search' id='wrapper'>
     <div class='navbar'>
       <div class='navbar-inner'>
         <div class='container'>
+          <button class='btn btn-navbar' data-target='.nav-collapse' data-toggle='collapse' type='button'>
+            <span class='icon-bar'></span>
+            <span class='icon-bar'></span>
+            <span class='icon-bar'></span>
+          </button>
+          <a class='brand' href='/'>
+           <img alt="Blightstatus-logo" src="/images/logo.png" />
+          </a>
+          <div class='nav-collapse collapse'>
+            <!--<ul class='nav top-account pull-right'>
+              <li>
+                <a href="/pages/about">Account</a>
+              </li>
+            </ul>-->
+            <ul class='nav top-links'>
+              <li>
+                <a href="/pages/about">About</a>
+              </li>
+              <li>
+                <a href="/pages/help">Help</a>
+              </li>
+            </ul>
+            <ul class='nav top-search'>
+              <li>
+                <div class='search-form'>
+                  <form accept-charset="UTF-8" action="/statusstreet.html" method="get">
+                    <div style="margin:0;padding:0;display:inline">
+                      <input name="utf8" type="hidden" value="&#x2713;" />
+                    </div>
+                    <div class='search-field'>
+                      <input id="main-search-field" name="address" placeholder="Search address or street name" type="text" value="" />
+                    </div>
+                    <div class='search-button'>
+                      <input class="btn btn-primary btn-primary-search" data-disable-with="Search" name="commit" type="submit" value="Search" />
+                    </div>
+                  </form>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class='container-fluid'>
+      <section class='search-results'>
+        <div class='row-fluid'>
+          <div class='span3 left-bar'>
+            <div class='well' style='padding: 8px 0;'>
+              <div class='nav-header'>
+                <h2>Search Results</h2>
+                <p>(only showing properties with cases history)</p>
+              </div>
+              <ul id='resultbar' class='nav list'>
+                <img id="loadanim" src="/images/loading-gif.gif"/>
+              </ul>
+              <div class='clearfix'></div>
+              <div class='exportlinks nav'>
+                <li class='nav-header'>Download Data</li>
+                <a class="btn" id="kmllink" href="/api">
+                  <img src="/images/Download-icon.png" style="vertical-align:middle;"/>
+                  <span style="font-size:8pt;vertical-align:middle;">Map (Google Earth/KML)</span>
+                </a>
+                <!--<br/><br/>
+                <a class="btn" id="pnglink" href="/api">
+                  <img src="/images/Download-icon.png" style="vertical-align:middle;"/>
+                  <span style="font-size:8pt;vertical-align:middle;">PNG (image)</span>
+                </a>-->
+                <br/><br/>
+                <a class="btn" id="jsonlink" href="/api">
+                  <img src="/images/Download-icon.png" style="vertical-align:middle;"/>
+                  <span style="font-size:8pt;vertical-align:middle;">JSON</span>
+                </a>
+              </div>
+              <div class='clearfix'></div>
+            </div>
+          </div>
+          
+          <div class='span9 right-bar'>
+            <div id='map' style='height: 400px;'></div>
+            <!--
+            <div class='toggle'>
+              <input id="map-search-mode" name="map-search-mode" type="checkbox" value="1" />
+              Redo search when map is moved
+            </div>
+            -->
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+  <footer>
+    <div class='container'>
+      <div class='row-fluid'>
+        <div class='span4'>
+          <h3>We're in Beta!</h3>
+          <p>We're busy at work building and improving this website, so we want your feedback! Please feel free to ask a question, report a problem, or suggest a feature.</p>
+          <p>If you are a developer and want to help us build this thing, check out the developer site.</p>
+          <p>Thanks!</p>
+        </div>
+        <div class='span3'>
+          <h3>Contact Us</h3>
           <p>
-            <img height='20px' src='/images/code_flag.png'>
-            Created by Code for America in partnership with the City of Macon.
-            <a href='http://www.codeforamerica.org' target='_blank'>Learn more</a>.
+            Website
+            <br/>
+            <a href="http://codeforamerica.org">http://codeforamerica.org</a>
+            <br/>
+          </p>
+          <p>
+            Email
+            <br/>
+            <a href="mailto:macon@codeforamerica.org">macon@codeforamerica.org</a>
+            <br/>
+          </p>
+          <p>
+            Twitter
+            <br/>
+            <a href="@blightstatus">http://twitter.com/blightstatus</a>
+            <br/>
+          </p>
+        </div>
+        <div class='span2'>
+          <h3>Partners</h3>
+          <p>
+            <a href='http://codeforamerica.org'>
+              <img alt="Codeforamerica" src="http://commons.codeforamerica.org//sites/all/themes/civiccommons/images/codeforamerica.png" />
+            </a>
+          </p>
+          <p>
+            <a href='http://maconga.gov'>City of Macon</a>
           </p>
         </div>
       </div>
     </div>
-    <header class='page-header'>
-      <h1 id='logo'>
-        <a href="/">homeSTATUS</a>
-      </h1>
-      <div class='top-search-bar'>
-        <div class='search-form'>
-          <form accept-charset="UTF-8" action="/statusstreet.html" method="get">
-            <div style="margin:0;padding:0;display:inline">
-              <input name="utf8" type="hidden" value="&#x2713;" />
-            </div>
-            <div class='search-field'>
-              <input id="main-search-field" name="streetname" placeholder="Example: Adams Ave" type="text" value="" />
-            </div>
-            <div class='search-button'>
-              <input class="btn" name="commit" type="submit" value="Map Addresses" />
-            </div>
-          </form>
-        </div>
-      </div>
-    </header>
-    <div class='search-results'>
-      <div class='left-bar'>
-        <div class='well' style='padding: 8px 0;'>
-          <ul id='resultbar' class='nav list'>
-            <li class='nav-header'>Search Results</li>
-            <img id="loadanim" src="/images/loading-gif.gif" style="width:100%;"/>
-          </ul>
-          <div class='exportlinks nav'>
-            <li class='nav-header'>Download Data</li>
-            <a class="btn" id="kmllink" href="/api">
-              <img src="/images/Download-icon.png" style="vertical-align:middle;"/>
-              <span style="font-size:8pt;vertical-align:middle;">KML (Google Earth)</span>
-            </a>
-            <!-- <br/>
-            <a class="btn" id="pnglink" href="/api">
-              <img src="/images/Download-icon.png" style="vertical-align:middle;"/>
-              <span style="font-size:8pt;vertical-align:middle;">PNG (image)</span>
-            </a> -->
-            <br/>
-            <a class="btn" id="jsonlink" href="/api">
-              <img src="/images/Download-icon.png" style="vertical-align:middle;"/>
-              <span style="font-size:8pt;vertical-align:middle;">JSON</span>
-            </a>
-          </div>
-          <div class='clearfix'></div>
-        </div>
-      </div>
-      <div class='right-bar'>
-        <h3>Results show properties with open cases (as of June 2012):</h3>
-        <div id='map' style='height: 400px;'></div>
-      </div>
-    </div>
-    <footer>
-      <div class='footer'>
-        <p>
-          <a href='/about'>About</a>
-          -
-          <a href='/terms-of-service'>Terms of Service</a>
-          -
-          <a href='/stats'>Statistics</a>
-          -
-          <a href='/feedback'>Send feedback</a>
-        </p>
-      </div>
-    </footer>
-  </div>
-</body>
+  </footer>
 </html>
