@@ -330,6 +330,12 @@ function findRoad(){
 .address.result img {
   width: 26px;
 }
+.mylegend{
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#22cccccc, endColorstr=#22cccccc);
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#22cccccc, endColorstr=#22cccccc)";
+  background-color: rgb(200, 200, 200);
+  background-color: rgba(200, 200, 200, 0.2);
+}
 ul#resultbar{
   max-height: 330px;
   overflow-y: scroll;
@@ -435,17 +441,17 @@ ul#resultbar{
               Redo search when map is moved
             </div>
             -->
-            <div class='toggle'>
+            <div class='mylegend' style='height:30px;'>
               <ul class="nav top-links">
-                <li>
+                <li style="float:left;width:30px;">
                   <img src="http://codeforamerica.github.com/NeighborDiff/images/bluemarker.png"/>
                   <span>No Violations</span>
                 </li>
-                <li>
+                <li style="float:left;width:30px;">
                   <img src="http://codeforamerica.github.com/NeighborDiff/images/orangemarker.png"/>
                   <span>Cited</span>
                 </li>
-                <li>
+                <li style="float:left;width:30px;">
                   <img src="http://codeforamerica.github.com/NeighborDiff/images/redmarker.png"/>
                   <span>Open Case</span>
                 </li>
