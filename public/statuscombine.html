@@ -178,7 +178,7 @@ function initMe(){
   jQuery("#caseslink")[0].href = b;
   jQuery.getJSON(b,function(b){
     $("#loadanim").css({ display: "none" });
-    jQuery("#kmllink")[0].href = '/export.kml?address=' + surveyAddress + '&cases=' + transformAddress;
+    jQuery("#kmllink")[0].href = '/export.kml?address=' + surveyAddress;
     if(b.rows.length){
       prevAddresses = casesToAddresses(b);
       
