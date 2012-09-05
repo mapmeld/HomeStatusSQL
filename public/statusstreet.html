@@ -330,6 +330,14 @@ function findRoad(){
 .address.result img {
   width: 26px;
 }
+ul#resultbar{
+  max-height: 330px;
+  overflow-y: scroll;
+}
+ul#resultbar::-webkit-scrollbar-thumb, ::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 122, 255, 0.7) !important;
+  -webkit-box-shadow: inset 1px 1px 0 rgba(255,255,255,0.10), inset 0 -1px 0 rgba(255,255,255,0.07);
+}
   </style>
 </head>
 <body data-action='search' data-controller='addresses' onload='initMe()'>
