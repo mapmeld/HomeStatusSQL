@@ -112,6 +112,26 @@ var init = exports.init = function (config) {
     res.redirect('/statushome.html');
   });
   
+  app.get('/search', function(req, res){
+    var foundNumber = false;
+    for(var c=0;c<req.query['address'].length;c++){
+      if(req.query['address'][c] == ' '){
+        continue;
+      }
+      if(!isNaN(req.query['address'][c])){
+        // got to a number before a letter
+        foundNumber = true;
+        break;
+      }
+    }
+    if(foundNumber){
+      res.redirect('/statuscombine.html?address=' + req.query['address']);
+    }
+    else{
+      res.redirect('/statusstreet.html?address=' + req.query['address']);
+    }
+  });
+  
   app.get('/m', function(req, res){
     res.redirect('/statusmobilehome.html')
   });
@@ -131,9 +151,22 @@ var init = exports.init = function (config) {
   
   // Code Enforcement Case History URLs
   app.get('/keydb', function(req, res){
-    // Request a house's code enforcement history by address
+    // Request a house's code enforcement history by actual id
     var street = req.query["address"];
     var sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/poll1/_view/Poll1?key=' + encodeURIComponent( '"' + street + '"');
+    var requestOptions = {
+      'uri': sendurl,
+    };
+    request(requestOptions, function (err, response, body) {
+      res.setHeader('Content-Type', 'application/json');
+      res.send(body);
+    });
+  });
+  
+  app.get('/house', function(req, res){
+    // Request a house's code enforcement history by address
+    var street = req.query["address"];
+    var sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/clearaddress/_view/clearaddress?key=' + encodeURIComponent( '"' + street + '"');
     var requestOptions = {
       'uri': sendurl,
     };

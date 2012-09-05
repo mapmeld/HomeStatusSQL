@@ -173,11 +173,16 @@ function initMe(){
   });
 
   // look up code enforcement case history
-  var transformAddress = gup("id");
-  if(transformAddress.indexOf("%20%20") == -1){
-    transformAddress = " " + transformAddress.split(',')[0].toUpperCase().replace("%20",",") + ",%20" + transformAddress.split(',')[1] + ",%20%20GA";
-  }
-  var b="/keydb?address=" + transformAddress;
+  //var transformAddress = gup("id");
+  //if(transformAddress.indexOf("%20%20") == -1){
+  //  transformAddress = " " + transformAddress.split(',')[0].toUpperCase().replace("%20",",") + ",%20" + transformAddress.split(',')[1] + ",%20%20GA";
+  //}
+  //var b="/keydb?address=" + transformAddress;
+  
+  var transformAddress = gup("address");
+  transformAddress = transformAddress.toLowerCase();
+  var b = '/house?address=' + transformAddress;
+  
   jQuery("#caseslink")[0].href = b;
   jQuery.getJSON(b,function(b){
     $("#loadanim").css({ display: "none" });
@@ -281,7 +286,7 @@ function initMe(){
               <ul class='nav top-search'>
                 <li>
                   <div class='search-form'>
-                    <form accept-charset="UTF-8" action="/statusstreet.html" method="get">
+                    <form accept-charset="UTF-8" action="/search" method="get">
                       <div style="margin:0;padding:0;display:inline">
                         <input name="utf8" type="hidden" value="&#x2713;" />
                       </div>
