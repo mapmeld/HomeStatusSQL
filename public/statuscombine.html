@@ -233,7 +233,7 @@ function initMe(){
   
   // link to the view for this street
   var streetname = gup("address").substring(gup("address").indexOf('%20') + 3);
-  jQuery("#streetlink").html( '<a href="/statusstreet.html?address=' + streetname + '">' + streetname + '</a>');
+  jQuery("#streetlink").html( '<a href="/statusstreet.html?address=' + streetname + '">' + replaceAll(streetname,"%20"," ") + '</a>');
 }
     </script>
     <style type="text/css">

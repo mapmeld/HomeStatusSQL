@@ -141,7 +141,7 @@ function listThisAddress(notsobad, stillopen, address, ismapped){
   if(!ismapped){
     li.style.backgroundColor = "#ffaaaa";
   }
-  var fixaddress = doc.address.split(',');
+  var fixaddress = address.split(',');
   var housenum = fixaddress[0];
   housenum *= 1;
   fixaddress = housenum + " " + fixaddress[1];
