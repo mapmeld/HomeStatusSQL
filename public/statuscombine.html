@@ -233,7 +233,7 @@ function initMe(){
   
   // link to the view for this street
   var streetname = gup("address").substring(gup("address").indexOf('%20') + 3);
-  jQuery("#streetlink").html( '<a href="/statusstreet.html?address=' + streetname + '">' + replaceAll(streetname,"%20"," ") + '</a>');
+  jQuery("#streetlink").html( '<a style="text-transform:capitalize;" href="/statusstreet.html?address=' + streetname + '">' + replaceAll(streetname,"%20"," ") + '</a>');
 }
     </script>
     <style type="text/css">
@@ -299,7 +299,7 @@ function initMe(){
         <section class='row-fluid'>
           <div class='span8 main'>
             <div class='address-title'>
-              <h1 id="myaddress"></h1>
+              <h1 id="myaddress" style="text-transform:capitalize;"></h1>
             </div>
             <div class='status-update'>
               <div class='recent'>

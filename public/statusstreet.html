@@ -145,7 +145,7 @@ function listThisAddress(notsobad, stillopen, address, ismapped){
   var housenum = fixaddress[0];
   housenum *= 1;
   fixaddress = housenum + " " + fixaddress[1];
-  li.innerHTML="<img src='" + icon + "' width='10px'><span class='search-address'><a href='/statuscombine.html?address=" + fixaddress.toLowerCase() + "'>" + fixaddress + "</a></span>";
+  li.innerHTML="<img src='" + icon + "' width='10px'><span class='search-address'><a style='text-transform:capitalize;' href='/statuscombine.html?address=" + fixaddress.toLowerCase() + "'>" + fixaddress + "</a></span>";
   $("#resultbar").append(li);
 }
 function initMe(){
