@@ -121,7 +121,7 @@ function initMe(){
 
   map.addLayer( baseMapLayer );
   map.setView(new L.LatLng(32.840943,-83.62587),12);
-  $("#main-search-field").val( gup("address") );
+  $("#main-search-field").val( replaceAll(gup("address"), "%20", " ") );
   $("#myaddress").html( $("#main-search-field").val() );
 
   var surveyAddress = gup("address");
@@ -232,7 +232,7 @@ function initMe(){
   });
   
   // link to the view for this street
-  var streetname = gup("address").split(' ')[1];
+  var streetname = gup("address").substring(gup("address").indexOf('%20') + 3);
   jQuery("#streetlink").html( '<a href="/statusstreet.html?address=' + streetname + '">' + streetname + '</a>');
 }
     </script>
