@@ -141,7 +141,11 @@ function listThisAddress(notsobad, stillopen, address, ismapped){
   if(!ismapped){
     li.style.backgroundColor = "#ffaaaa";
   }
-  li.innerHTML="<img src='" + icon + "' width='10px'><span class='search-address'><a href='/statuscombine.html?id=" + address + "'>" + address.split(',')[0] + " " + address.split(',')[1] + "</a></span>";
+  var fixaddress = doc.address.split(',');
+  var housenum = fixaddress[0];
+  housenum *= 1;
+  fixaddress = housenum + " " + fixaddress[1];
+  li.innerHTML="<img src='" + icon + "' width='10px'><span class='search-address'><a href='/statuscombine.html?address=" + fixaddress.toLowerCase() + "'>" + fixaddress + "</a></span>";
   $("#resultbar").append(li);
 }
 function initMe(){
