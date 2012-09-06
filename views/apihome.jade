@@ -20,20 +20,81 @@ body(data-action='index', data-controller='home')
       h1#logo
         a(href="/") homeSTATUS API
 
-      div.tag-line Access data on Macon properties
+      div.tag-line Access data on Macon properties in Code Enforcement
       div.top-search-bar
 
     div.content.frontpage
       .homesearch(style="width:70%;")
         .search-form(style="width:100%;")
-          h3 Build a better app
-          h4 Use and re-use our data.
+          h3 Build a better app!
+          h4 Use and re-use public data.
           br
           p Access our API or download datasets in KML, JSON, and PNG formats.
           p
             span We also support the Open311 API:&nbsp;
             a(href="/311/services.json") /311/services.json
-          p Community groups: set up a data partnership to upload neighborhood surveys and exchange results with the city.
+
+        .search-form(style="width:100%;")
+          h3 Google Earth / KML API
+          p
+            span Start with&nbsp;
+            span(style="font-family:'Courier New';") http://housepointer.herokuapp.com
+            br
+            span No points will be returned if the street or house has no data from 2009-2012.
+          
+          h4 Street Level - All Cases
+          p
+            span Send a street's name. Abbreviate words such as Street, Avenue, and Lane.
+            ul(style="font-family:'Courier New';")
+              li /export.kml?streetname=Pio Nono Ave
+              li /export.kml?streetname=Smith St
+        
+          h4 Geo Search - All Cases
+          p
+            span Send a bounding box using latitude and longitude limits.
+            ul(style="font-family:'Courier New';")
+              li /geo.kml?bbox=SOUTH,WEST,NORTH,EAST&fmt=kml
+              li /geo.kml?bbox=32.833985,-83.668541,32.837032,-83.663971&fmt=kml
+
+          h4 House Level - House with Cases and Survey Information
+          p
+            span Send an address in a format such as 700 Poplar St. Abbreviate words such as Street, Avenue, and Lane.
+            ul(style="font-family:'Courier New';")
+              li /export.kml?address=700 Poplar St
+
+        .search-form(style="width:100%;")
+          h3 Web JSON APIs
+          p
+            span Start with&nbsp;
+            span(style="font-family:'Courier New';") http://housepointer.herokuapp.com
+            br
+            span No points will be returned if the street or house has no data from 2009-2012.
+
+          h4 Street Level - All Cases
+          p
+            span Send a street's name. Abbreviate words such as Street, Avenue, and Lane.
+            ul(style="font-family:'Courier New';")
+              li /searchdb.json?streetname=Pio Nono Ave
+              li /searchdb.json?streetname=Smith St
+
+          h4 Geo Search - All Cases
+          p
+            span Send a bounding box using latitude and longitude limits.
+            ul(style="font-family:'Courier New';")
+              li /geo.json?bbox=SOUTH,WEST,NORTH,EAST
+              li /geo.json?bbox=32.833985,-83.668541,32.837032,-83.663971
+
+          h4 House Level - Cases
+          p
+            span Send an address in a format such as this: "700 Poplar St". Abbreviate words such as Street, Avenue, and Lane.
+            ul(style="font-family:'Courier New';")
+              li /house?address=700 Poplar St
+
+          h4 House Level - Surveys
+          p
+            span Send an address in a format such as this: "700 Poplar St". Abbreviate words such as Street, Avenue, and Lane.
+            ul(style="font-family:'Courier New';")
+              li /surveyed?address=700 Poplar St
 
     footer
       div.footer

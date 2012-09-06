@@ -165,7 +165,7 @@ var init = exports.init = function (config) {
   
   app.get('/house', function(req, res){
     // Request a house's code enforcement history by address
-    var street = req.query["address"];
+    var street = req.query["address"].toLowerCase();
     var sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/clearaddress/_view/clearaddress?key=' + encodeURIComponent( '"' + street + '"');
     var requestOptions = {
       'uri': sendurl,
@@ -523,7 +523,7 @@ var init = exports.init = function (config) {
   app.get('/surveyed', function(req, res){
     // Request survey data by address
     // Sample URL: http://nickd.iriscouch.com:5984/housing/_design/poll1/_view/Poll1?key="ADDRESS, Macon, GA"
-    var street = req.query["address"];
+    var street = req.query["address"].toLowerCase();
     var sendurl = 'http://nickd.iriscouch.com:5984/housing/_design/poll1/_view/Poll1?key=' + encodeURIComponent( '"' + street + '"');
     //res.send(sendurl);
     var requestOptions = {
