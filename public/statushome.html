@@ -27,7 +27,7 @@ function showRecent(){
   jQuery.getJSON("/recentclose", function(closed){
     for(var i=0;i<closed.rows.length;i++){
       var li = document.createElement("li");
-      li.innerHTML = '<a href="/statuscombine.html?address=' + cleanAddress(opened.rows[i].value.address) + '">' + cleanAddress(closed.rows[i].value.address) + ' - ' + closed.rows[i].value.action + '</a>';
+      li.innerHTML = '<a href="/statuscombine.html?address=' + cleanAddress(closed.rows[i].value.address) + '">' + cleanAddress(closed.rows[i].value.address) + ' - ' + closed.rows[i].value.action + '</a>';
       document.getElementById("recently_closed").appendChild(li);
     }
   });
