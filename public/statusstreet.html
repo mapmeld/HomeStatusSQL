@@ -44,6 +44,30 @@ function replaceAll(src, oldr, newr){
   }
   return src;
 }
+var inspectionType = {
+  "A/C": "Abandoned",
+  "AC": "Abandoned",
+  "Y/P": "Yard / premises maintenance",
+  "YP": "Yard / premises maintenance",
+  "HC": "Housing Maintenance",
+  "IV": "Inoperable Vehicle",
+  "WO": "Vacant lot, overgrown",
+  "W/O": "Vacant lot, overgrown",
+  "NDPV": "Dwelling, no violations",
+  "NVLV": "Vacant lot, no violations"
+  // REFAD
+};
+function getInspection(t){
+  var items = t.split(',');
+  for(var i=0;i<items.length;i++){
+    if(inspectionType[items[i]]){
+      t.replace(items[i], inspectionType[items[i]]);
+    }
+    else{
+      t.replace(items[i], "Inspected");
+    }
+  }
+}
 function streetNameThenNumber(a,b){
   if(a.value.address.split(",")[1] == b.value.address.split(",")[1]){
     // streets match, sort by number
@@ -198,7 +222,7 @@ function initMe(){
         // make a list of cases
         for(var i=0;i<sortedCases.length;i++){
           var sc = sortedCases[i];
-          j += "<li>"+sc.inspector + " inspected. Case opened "+ parseStamp(sc.opendate) + ".";
+          j += "<li>" + getInspection(sc.inspector) + ". Case opened "+ parseStamp(sc.opendate) + ".";
           if(sc.closedate.length > 5){
             j += " Resolved with " + sc.action + " on " + parseStamp(sc.closedate) + "</li>";
           }
@@ -311,7 +335,7 @@ function findRoad(){
             // make a list of cases
             for(var i=0;i<sortedCases.length;i++){
               var sc = sortedCases[i];
-              j += "<li>"+sc.inspector + " inspected. Case opened "+ parseStamp(sc.opendate) + ".";
+              j += "<li>"+ getInspection(sc.inspector) + ". Case opened "+ parseStamp(sc.opendate) + ".";
               if(sc.closedate.length > 5){
                 j += " Resolved with " + sc.action + " on " + parseStamp(sc.closedate) + "</li>";
               }

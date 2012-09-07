@@ -44,6 +44,30 @@ function replaceAll(src, oldr, newr){
   }
   return src;
 }
+var inspectionType = {
+  "A/C": "Abandoned",
+  "AC": "Abandoned",
+  "Y/P": "Yard / premises maintenance",
+  "YP": "Yard / premises maintenance",
+  "HC": "Housing Maintenance",
+  "IV": "Inoperable Vehicle",
+  "WO": "Vacant lot, overgrown",
+  "W/O": "Vacant lot, overgrown",
+  "NDPV": "Dwelling, no violations",
+  "NVLV": "Vacant lot, no violations"
+  // REFAD
+};
+function getInspection(t){
+  var items = t.split(',');
+  for(var i=0;i<items.length;i++){
+    if(inspectionType[items[i]]){
+      t.replace(items[i], inspectionType[items[i]]);
+    }
+    else{
+      t.replace(items[i], "Inspected");
+    }
+  }
+}
 function initMe(){
   //var tileURL = "http://otile1.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png";
   //var attribution = "Map data &copy; 2012 OpenStreetMap contributors, Tiles by MapQuest";
@@ -151,7 +175,7 @@ function findRoad(){
         // make a list of cases
         for(var i=0;i<sortedCases.length;i++){
           var sc = sortedCases[i];
-          j += "<li>"+sc.inspector + " inspected. Case opened "+ parseStamp(sc.opendate) + ".";
+          j += "<li>" + getInspection(sc.inspector) + ". Case opened "+ parseStamp(sc.opendate) + ".";
           if(sc.closedate.length > 5){
             j += " Resolved with " + sc.action + " on " + parseStamp(sc.closedate) + "</li>";
           }
