@@ -67,6 +67,7 @@ function getInspection(t){
       t.replace(items[i], "Inspected");
     }
   }
+  return t;
 }
 function streetNameThenNumber(a,b){
   if(a.value.address.split(",")[1] == b.value.address.split(",")[1]){
