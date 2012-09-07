@@ -61,10 +61,10 @@ function getInspection(t){
   var items = t.split(',');
   for(var i=0;i<items.length;i++){
     if(inspectionType[items[i]]){
-      t.replace(items[i], inspectionType[items[i]]);
+      t = t.replace(items[i], inspectionType[items[i]]);
     }
     else{
-      t.replace(items[i], "Inspected");
+      t = t.replace(items[i], "Inspected");
     }
   }
   return t;
