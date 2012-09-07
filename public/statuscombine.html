@@ -111,8 +111,10 @@ function casesToAddresses(b){
   return pa;
 }
 function initMe(){
-  var tileURL = "http://otile1.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png";
-  var attribution = "Map data &copy; 2012 OpenStreetMap contributors, Tiles by MapQuest";
+  //var tileURL = "http://otile1.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png";
+  //var attribution = "Map data &copy; 2012 OpenStreetMap contributors, Tiles by MapQuest";
+  var tileURL = "http://tiles{c}.skobbler.net/osm_tiles2/{z}/{x}/{y}.png";
+  var attribution = "Map data &copy; 2012 OpenStreetMap contributors, Tiles by <a href='http://maps.skobbler.com' target='_blank'>skobbler GmbH</a>"
   var baseMapLayer = new L.TileLayer(tileURL, {maxZoom: 18, attribution: attribution});
 
   map = new L.Map('map', { zoomControl: false, panControl: false });
@@ -244,6 +246,10 @@ function initMe(){
 }
 .exportlinks a{
   background: none repeat scroll 0 0 #62CC11;
+}
+.leaflet-container .leaflet-control-attribution{
+  display: block;
+  font-size: 8pt;
 }
     </style>
   </head>
