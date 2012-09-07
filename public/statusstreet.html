@@ -144,8 +144,8 @@ function listThisAddress(notsobad, stillopen, address, ismapped){
   var fixaddress = address.split(',');
   var housenum = fixaddress[0];
   housenum *= 1;
-  fixaddress = housenum + " " + fixaddress[1];
-  li.innerHTML="<img src='" + icon + "' width='10px'><span class='search-address'><a style='text-transform:capitalize;' href='/statuscombine.html?address=" + fixaddress.toLowerCase() + "'>" + fixaddress + "</a></span>";
+  fixaddress = (housenum + " " + fixaddress[1]).toLowerCase();
+  li.innerHTML="<img src='" + icon + "' width='10px'><span class='search-address'><a style='text-transform:capitalize;' href='/statuscombine.html?address=" + fixaddress + "'>" + fixaddress + "</a></span>";
   $("#resultbar").append(li);
 }
 function initMe(){
@@ -188,7 +188,11 @@ function initMe(){
           return b.id * 1 - a.id * 1;
         });
         // write the top of a map popup
-        j='<h3><a href="/statuscombine.html?id='+address+'">'+address.split(',')[0]+" "+address.split(',')[1]+"</a></h3><ul>";
+        var fixaddress = address.split(',');
+        var housenum = fixaddress[0];
+        housenum *= 1;
+        fixaddress = (housenum + " " + fixaddress[1]).toLowerCase();
+        j='<h3><a href="/statuscombine.html?address='+fixaddress+'" style="text-transform:capitalize;">'+fixaddress+"</a></h3><ul>";
         // make a list of cases
         for(var i=0;i<sortedCases.length;i++){
           var sc = sortedCases[i];
@@ -297,7 +301,11 @@ function findRoad(){
               return b.id * 1 - a.id * 1;
             });
             // write the top of a map popup
-            j='<h3><a href="/statuscombine.html?id='+address+'" style="text-transform:capitalize;">'+ (address.split(',')[0]+" "+address.split(',')[1]).toLowerCase() +"</a></h3><ul>";
+            var fixaddress = address.split(',');
+            var housenum = fixaddress[0];
+            housenum *= 1;
+            fixaddress = housenum + " " + fixaddress[1];
+            j='<h3><a href="/statuscombine.html?address='+fixaddress+'" style="text-transform:capitalize;">'+ fixaddress +"</a></h3><ul>";
             // make a list of cases
             for(var i=0;i<sortedCases.length;i++){
               var sc = sortedCases[i];
