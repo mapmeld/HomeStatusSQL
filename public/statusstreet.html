@@ -142,7 +142,7 @@ function listThisAddress(notsobad, stillopen, address, ismapped){
     li.style.backgroundColor = "#ffaaaa";
   }
   var fixaddress = address.split(',');
-  var housenum = fixaddress[0];
+  var housenum = fixaddress[0].split('-')[0];
   housenum *= 1;
   fixaddress = (housenum + " " + fixaddress[1]).toLowerCase();
   li.innerHTML="<img src='" + icon + "' width='10px'><span class='search-address'><a style='text-transform:capitalize;' href='/statuscombine.html?address=" + fixaddress + "'>" + fixaddress + "</a></span>";
@@ -189,7 +189,7 @@ function initMe(){
         });
         // write the top of a map popup
         var fixaddress = address.split(',');
-        var housenum = fixaddress[0];
+        var housenum = fixaddress[0].split('-')[0];
         housenum *= 1;
         fixaddress = (housenum + " " + fixaddress[1]).toLowerCase();
         j='<h3><a href="/statuscombine.html?address='+fixaddress+'" style="text-transform:capitalize;">'+fixaddress+"</a></h3><ul>";
@@ -302,7 +302,7 @@ function findRoad(){
             });
             // write the top of a map popup
             var fixaddress = address.split(',');
-            var housenum = fixaddress[0];
+            var housenum = fixaddress[0].split('-')[0];
             housenum *= 1;
             fixaddress = housenum + " " + fixaddress[1];
             j='<h3><a href="/statuscombine.html?address='+fixaddress+'" style="text-transform:capitalize;">'+ fixaddress +"</a></h3><ul>";

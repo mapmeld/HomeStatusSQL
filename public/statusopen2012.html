@@ -142,7 +142,7 @@ function findRoad(){
         });
         // write the top of a map popup
         var fixaddress = address.split(',');
-        var housenum = fixaddress[0];
+        var housenum = fixaddress[0].split('-')[0];
         housenum *= 1;
         fixaddress = (housenum + " " + fixaddress[1]).toLowerCase();
         j='<h3><a style="text-transform:capitalize;" href="/statuscombine.html?address='+fixaddress+'">'+fixaddress+"</a></h3><ul>";
@@ -180,7 +180,7 @@ function findRoad(){
   	    li.className="active address result";
   	    var icon = "http://codeforamerica.github.com/NeighborDiff/images/redmarker.png";
         var fixaddress = address.split(',');
-        var housenum = fixaddress[0];
+        var housenum = fixaddress[0].split('-')[0];
         housenum *= 1;
         fixaddress = (housenum + " " + fixaddress[1]).toLowerCase();
       	li.innerHTML="<img src='" + icon + "' width='10px'><span class='search-address'><a href='/statuscombine.html?address=" + fixaddress + "' style='text-transform:capitalize;'>" + fixaddress + "</a></span>";
@@ -305,6 +305,14 @@ ul#resultbar{
               Redo search when map is moved
             </div>
             -->
+            <div class='mylegend'>
+              <ul class="nav top-links">
+                <li>
+                  <img src="http://codeforamerica.github.com/NeighborDiff/images/redmarker.png"/>
+                  <span>Browsing Open Cases - Move Map to Search</span>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </section>
