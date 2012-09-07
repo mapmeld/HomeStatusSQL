@@ -47,14 +47,14 @@ function replaceAll(src, oldr, newr){
 var inspectionType = {
   "A/C": "Abandoned",
   "AC": "Abandoned",
-  "Y/P": "Yard / premises maintenance",
-  "YP": "Yard / premises maintenance",
-  "HC": "Housing Maintenance",
-  "IV": "Inoperable Vehicle",
-  "WO": "Vacant lot, overgrown",
-  "W/O": "Vacant lot, overgrown",
-  "NDPV": "Dwelling, no violations",
-  "NVLV": "Vacant lot, no violations"
+  "Y/P": "Yard & premises maintenance",
+  "YP": "Yard & premises maintenance",
+  "HC": "Housing maintenance",
+  "IV": "Inoperable vehicle",
+  "WO": "Overgrown vacant lot",
+  "W/O": "Overgrown vacant lot",
+  "NDPV": "Dwelling with no violations",
+  "NVLV": "Vacant lot with no violations"
   // REFAD
 };
 function getInspection(t){
@@ -67,7 +67,7 @@ function getInspection(t){
       t = t.replace(items[i], "Inspected");
     }
   }
-  return t;
+  return replaceAll(t, ',', ', ');
 }
 function streetNameThenNumber(a,b){
   if(a.value.address.split(",")[1] == b.value.address.split(",")[1]){
