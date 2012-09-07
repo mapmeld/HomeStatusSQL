@@ -56,6 +56,13 @@ body(data-action='index', data-controller='home')
             ul(style="font-family:'Courier New';")
               li /geo.kml?bbox=SOUTH,WEST,NORTH,EAST&fmt=kml
               li /geo.kml?bbox=32.833985,-83.668541,32.837032,-83.663971&fmt=kml
+        
+          h4 Geo Search - Open Cases
+          p
+            span Send a bounding box using latitude and longitude limits.
+            ul(style="font-family:'Courier New';")
+              li /geo.kml?status=open&bbox=SOUTH,WEST,NORTH,EAST&fmt=kml
+              li /geo.kml?status=open&bbox=32.839897,-83.652649,32.847108,-83.633938&fmt=kml
 
           h4 House Level - House with Cases and Survey Information
           p
@@ -85,7 +92,14 @@ body(data-action='index', data-controller='home')
             ul(style="font-family:'Courier New';")
               li /geo.json?bbox=SOUTH,WEST,NORTH,EAST
               li /geo.json?bbox=32.833985,-83.668541,32.837032,-83.663971
-
+        
+          h4 Geo Search - Open Cases
+          p
+            span Send a bounding box using latitude and longitude limits.
+            ul(style="font-family:'Courier New';")
+              li /geo.json?status=open&bbox=SOUTH,WEST,NORTH,EAST
+              li /geo.json?status=open&bbox=32.833985,-83.668541,32.837032,-83.663971
+     
           h4 House Level - Cases
           p
             span Send an address in a format such as this: "700 Poplar St". Abbreviate words such as Street, Avenue, and Lane.

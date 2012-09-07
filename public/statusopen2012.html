@@ -175,7 +175,7 @@ function findRoad(){
   	    var li = document.createElement("li");
   	    li.className="active address result";
   	    var icon = "http://codeforamerica.github.com/NeighborDiff/images/redmarker.png";
-      	li.innerHTML="<img src='" + icon + "' width='10px'><span class='search-address'><a href='/statuscombine.html?id=" + address + "'>" + address.split(',')[0] + " " + address.split(',')[1] + "</a></span>";
+      	li.innerHTML="<img src='" + icon + "' width='10px'><span class='search-address'><a href='/statuscombine.html?id=" + address + "' style='text-transform:capitalize;'>" + (address.split(',')[0] + " " + address.split(',')[1]).toLowerCase() + "</a></span>";
   	    $("#resultbar").append(li);
   	  }
   	}
