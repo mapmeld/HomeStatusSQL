@@ -57,7 +57,7 @@ function getInspection(t){
       t = t.replace(items[i], "Inspected");
     }
   }
-  return replaceAll(t, ',', ', ');
+  return replaceAll(replaceAll(t, ',', '_'),"_",", ");
 }
 function listNote(note){
   var li = document.createElement("li");
