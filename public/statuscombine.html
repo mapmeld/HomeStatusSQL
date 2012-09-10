@@ -69,8 +69,8 @@ function listNote(note){
 function markerByStatus(notsobad, stillopen, pt){
   if(notsobad){
     var miniIcon = new L.Icon({
-      iconSize: [28, 30],
-      iconAnchor: [15, 30],
+      iconSize: [22, 30],
+      iconAnchor: [11, 30],
       shadowSize: [34, 30],
       popupAnchor: [0, -25],
       iconUrl: "../images/macon-marker-03.png"
@@ -79,8 +79,8 @@ function markerByStatus(notsobad, stillopen, pt){
   }
   else if(stillopen){
     var openIcon = new L.Icon({
-  	  iconSize: [35, 30],
-      iconAnchor: [18, 30],
+  	  iconSize: [22, 30],
+      iconAnchor: [11, 30],
   	  shadowSize: [42, 30],
       popupAnchor: [0, -28],
   	  iconUrl: "../images/macon-marker-01.png"
@@ -89,8 +89,8 @@ function markerByStatus(notsobad, stillopen, pt){
   }
   // standard marker
   var standardIcon = new L.Icon({
-  	iconSize: [35, 30],
-    iconAnchor: [18, 30],
+  	iconSize: [22, 30],
+    iconAnchor: [11, 30],
   	shadowSize: [42, 30],
     popupAnchor: [0, -28],
     iconUrl: "../images/macon-marker-02.png"
