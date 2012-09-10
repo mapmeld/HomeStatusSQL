@@ -129,7 +129,7 @@ function markerByStatus(notsobad, stillopen, pt){
       iconAnchor: [15, 30],
       shadowSize: [34, 30],
       popupAnchor: [0, -25],
-      iconUrl: "http://codeforamerica.github.com/NeighborDiff/images/bluemarker.png"
+      iconUrl: "../images/macon-marker-03.png"
     });
     return new L.Marker( new L.LatLng( pt.lat, pt.lng ), { icon: miniIcon });
   }
@@ -139,7 +139,7 @@ function markerByStatus(notsobad, stillopen, pt){
       iconAnchor: [18, 30],
   	  shadowSize: [42, 30],
       popupAnchor: [0, -28],
-  	  iconUrl: "http://codeforamerica.github.com/NeighborDiff/images/redmarker.png"
+  	  iconUrl: "../images/macon-marker-01.png"
   	});
     return new L.Marker( new L.LatLng( pt.lat, pt.lng ), { icon: openIcon });
   }
@@ -149,19 +149,19 @@ function markerByStatus(notsobad, stillopen, pt){
     iconAnchor: [18, 30],
   	shadowSize: [42, 30],
     popupAnchor: [0, -28],
-    iconUrl: "http://codeforamerica.github.com/NeighborDiff/images/orangemarker.png"
+    iconUrl: "../images/macon-marker-02.png"
   });
   return new L.Marker( new L.LatLng( pt.lat, pt.lng ), { icon: standardIcon });
 }
 function listThisAddress(notsobad, stillopen, address, ismapped){
   var li = document.createElement("li");
   li.className="active address result";
-  var icon = "http://codeforamerica.github.com/NeighborDiff/images/orangemarker.png";
+  var icon = "../images/macon-marker-02.png";
   if(notsobad){
-    icon = 'http://codeforamerica.github.com/NeighborDiff/images/bluemarker.png';
+    icon = '../images/macon-marker-03.png';
   }
   else if(stillopen){
-    icon = "http://codeforamerica.github.com/NeighborDiff/images/redmarker.png";
+    icon = "../images/macon-marker-01.png";
   }
   if(!ismapped){
     li.style.backgroundColor = "#ffaaaa";
@@ -506,15 +506,15 @@ ul#resultbar{
             <div class='mylegend'>
               <ul class="nav top-links">
                 <li>
-                  <img src="http://codeforamerica.github.com/NeighborDiff/images/bluemarker.png"/>
+                  <img src="/images/macon-marker-03.png"/>
                   <span>No Violations</span>
                 </li>
                 <li>
-                  <img src="http://codeforamerica.github.com/NeighborDiff/images/orangemarker.png"/>
-                  <span>Cited</span>
+                  <img src="/images/macon-marker-02.png"/>
+                  <span>Past Violations</span>
                 </li>
                 <li>
-                  <img src="http://codeforamerica.github.com/NeighborDiff/images/redmarker.png"/>
+                  <img src="/images/macon-marker-01.png"/>
                   <span>Open Case</span>
                 </li>
               </ul>
