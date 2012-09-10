@@ -168,10 +168,12 @@ function findRoad(){
           return b.id * 1 - a.id * 1;
         });
         // write the top of a map popup
-        var fixaddress = address.split(',');
-        var housenum = fixaddress[0].split('-')[0];
-        housenum *= 1;
-        fixaddress = (housenum + " " + fixaddress[1]).toLowerCase();
+        var fixaddress = address.toLowerCase().split(',');
+        var housenum = fixaddress[0].replace(' ','');
+        if(housenum[0] == "0"){
+          housenum = housenum.replace("0","");
+        }
+        fixaddress = housenum + " " + fixaddress[1];
         j='<h3><a style="text-transform:capitalize;" href="/statuscombine.html?address='+fixaddress+'">'+fixaddress+"</a></h3><ul>";
         // make a list of cases
         for(var i=0;i<sortedCases.length;i++){
@@ -206,10 +208,12 @@ function findRoad(){
   	    var li = document.createElement("li");
   	    li.className="active address result";
   	    var icon = "http://codeforamerica.github.com/NeighborDiff/images/redmarker.png";
-        var fixaddress = address.split(',');
-        var housenum = fixaddress[0].split('-')[0];
-        housenum *= 1;
-        fixaddress = (housenum + " " + fixaddress[1]).toLowerCase();
+        var fixaddress = address.toLowerCase().split(',');
+        var housenum = fixaddress[0].replace(' ','');
+        if(housenum[0] == "0"){
+          housenum = housenum.replace("0","");
+        }
+        fixaddress = housenum + " " + fixaddress[1];
       	li.innerHTML="<img src='" + icon + "' width='10px'><span class='search-address'><a href='/statuscombine.html?address=" + fixaddress + "' style='text-transform:capitalize;'>" + fixaddress + "</a></span>";
   	    $("#resultbar").append(li);
   	  }
