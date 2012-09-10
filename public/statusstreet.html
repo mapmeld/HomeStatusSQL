@@ -172,7 +172,7 @@ function listThisAddress(notsobad, stillopen, address, ismapped){
     housenum = housenum.replace("0","");
   }
   fixaddress = (housenum + " " + fixaddress[1]);
-  li.innerHTML="<img src='" + icon + "' width='10px'><span class='search-address'><a style='text-transform:capitalize;' href='/statuscombine.html?address=" + fixaddress + "'>" + fixaddress + "</a></span>";
+  li.innerHTML="<img src='" + icon + "' width='10px'><span class='search-address'><a style='text-transform:capitalize;' href='/statuscombine.html?address=" + encodeURIComponent(fixaddress) + "'>" + fixaddress + "</a></span>";
   $("#resultbar").append(li);
 }
 function initMe(){
@@ -223,7 +223,7 @@ function initMe(){
           housenum = housenum.replace("0","");
         }
         fixaddress = (housenum + " " + fixaddress[1]);
-        j='<h3><a href="/statuscombine.html?address='+fixaddress+'" style="text-transform:capitalize;">'+fixaddress+"</a></h3><ul>";
+        j='<h3><a href="/statuscombine.html?address='+encodeURIComponent(fixaddress)+'" style="text-transform:capitalize;">'+fixaddress+"</a></h3><ul>";
         // make a list of cases
         for(var i=0;i<sortedCases.length;i++){
           var sc = sortedCases[i];
@@ -338,7 +338,7 @@ function findRoad(){
               housenum = housenum.replace("0","");
             }
             fixaddress = housenum + " " + fixaddress[1];
-            j='<h3><a href="/statuscombine.html?address='+fixaddress+'" style="text-transform:capitalize;">'+ fixaddress +"</a></h3><ul>";
+            j='<h3><a href="/statuscombine.html?address='+encodeURIComponent(fixaddress)+'" style="text-transform:capitalize;">'+ fixaddress +"</a></h3><ul>";
             // make a list of cases
             for(var i=0;i<sortedCases.length;i++){
               var sc = sortedCases[i];
