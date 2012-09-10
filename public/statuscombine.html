@@ -148,7 +148,7 @@ function initMe(){
 
   map.addLayer( baseMapLayer );
   map.setView(new L.LatLng(32.840943,-83.62587),12);
-  $("#main-search-field").val( replaceAll(replaceAll(gup("address"), "%20", " "), "%26", "&" );
+  $("#main-search-field").val( replaceAll(replaceAll(gup("address"), "%20", " "), "%26", "&" ) );
   $("#myaddress").html( $("#main-search-field").val() );
 
   var surveyAddress = gup("address");
