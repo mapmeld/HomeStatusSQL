@@ -12,7 +12,7 @@ This is an app experimenting with CouchDB to store housing data. Check [openblig
 <img src="http://i.imgur.com/QNQWW.png"/>
 
 ### Individual House History and Survey Data
-<img src="http://imgur.com/pUsR0"/>
+<img src="http://i.imgur.com/pUsR0.png"/>
 
 ### Browse Open Cases Map
 <img src="http://i.imgur.com/aHyDJ.png"/>
