@@ -3,32 +3,34 @@
 This is an app experimenting with CouchDB to store housing data. Check [openblight](https://github.com/codeforamerica/openblight) for more information on that project.
 
 ### Homepage
-<img src="http://i.imgur.com/koNAz.png"/>
+<img src="http://imgur.com/ZRfTW"/>
 
 ### Street-by-Street Results
-<img src="http://i.imgur.com/naW3T.png"/>
+<img src="http://i.imgur.com/WLzkJ.png"/>
 
-### Click for 3-Year History
-<img src="http://i.imgur.com/3ePoQ.png"/>
+### Click for 2009-2012 Code Enforcement History
+<img src="http://i.imgur.com/QNQWW.png"/>
 
 ### Individual House History and Survey Data
-<img src="http://i.imgur.com/QNAB1.png"/>
+<img src="http://imgur.com/pUsR0"/>
 
 ### Browse Open Cases Map
-<img src="http://i.imgur.com/ejycX.png"/>
+<img src="http://i.imgur.com/aHyDJ.png"/>
 
 ### Download as Google Earth KML
 <img src="http://i.imgur.com/bqAHM.jpg"/>
 
-### Integration with SeeClickFix
+### Experimental
+
+#### Integration with SeeClickFix
 <img src="http://i.imgur.com/03l8t.png"/>
 <br/>
 <img src="http://i.imgur.com/ZE5i9.png"/>
 
-### Open311 Server
+#### Open311 Server
 <img src="http://i.imgur.com/Wxkmu.png"/>
 
-### Integration with Google Prediction API
+#### Integration with Google Prediction API
 <img src="http://i.imgur.com/n3AmJ.png"/>
 
 # About the Database
