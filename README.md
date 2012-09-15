@@ -3,7 +3,7 @@
 This is an app experimenting with CouchDB to store housing data. Check [openblight](https://github.com/codeforamerica/openblight) for more information on that project.
 
 ### Homepage
-<img src="http://imgur.com/ZRfTW"/>
+<img src="http://i.imgur.com/ZRfTW.png"/>
 
 ### Street-by-Street Results
 <img src="http://i.imgur.com/WLzkJ.png"/>
