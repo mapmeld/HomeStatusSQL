@@ -275,7 +275,7 @@ var init = exports.init = function (config) {
 		    if(prevAddresses[address].cases[pt].action.indexOf("No Violation") == -1){
 		      notsobad = false;
 		    }
-		    if(isNaN(1 * prevAddresses[address].cases[pt].closedate)){
+		    if(isNaN(1 * prevAddresses[address].cases[pt].closedate) || !prevAddresses[address].cases[pt].closedate){
 		      opencase = true;
 		    }
 		    kmlplacemarks += '<h4>Case ' + prevAddresses[address].cases[pt].id + '</h4><b>Opened:</b> ' + prevAddresses[address].cases[pt].opendate + '<br><b>Closed:</b> ' + prevAddresses[address].cases[pt].closedate + '<br><b>Inspection Code:</b> ' + prevAddresses[address].cases[pt].inspector + '<br><b>Action:</b> ' + prevAddresses[address].cases[pt].action + '<br><b>Cause:</b> ' + prevAddresses[address].cases[pt].cause;
@@ -360,7 +360,7 @@ var init = exports.init = function (config) {
             if(casesbody.rows[r].value.action.indexOf("No Violation") == -1){
               notsobad = false;
             }
-            if(isNaN( 1 * casesbody.rows[r].value.closedate)){
+            if(isNaN( 1 * casesbody.rows[r].value.closedate) || !casesbody.rows[r].value.closedate){
               opencase = true;
             }
             kmlplacemarks += '<h4>Case ' + casesbody.rows[r].value.ecd_id + '</h4><b>Opened:</b> ' + casesbody.rows[r].value.opendate + '<br><b>Closed:</b> ' + casesbody.rows[r].value.closedate + '<br><b>Inspection Code:</b> ' + casesbody.rows[r].value.inspector + '<br><b>Cause:</b> ' + casesbody.rows[r].value.reason;
@@ -544,7 +544,7 @@ var init = exports.init = function (config) {
 		    if(prevAddresses[address].cases[pt].action.indexOf("No Violation") == -1){
 		      notsobad = false;
 		    }
-		    if(isNaN(1 * prevAddresses[address].cases[pt].closedate)){
+		    if(isNaN(1 * prevAddresses[address].cases[pt].closedate) || !prevAddresses[address].cases[pt].closedate){
 		      opencase = true;
 		    }
 		    kmlplacemarks += '<h4>Case ' + prevAddresses[address].cases[pt].id + '</h4><b>Opened:</b> ' + prevAddresses[address].cases[pt].opendate + '<br><b>Closed:</b> ' + prevAddresses[address].cases[pt].closedate + '<br><b>Inspector:</b> ' + prevAddresses[address].cases[pt].inspector + '<br><b>Action:</b> ' + prevAddresses[address].cases[pt].action + '<br><b>Cause:</b> ' + prevAddresses[address].cases[pt].cause;
