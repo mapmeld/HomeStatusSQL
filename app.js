@@ -547,7 +547,7 @@ var init = exports.init = function (config) {
 		    if(isNaN(1 * prevAddresses[address].cases[pt].closedate) || !prevAddresses[address].cases[pt].closedate){
 		      opencase = true;
 		    }
-		    kmlplacemarks += '<h4>Case ' + prevAddresses[address].cases[pt].id + '</h4><b>Opened:</b> ' + prevAddresses[address].cases[pt].opendate + '<br><b>Closed:</b> ' + prevAddresses[address].cases[pt].closedate + '<br><b>Inspector:</b> ' + prevAddresses[address].cases[pt].inspector + '<br><b>Action:</b> ' + prevAddresses[address].cases[pt].action + '<br><b>Cause:</b> ' + prevAddresses[address].cases[pt].cause;
+		    kmlplacemarks += '<h4>Case ' + prevAddresses[address].cases[pt].id + '</h4><b>Opened:</b> ' + prevAddresses[address].cases[pt].opendate + '<br><b>Closed:</b> ' + prevAddresses[address].cases[pt].closedate + '<br><b>Inspection Code:</b> ' + prevAddresses[address].cases[pt].inspector + '<br><b>Action:</b> ' + prevAddresses[address].cases[pt].action + '<br><b>Cause:</b> ' + prevAddresses[address].cases[pt].cause;
 		  }
 		  kmlplacemarks += '</div>]]></description>\n';
 		  if(opencase){
@@ -561,7 +561,7 @@ var init = exports.init = function (config) {
 		  }
 		  kmlplacemarks += '			<Point>\n				<coordinates>' + prevAddresses[address].lng + ',' + prevAddresses[address].lat + ',0</coordinates>\n			</Point>\n		</Placemark>\n';
 		}
-		var kmlend = '	</Folder>\n</Document>\n</kml>';
+		var kmlend = '</Document>\n</kml>';
         res.send(kmlintro + kmlplacemarks + kmlend);
       }
       else if(req.query["fmt"] == "png"){
