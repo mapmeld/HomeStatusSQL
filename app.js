@@ -214,7 +214,13 @@ var init = exports.init = function (config) {
         res.setHeader('Content-Type', 'application/kml');
         var totalrep = JSON.parse(body);
 
-        var kmlintro = '<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">\n<Document>\n	<name>Macon Housing API</name>\n	<Style id="BasicStyle">\n		<IconStyle>\n			<scale>1.1</scale>\n			<Icon>\n				<href>http://maps.google.com/mapfiles/kml/paddle/red-blank_maps.png</href>\n			</Icon>\n			<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>\n		</IconStyle>\n		<BalloonStyle>\n			<text>$[description]</text>\n		</BalloonStyle>\n	</Style>\n	<Folder id="KMLAPI">\n		<name>KML API Download</name>\n		<Style id="BasicStyle">\n			<IconStyle>\n				<color>ffffffff</color>\n				<scale>1.1</scale>\n				<Icon>\n					<href>http://maps.google.com/mapfiles/kml/paddle/red-blank_maps.png</href>\n				</Icon>\n				<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>\n			</IconStyle>\n			<BalloonStyle>\n				<text>$[description]</text>\n				<textColor>ff000000</textColor>\n				<displayMode>default</displayMode>\n</BalloonStyle>\n</Style>\n';
+        var kmlintro = '<?xml version="1.0" encoding="UTF-8"?>\n';
+        kmlintro += '<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">\n'
+        kmlintro += '<Document>\n	<name>Macon Housing API</name>\n';
+        kmlintro += '	<Style id="OpenCase">\n		<IconStyle>\n			<scale>1.1</scale>\n			<Icon>\n				<href>http://homestatus.herokuapp.com/images/macon-marker-01.png</href>\n			</Icon>\n			<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>\n		</IconStyle>\n		<BalloonStyle>\n			<text>$[description]</text>\n		</BalloonStyle>\n	</Style>\n';
+        kmlintro += '	<Style id="NoViolations">\n		<IconStyle>\n			<scale>1.1</scale>\n			<Icon>\n				<href>http://homestatus.herokuapp.com/images/macon-marker-03.png</href>\n			</Icon>\n			<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>\n		</IconStyle>\n		<BalloonStyle>\n			<text>$[description]</text>\n		</BalloonStyle>\n	</Style>\n';
+        kmlintro += '	<Style id="PastViolations">\n		<IconStyle>\n			<scale>1.1</scale>\n			<Icon>\n				<href>http://homestatus.herokuapp.com/images/macon-marker-02.png</href>\n			</Icon>\n			<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>\n		</IconStyle>\n		<BalloonStyle>\n			<text>$[description]</text>\n		</BalloonStyle>\n	</Style>\n';
+        
 		// Placemarks
 		var kmlplacemarks = '';
 		var prevAddresses = { };
@@ -263,14 +269,30 @@ var init = exports.init = function (config) {
           kmlplacemarks += '		<Placemark>\n			<name>' + address + '</name>\n			<address>' + address + '</address>\n';
           kmlplacemarks += '			<description><![CDATA[<div class="googft-info-window" style="font-family:sans-serif">';
           prevAddresses[address].cases.sort( function(a,b){ return b.id * 1 - a.id * 1; } );
+          var notsobad = true;
+          var opencase = false;
 		  for(var pt=0;pt<prevAddresses[address].cases.length;pt++){
-		    kmlplacemarks += '<h4>Case ' + prevAddresses[address].cases[pt].id + '</h4><b>Opened:</b> ' + prevAddresses[address].cases[pt].opendate + '<br><b>Closed:</b> ' + prevAddresses[address].cases[pt].closedate + '<br><b>Inspector:</b> ' + prevAddresses[address].cases[pt].inspector + '<br><b>Action:</b> ' + prevAddresses[address].cases[pt].action + '<br><b>Cause:</b> ' + prevAddresses[address].cases[pt].cause;
+		    if(prevAddresses[address].cases[pt].action.indexOf("No Violation") == -1){
+		      notsobad = false;
+		    }
+		    if(isNaN(1 * prevAddresses[address].cases[pt].closedate)){
+		      opencase = true;
+		    }
+		    kmlplacemarks += '<h4>Case ' + prevAddresses[address].cases[pt].id + '</h4><b>Opened:</b> ' + prevAddresses[address].cases[pt].opendate + '<br><b>Closed:</b> ' + prevAddresses[address].cases[pt].closedate + '<br><b>Inspection Code:</b> ' + prevAddresses[address].cases[pt].inspector + '<br><b>Action:</b> ' + prevAddresses[address].cases[pt].action + '<br><b>Cause:</b> ' + prevAddresses[address].cases[pt].cause;
 		  }
 		  kmlplacemarks += '</div>]]></description>\n';
-		  kmlplacemarks += '			<styleUrl>#BasicStyle</styleUrl>\n			<ExtendedData>\n				<Data name="F">\n					<value>F</value>\n				</Data>\n			</ExtendedData>\n';
+		  if(opencase){
+		    kmlplacemarks += '			<styleUrl>#OpenCase</styleUrl>\n';
+		  }
+		  else if(notsobad){
+		    kmlplacemarks += '			<styleUrl>#NoViolations</styleUrl>\n';
+		  }
+		  else{
+		    kmlplacemarks += '			<styleUrl>#PastViolations</styleUrl>\n';
+		  }
 		  kmlplacemarks += '			<Point>\n				<coordinates>' + prevAddresses[address].lng + ',' + prevAddresses[address].lat + ',0</coordinates>\n			</Point>\n		</Placemark>\n';
 		}
-		var kmlend = '	</Folder>\n</Document>\n</kml>';
+		var kmlend = '</Document>\n</kml>';
         res.send(kmlintro + kmlplacemarks + kmlend);
 
       }
@@ -320,25 +342,45 @@ var init = exports.init = function (config) {
         }
 
         res.setHeader('Content-Type', 'application/kml');
-        var kmlintro = '<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">\n<Document>\n	<name>Macon Housing API</name>\n	<Style id="BasicStyle">\n		<IconStyle>\n			<scale>1.1</scale>\n			<Icon>\n				<href>http://maps.google.com/mapfiles/kml/paddle/red-blank_maps.png</href>\n			</Icon>\n			<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>\n		</IconStyle>\n		<BalloonStyle>\n			<text>$[description]</text>\n		</BalloonStyle>\n	</Style>\n	<Folder id="KMLAPI">\n		<name>KML API Download</name>\n		<Style id="BasicStyle">\n			<IconStyle>\n				<color>ffffffff</color>\n				<scale>1.1</scale>\n				<Icon>\n					<href>http://maps.google.com/mapfiles/kml/paddle/red-blank_maps.png</href>\n				</Icon>\n				<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>\n			</IconStyle>\n			<BalloonStyle>\n				<text>$[description]</text>\n				<textColor>ff000000</textColor>\n				<displayMode>default</displayMode>\n</BalloonStyle>\n</Style>\n';
+        var kmlintro = '<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">\n<Document>\n	<name>Macon Housing API</name>\n';
+        kmlintro += '	<Style id="OpenCase">\n		<IconStyle>\n			<scale>1.1</scale>\n			<Icon>\n				<href>http://homestatus.herokuapp.com/images/macon-marker-01.png</href>\n			</Icon>\n			<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>\n		</IconStyle>\n		<BalloonStyle>\n			<text>$[description]</text>\n		</BalloonStyle>\n	</Style>\n';
+        kmlintro += '	<Style id="NoViolations">\n		<IconStyle>\n			<scale>1.1</scale>\n			<Icon>\n				<href>http://homestatus.herokuapp.com/images/macon-marker-03.png</href>\n			</Icon>\n			<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>\n		</IconStyle>\n		<BalloonStyle>\n			<text>$[description]</text>\n		</BalloonStyle>\n	</Style>\n';
+        kmlintro += '	<Style id="PastViolations">\n		<IconStyle>\n			<scale>1.1</scale>\n			<Icon>\n				<href>http://homestatus.herokuapp.com/images/macon-marker-02.png</href>\n			</Icon>\n			<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>\n		</IconStyle>\n		<BalloonStyle>\n			<text>$[description]</text>\n		</BalloonStyle>\n	</Style>\n';
         // Placemarks
         var kmlplacemarks = '		<Placemark>\n			<name>' + address + '</name>\n			<address>' + address + '</address>\n';
         kmlplacemarks += '			<description><![CDATA[<div class="googft-info-window" style="font-family:sans-serif">';
+        var notsobad = true;
+        var opencase = false;
         if(casesbody.rows.length){
           kmlplacemarks += '<h3>Code Enforcement</h3><b>Address:</b>' + casesbody.rows[0].value.address + '<br><b>Neighborhood:</b> ' + (casesbody.rows[0].value.neighborhood || '');
           kmlplacemarks += '<hr>';
           casesbody.rows.sort(function(a,b){ return b.value.ecd_id * 1 - a.value.ecd_id * 1 });
+
           for(var r=0;r<casesbody.rows.length;r++){
-            kmlplacemarks += '<h4>Case ' + casesbody.rows[r].value.ecd_id + '</h4><b>Opened:</b> ' + casesbody.rows[r].value.opendate + '<br><b>Closed:</b> ' + casesbody.rows[r].value.closedate + '<br><b>Inspector:</b> ' + casesbody.rows[r].value.inspector + '<br><b>Cause:</b> ' + casesbody.rows[r].value.reason;
+            if(casesbody.rows[r].value.action.indexOf("No Violation") == -1){
+              notsobad = false;
+            }
+            if(isNaN( 1 * casesbody.rows[r].value.closedate)){
+              opencase = true;
+            }
+            kmlplacemarks += '<h4>Case ' + casesbody.rows[r].value.ecd_id + '</h4><b>Opened:</b> ' + casesbody.rows[r].value.opendate + '<br><b>Closed:</b> ' + casesbody.rows[r].value.closedate + '<br><b>Inspection Code:</b> ' + casesbody.rows[r].value.inspector + '<br><b>Cause:</b> ' + casesbody.rows[r].value.reason;
           }
         }
         if(surveybody.rows.length){
           kmlplacemarks += '<h3>Survey</h3><b>Inspected:</b> ' + surveybody.rows[0].value.inspdate + '<br><b>Major Damage?</b> ' + surveybody.rows[0].value.major + '<br><b>Minor Damage?</b> ' + surveybody.rows[0].value.minor + '<br><b>Open?</b> ' + surveybody.rows[0].value.open + '<br><b>Boarded?</b> ' + surveybody.rows[0].value.boarded + '<br><b>Secure?</b> ' + surveybody.rows[0].value.secure + '<br><b>Burned?</b> ' + surveybody.rows[0].value.burned;
         }
         kmlplacemarks += '</div>]]></description>\n';
-        kmlplacemarks += '			<styleUrl>#BasicStyle</styleUrl>\n			<ExtendedData>\n				<Data name="F">\n					<value>F</value>\n				</Data>\n			</ExtendedData>\n';
+		if(opencase){
+		  kmlplacemarks += '			<styleUrl>#OpenCase</styleUrl>\n';
+		}
+		else if(notsobad){
+		  kmlplacemarks += '			<styleUrl>#NoViolations</styleUrl>\n';
+		}
+		else{
+		  kmlplacemarks += '			<styleUrl>#PastViolations</styleUrl>\n';
+		}
         kmlplacemarks += '			<Point>\n				<coordinates>' + lng + ',' + lat + ',0</coordinates>\n			</Point>\n		</Placemark>\n';
-        var kmlend = '	</Folder>\n</Document>\n</kml>';
+        var kmlend = '</Document>\n</kml>';
         res.send(kmlintro + kmlplacemarks + kmlend);
       });      
     });
@@ -443,7 +485,11 @@ var init = exports.init = function (config) {
       if(req.query["fmt"] == "kml"){
         // KML API for mapping mash-ups
         res.setHeader('Content-Type', 'application/kml');
-        var kmlintro = '<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">\n<Document>\n	<name>Macon Housing API</name>\n	<Style id="BasicStyle">\n		<IconStyle>\n			<scale>1.1</scale>\n			<Icon>\n				<href>http://maps.google.com/mapfiles/kml/paddle/red-blank_maps.png</href>\n			</Icon>\n			<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>\n		</IconStyle>\n		<BalloonStyle>\n			<text>$[description]</text>\n		</BalloonStyle>\n	</Style>\n	<Folder id="KMLAPI">\n		<name>KML API Download</name>\n		<Style id="BasicStyle">\n			<IconStyle>\n				<color>ffffffff</color>\n				<scale>1.1</scale>\n				<Icon>\n					<href>http://maps.google.com/mapfiles/kml/paddle/red-blank_maps.png</href>\n				</Icon>\n				<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>\n			</IconStyle>\n			<BalloonStyle>\n				<text>$[description]</text>\n				<textColor>ff000000</textColor>\n				<displayMode>default</displayMode>\n</BalloonStyle>\n</Style>\n';
+        var kmlintro = '<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">\n<Document>\n	<name>Macon Housing API</name>\n'
+        kmlintro += '	<Style id="OpenCase">\n		<IconStyle>\n			<scale>1.1</scale>\n			<Icon>\n				<href>http://homestatus.herokuapp.com/images/macon-marker-01.png</href>\n			</Icon>\n			<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>\n		</IconStyle>\n		<BalloonStyle>\n			<text>$[description]</text>\n		</BalloonStyle>\n	</Style>\n';
+        kmlintro += '	<Style id="NoViolations">\n		<IconStyle>\n			<scale>1.1</scale>\n			<Icon>\n				<href>http://homestatus.herokuapp.com/images/macon-marker-03.png</href>\n			</Icon>\n			<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>\n		</IconStyle>\n		<BalloonStyle>\n			<text>$[description]</text>\n		</BalloonStyle>\n	</Style>\n';
+        kmlintro += '	<Style id="PastViolations">\n		<IconStyle>\n			<scale>1.1</scale>\n			<Icon>\n				<href>http://homestatus.herokuapp.com/images/macon-marker-02.png</href>\n			</Icon>\n			<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>\n		</IconStyle>\n		<BalloonStyle>\n			<text>$[description]</text>\n		</BalloonStyle>\n	</Style>\n';
+        
 		// Placemarks
 		var kmlplacemarks = '';
 		var prevAddresses = { };
@@ -492,11 +538,27 @@ var init = exports.init = function (config) {
           kmlplacemarks += '		<Placemark>\n			<name>' + address + '</name>\n			<address>' + address + '</address>\n';
           kmlplacemarks += '			<description><![CDATA[<div class="googft-info-window" style="font-family:sans-serif">';
           prevAddresses[address].cases.sort( function(a,b){ return b.id * 1 - a.id * 1; } );
+          var opencase = false;
+          var notsobad = true;
 		  for(var pt=0;pt<prevAddresses[address].cases.length;pt++){
+		    if(prevAddresses[address].cases[pt].action.indexOf("No Violation") == -1){
+		      notsobad = false;
+		    }
+		    if(isNaN(1 * prevAddresses[address].cases[pt].closedate)){
+		      opencase = true;
+		    }
 		    kmlplacemarks += '<h4>Case ' + prevAddresses[address].cases[pt].id + '</h4><b>Opened:</b> ' + prevAddresses[address].cases[pt].opendate + '<br><b>Closed:</b> ' + prevAddresses[address].cases[pt].closedate + '<br><b>Inspector:</b> ' + prevAddresses[address].cases[pt].inspector + '<br><b>Action:</b> ' + prevAddresses[address].cases[pt].action + '<br><b>Cause:</b> ' + prevAddresses[address].cases[pt].cause;
 		  }
 		  kmlplacemarks += '</div>]]></description>\n';
-		  kmlplacemarks += '			<styleUrl>#BasicStyle</styleUrl>\n			<ExtendedData>\n				<Data name="F">\n					<value>F</value>\n				</Data>\n			</ExtendedData>\n';
+		  if(opencase){
+		    kmlplacemarks += '			<styleUrl>#OpenCase</styleUrl>\n';
+		  }
+		  else if(notsobad){
+		    kmlplacemarks += '			<styleUrl>#NoViolations</styleUrl>\n';
+		  }
+		  else{
+		    kmlplacemarks += '			<styleUrl>#PastViolations</styleUrl>\n';
+		  }
 		  kmlplacemarks += '			<Point>\n				<coordinates>' + prevAddresses[address].lng + ',' + prevAddresses[address].lat + ',0</coordinates>\n			</Point>\n		</Placemark>\n';
 		}
 		var kmlend = '	</Folder>\n</Document>\n</kml>';
