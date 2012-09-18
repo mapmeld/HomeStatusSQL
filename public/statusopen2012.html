@@ -161,7 +161,7 @@ function findRoad(){
         }
       }
 
-      for(address in prevAddresses){
+      $.each(prevAddresses, function(address, addinfo){
         var j="";
         var stillopen = true;
         // sort cases for this address by their date
@@ -217,7 +217,7 @@ function findRoad(){
         fixaddress = housenum + " " + fixaddress[1];
       	li.innerHTML="<img src='" + icon + "' width='10px'><span class='search-address'><a href='/statuscombine.html?address=" + fixaddress + "' style='text-transform:capitalize;'>" + fixaddress + "</a></span>";
   	    $("#resultbar").append(li);
-  	  }
+  	  });
   	}
   });
   $("#jsonlink")[0].href = geolink.replace("/geo","/geo.json");
