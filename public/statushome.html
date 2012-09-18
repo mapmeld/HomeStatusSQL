@@ -41,7 +41,7 @@ function showRecent(){
 }
 function cleanAddress(add){
   add = add.replace(","," ").split(",")[0];
-  return add;
+  return add.toLowerCase();
 }
 jQuery(document).ready(showRecent);
   </script>
