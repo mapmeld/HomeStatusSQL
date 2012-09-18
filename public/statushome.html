@@ -46,7 +46,7 @@ function cleanAddress(add){
   }
   for(var c=1;c<add.length;c++){
     if(add[c-1] != " "){
-      add = add.substring(0,c) + add[c].toLowerCase() + add.substring(c+1,add.length);
+      add = (add.substring(0,c) || "") + (add[c].toLowerCase() || "") + (add.substring(c+1,add.length) || "");
     }
   }
   return add;
