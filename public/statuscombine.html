@@ -209,7 +209,7 @@ function initMe(){
     if(b.rows.length){
       prevAddresses = casesToAddresses(b);
       
-      for(address in prevAddresses){
+      $.each(prevAddresses, function(address, addinfo){
         var notsobad = true;
         var stillopen = false;
         var sortedCases = prevAddresses[address].cases.sort( function(a,b){ return b.id * 1 - a.id * 1; } );
@@ -254,7 +254,7 @@ function initMe(){
           //earlyPopup.setContent(j);
           //map.openPopup(earlyPopup);
         }
-      }
+      });
     }
   });
   
