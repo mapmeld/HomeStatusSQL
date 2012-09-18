@@ -35,7 +35,8 @@ if(typeof console === 'undefined' || !console || !console.log){
 function gup(nm){nm=nm.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");var rxS="[\\?&]"+nm+"=([^&#]*)";var rx=new RegExp(rxS);var rs=rx.exec(window.location.href);if(!rs){return null;}else{return rs[1];}}
 function parseStamp(tstamp){
   var pstamp = new Date(tstamp.substring(4,6) + "/" + tstamp.substring(6) + "/" + tstamp.substring(0,4));
-  pstamp = pstamp.toString().substring(4).substring(0,11);
+  var monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  pstamp = monthNames[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
   return pstamp;
 }
 function replaceAll(src, oldr, newr){
