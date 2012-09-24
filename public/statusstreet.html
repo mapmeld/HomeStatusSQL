@@ -200,7 +200,7 @@ function initMe(){
   var b="/searchdb?streetname=" + gup("address");
   jQuery.getJSON(b,function(b){
     $("#loadanim").css({ display: "none" });
-    if(b.rows.length){
+    if(b && b.rows && b.rows.length){
 
       // sort all cases by address
       b.rows.sort(streetNameThenNumber);
