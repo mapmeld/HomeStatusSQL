@@ -40,7 +40,7 @@ function showRecent(){
   });
 }
 function cleanAddress(add){
-  add = add.replace("%20","");
+  add = add.replace(" ","");
   add = add.replace(","," ").split(",")[0];
   if(add[0] == "0"){
     add = add.substring(1);
