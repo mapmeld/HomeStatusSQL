@@ -161,7 +161,7 @@ var init = exports.init = function (config) {
     });
   }); */
   
-  app.get('/sqltest', function(req, res){
+  /*app.get('/sqltest', function(req, res){
     client.query('SELECT * FROM ' + TEST_TABLE, function(err, results, fields) {
       if(err){
         throw err;
@@ -170,38 +170,32 @@ var init = exports.init = function (config) {
       //res.send(fields);
       //client.end();
     });
-  });
+  });*/
   
   // Code Enforcement Case History URLs
   app.get('/keydb', function(req, res){
-    // Request a house's code enforcement history by actual id
+    // Request a house's code enforcement history by its original address code (formats vary, looks like " 1200,Sample St,  Macon,  GA  31212")
     var street = req.query["address"];
-    var sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/poll1/_view/Poll1?key=' + encodeURIComponent( '"' + street + '"');
-    var requestOptions = {
-      'uri': sendurl,
-    };
-    request(requestOptions, function (err, response, body) {
+    client.query('SELECT * FROM ' + TEST_TABLE + ' WHERE address = \'' + street.replace('\'','\\\'') + '\'', function(err, results, fields) {
+      if(err){
+        throw err;
+      }
       res.setHeader('Content-Type', 'application/json');
-      res.send(body);
+      res.send(results);
     });
   });
   
   app.get('/house', function(req, res){
-    // Request a house's code enforcement history by address
+    // Request a house's code enforcement history by a cleaned-up address (looks like "1200 Sample St" or "1200 SAMPLE ST")
     var street = req.query["address"].toLowerCase();
-    var sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/clearaddress/_view/clearaddress?key=' + encodeURIComponent( '"' + street + '"');
-    var requestOptions = {
-      'uri': sendurl,
-    };
-    request(requestOptions, function (err, response, body) {
+    client.query('SELECT * FROM ' + TEST_TABLE + ' WHERE cleanaddress = \'' + street.replace('\'','\\\'') + '\'', function(err, results, fields){
       res.setHeader('Content-Type', 'application/json');
-      res.send(body);
+      res.send(results);
     });
   });
   
   app.get('/searchdb*', function(req, res){
-    // Request code enforcement history by street
-    // Sample URL: http://nickd.iriscouch.com:5984/cases/_design/streetname/_view/streetname?startkey="adamsave"&endkey="adamsave0"
+    // Return code enforcement cases by street name ( looks like "Sample St", "Sample Street", etc )
     var street = req.query["streetname"];
     street = street.toLowerCase();
     street = street.replace("street","st");
@@ -226,16 +220,10 @@ var init = exports.init = function (config) {
       }
     }
 
-    var sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/streetname/_view/streetname?startkey=' + encodeURIComponent( '"' + street + '"') + '&endkey=' + encodeURIComponent( '"' + street + '0"' );
-
-    var requestOptions = {
-      'uri': sendurl,
-    };
-    request(requestOptions, function(err, response, body){
+    client.query('SELECT * FROM ' + TEST_TABLE + ' WHERE streetname = \'' + street.replace('\'','\\\'') + '\'', function(err, results, fields){
       if(req.query["fmt"] == "kml"){
         // KML API for mapping mash-ups
         res.setHeader('Content-Type', 'application/kml');
-        var totalrep = JSON.parse(body);
 
         var kmlintro = '<?xml version="1.0" encoding="UTF-8"?>\n';
         kmlintro += '<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">\n'
@@ -247,39 +235,39 @@ var init = exports.init = function (config) {
 		// Placemarks
 		var kmlplacemarks = '';
 		var prevAddresses = { };
-		
-		for(i=0;i<totalrep.rows.length;i++){
-          if(prevAddresses[totalrep.rows[i].value.address]){
+
+		for(i=0;i<results.length;i++){
+          if(prevAddresses[results[i].address]){
             // already thinking about this address
-            if(!prevAddresses[totalrep.rows[i].value.address].lat && totalrep.rows[i].value.loc){
-              prevAddresses[totalrep.rows[i].value.address].lat = totalrep.rows[i].value.loc[0] * 1.0;
-              prevAddresses[totalrep.rows[i].value.address].lng = totalrep.rows[i].value.loc[1] * 1.0;
+            if(!prevAddresses[results[i].address].lat && results[i].latitude){
+              prevAddresses[results[i].address].lat = results[i].latitude * 1.0;
+              prevAddresses[results[i].address].lng = results[i].longitude * 1.0;
             }
-            prevAddresses[totalrep.rows[i].value.address].cases.push({
-              id: totalrep.rows[i].value.ecd_id,
-              inspector: totalrep.rows[i].value.inspector,
-              opendate: totalrep.rows[i].value.opendate,
-              action: totalrep.rows[i].value.action,
-              closedate: totalrep.rows[i].value.closedate
+            prevAddresses[results[i].address].cases.push({
+              id: results[i].ecd_id,
+              inspector: results[i].inspectcodes,
+              opendate: results[i].opendate,
+              action: results[i].action,
+              closedate: results[i].closedate
             });
           }
           else{
-            if(totalrep.rows[i].value.loc){
-              prevAddresses[totalrep.rows[i].value.address] = {
-                lat: totalrep.rows[i].value.loc[0] * 1.0,
-                lng: totalrep.rows[i].value.loc[1] * 1.0
+            if(results[i].latitude){
+              prevAddresses[results[i].address] = {
+                lat: results[i].latitude * 1.0,
+                lng: results[i].longitude * 1.0
               };
             }
             else{
-              prevAddresses[totalrep.rows[i].value.address] = { };
+              prevAddresses[results[i].address] = { };
             }
-            prevAddresses[totalrep.rows[i].value.address].cases = [{
-              id: totalrep.rows[i].value.ecd_id,
-              inspector: totalrep.rows[i].value.inspector,
-              opendate: totalrep.rows[i].value.opendate,
-              action: totalrep.rows[i].value.action,
-              closedate: totalrep.rows[i].value.closedate,
-              cause: totalrep.rows[i].value.reason
+            prevAddresses[results[i].address].cases = [{
+              id: results[i].ecd_id,
+              inspector: results[i].inspectcodes,
+              opendate: results[i].opendate,
+              action: results[i].action,
+              closedate: results[i].closedate,
+              cause: results[i].reason
             }];
           }
         }
@@ -301,7 +289,7 @@ var init = exports.init = function (config) {
 		    if(isNaN(1 * prevAddresses[address].cases[pt].closedate) || !prevAddresses[address].cases[pt].closedate){
 		      opencase = true;
 		    }
-		    kmlplacemarks += '<h4>Case ' + prevAddresses[address].cases[pt].id + '</h4><b>Opened:</b> ' + prevAddresses[address].cases[pt].opendate + '<br><b>Closed:</b> ' + prevAddresses[address].cases[pt].closedate + '<br><b>Inspection Code:</b> ' + prevAddresses[address].cases[pt].inspector + '<br><b>Action:</b> ' + prevAddresses[address].cases[pt].action + '<br><b>Cause:</b> ' + prevAddresses[address].cases[pt].cause;
+		    kmlplacemarks += '<h4>Case ' + prevAddresses[address].cases[pt].id + '</h4><b>Opened:</b> ' + prevAddresses[address].cases[pt].opendate + '<br><b>Closed:</b> ' + prevAddresses[address].cases[pt].closedate + '<br><b>Inspection Code:</b> ' + prevAddresses[address].cases[pt].inspectcodes + '<br><b>Action:</b> ' + prevAddresses[address].cases[pt].action + '<br><b>Cause:</b> ' + prevAddresses[address].cases[pt].cause;
 		  }
 		  kmlplacemarks += '</div>]]></description>\n';
 		  if(opencase){
@@ -339,30 +327,25 @@ var init = exports.init = function (config) {
       return;
     }
     var street = req.query['address'];
-    var sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/clearaddress/_view/clearaddress?key=' + encodeURIComponent( '"' + street + '"');
-    var requestOptions = {
-      'uri': sendurl,
-    };
-    request(requestOptions, function (err, response, casesbody) {
-      casesbody = JSON.parse(casesbody);
-      var sendurl = 'http://nickd.iriscouch.com:5984/housing/_design/poll1/_view/Poll1?key=' + encodeURIComponent( '"' + street + '"');
+    client.query('SELECT * FROM ' + TEST_TABLE + ' WHERE cleanaddress = \'' + street.replace('\'','\\\'') + '\'', function(err, results, fields){
+      /*var sendurl = 'http://nickd.iriscouch.com:5984/housing/_design/poll1/_view/Poll1?key=' + encodeURIComponent( '"' + street + '"');
       var requestOptions = {
         'uri': sendurl,
       };
-      request(requestOptions, function (err, response, surveybody) {
-        surveybody = JSON.parse(surveybody);
+      request(requestOptions, function (err, response, surveybody) {*/
+        //surveybody = JSON.parse(surveybody);
         
         var address, lat, lng;
-        if(casesbody.rows.length){
-          address = casesbody.rows[0].value.address;
-          lat = casesbody.rows[0].value.loc[0];
-          lng = casesbody.rows[0].value.loc[1];
+        if(results.length){
+          address = results[0].cleanaddress;
+          lat = results[0].latitude;
+          lng = results[0].longitude;
         }
-        else if(surveybody.rows.length){
+        /*else if(surveybody.rows.length){
           address = surveybody.rows[0].value.address;
           lat = surveybody.rows[0].value.loc[0];
           lng = surveybody.rows[0].value.loc[1];
-        }
+        }*/
 
         res.setHeader('Content-Type', 'application/kml');
         var kmlintro = '<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">\n<Document>\n	<name>Macon Housing API</name>\n';
@@ -374,24 +357,24 @@ var init = exports.init = function (config) {
         kmlplacemarks += '			<description><![CDATA[<div class="googft-info-window" style="font-family:sans-serif">';
         var notsobad = true;
         var opencase = false;
-        if(casesbody.rows.length){
-          kmlplacemarks += '<h3>Code Enforcement</h3><b>Address:</b>' + casesbody.rows[0].value.address + '<br><b>Neighborhood:</b> ' + (casesbody.rows[0].value.neighborhood || '');
+        if(results.length){
+          kmlplacemarks += '<h3>Code Enforcement</h3><b>Address:</b>' + address + '<br><b>Neighborhood:</b> ' + (results[0].neighborhood || '');
           kmlplacemarks += '<hr>';
-          casesbody.rows.sort(function(a,b){ return b.value.ecd_id * 1 - a.value.ecd_id * 1 });
+          results.sort(function(a,b){ return b.ecd_id * 1 - a.ecd_id * 1 });
 
-          for(var r=0;r<casesbody.rows.length;r++){
-            if(casesbody.rows[r].value.action.indexOf("No Violation") == -1){
+          for(var r=0;r<results.length;r++){
+            if(results[r].action.indexOf("No Violation") == -1){
               notsobad = false;
             }
-            if(isNaN( 1 * casesbody.rows[r].value.closedate) || !casesbody.rows[r].value.closedate){
+            if(isNaN( 1 * results[r].closedate) || !results[r].closedate){
               opencase = true;
             }
-            kmlplacemarks += '<h4>Case ' + casesbody.rows[r].value.ecd_id + '</h4><b>Opened:</b> ' + casesbody.rows[r].value.opendate + '<br><b>Closed:</b> ' + casesbody.rows[r].value.closedate + '<br><b>Inspection Code:</b> ' + casesbody.rows[r].value.inspector + '<br><b>Cause:</b> ' + casesbody.rows[r].value.reason;
+            kmlplacemarks += '<h4>Case ' + results[r].ecd_id + '</h4><b>Opened:</b> ' + results[r].opendate + '<br><b>Closed:</b> ' + results[r].closedate + '<br><b>Inspection Code:</b> ' + results[r].inspectcodes + '<br><b>Cause:</b> ' + results[r].reason;
           }
         }
-        if(surveybody.rows.length){
+        /*if(surveybody.rows.length){
           kmlplacemarks += '<h3>Survey</h3><b>Inspected:</b> ' + surveybody.rows[0].value.inspdate + '<br><b>Major Damage?</b> ' + surveybody.rows[0].value.major + '<br><b>Minor Damage?</b> ' + surveybody.rows[0].value.minor + '<br><b>Open?</b> ' + surveybody.rows[0].value.open + '<br><b>Boarded?</b> ' + surveybody.rows[0].value.boarded + '<br><b>Secure?</b> ' + surveybody.rows[0].value.secure + '<br><b>Burned?</b> ' + surveybody.rows[0].value.burned;
-        }
+        }*/
         kmlplacemarks += '</div>]]></description>\n';
 		if(opencase){
 		  kmlplacemarks += '			<styleUrl>#OpenCase</styleUrl>\n';
@@ -405,27 +388,19 @@ var init = exports.init = function (config) {
         kmlplacemarks += '			<Point>\n				<coordinates>' + lng + ',' + lat + ',0</coordinates>\n			</Point>\n		</Placemark>\n';
         var kmlend = '</Document>\n</kml>';
         res.send(kmlintro + kmlplacemarks + kmlend);
-      });      
+      //});      
     });
   });
  
   // Code Enforcement's recent cases: recent opens and recent closes
   app.get('/recentopen', function(req, res){
-    var sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/opendate/_view/opendate?descending=true&limit=5';
-    var requestOptions = {
-      'uri': sendurl,
-    };
-    request(requestOptions, function (err, response, body) {
-      res.send(body);
+    client.query('SELECT * FROM ' + TEST_TABLE + ' ORDER BY opendate DESC LIMIT 5', function(err, results, fields){
+      res.send(results);
     });
   });
   app.get('/recentclose', function(req, res){
-    var sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/closedate/_view/closedate?descending=true&limit=5';
-    var requestOptions = {
-      'uri': sendurl,
-    };
-    request(requestOptions, function (err, response, body) {
-      res.send(body);
+    client.query('SELECT * FROM ' + TEST_TABLE + ' ORDER BY closedate DESC LIMIT 5', function(err, results, fields){
+      res.send(results);
     });
   });
   
@@ -480,31 +455,12 @@ var init = exports.init = function (config) {
       west = bbox[1] * 1.0,
       east = bbox[3] * 1.0;
 
-    var sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/spatial/_view/spatial?startkey={%22type%22:%22Point%22,%22coordinates%22:[' + south + ',0]}&endkey={%22type%22:%22Point%22,%22coordinates%22:[' + north + ',0]}';
+    var querystring = 'SELECT * FROM ' + TEST_TABLE + ' WHERE latitude < ' + north + ' AND latitude > ' + south + ' AND longitude < ' + east + ' AND longitude > ' + west;
     if(req.query["status"] == "open"){
-      // add &status=isopen to geosearch only open cases
-      sendurl = sendurl.replace("/spatial", "/isopen").replace("/spatial", "/isopen");
+      querystring += ' AND closedate = \'\'';
     }
-    var requestOptions = {
-      'uri': sendurl,
-    };
-    request(requestOptions, function (err, response, body){
-      var totalrep = JSON.parse(body);
-      // for now the query returns all points between south and north bounds
-      // remaining points should be filtered out if they're outside west and east bounds
-      for(var r=totalrep.rows.length-1;r>=0;r--){
-        if(west > east){
-          // int'l date line fix
-          if(totalrep.rows[r].key.coordinates[1] > west && totalrep.rows[r].key.coordinates[1] < east){
-            totalrep.rows.splice(r,1);
-          }
-        }
-        else{
-          if(totalrep.rows[r].key.coordinates[1] < west || totalrep.rows[r].key.coordinates[1] > east){
-            totalrep.rows.splice(r,1);
-          }
-        }
-      }
+    
+    client.query(querystring, function(err, results, fields){
       if(req.query["fmt"] == "kml"){
         // KML API for mapping mash-ups
         res.setHeader('Content-Type', 'application/kml');
@@ -517,38 +473,38 @@ var init = exports.init = function (config) {
 		var kmlplacemarks = '';
 		var prevAddresses = { };
 		
-		for(i=0;i<totalrep.rows.length;i++){
-          if(prevAddresses[totalrep.rows[i].value.address]){
+		for(i=0;i<results.length;i++){
+          if(prevAddresses[results[i].address]){
             // already thinking about this address
-            if(!prevAddresses[totalrep.rows[i].value.address].lat && totalrep.rows[i].value.loc){
-              prevAddresses[totalrep.rows[i].value.address].lat = totalrep.rows[i].value.loc[0] * 1.0;
-              prevAddresses[totalrep.rows[i].value.address].lng = totalrep.rows[i].value.loc[1] * 1.0;
+            if(!prevAddresses[results[i].address].lat && results[i].loc){
+              prevAddresses[results[i].address].lat = results[i].latitude * 1.0;
+              prevAddresses[results[i].address].lng = results[i].longitude * 1.0;
             }
-            prevAddresses[totalrep.rows[i].value.address].cases.push({
-              id: totalrep.rows[i].value.ecd_id,
-              inspector: totalrep.rows[i].value.inspector,
-              opendate: totalrep.rows[i].value.opendate,
-              action: totalrep.rows[i].value.action,
-              closedate: totalrep.rows[i].value.closedate
+            prevAddresses[results[i].address].cases.push({
+              id: results[i].ecd_id,
+              inspector: results[i].inspectcodes,
+              opendate: results[i].opendate,
+              action: results[i].action,
+              closedate: results[i].closedate
             });
           }
           else{
-            if(totalrep.rows[i].value.loc){
-              prevAddresses[totalrep.rows[i].value.address] = {
-                lat: totalrep.rows[i].value.loc[0] * 1.0,
-                lng: totalrep.rows[i].value.loc[1] * 1.0
+            if(results[i].loc){
+              prevAddresses[results[i].address] = {
+                lat: results[i].latitude * 1.0,
+                lng: results[i].longitude * 1.0
               };
             }
             else{
-              prevAddresses[totalrep.rows[i].value.address] = { };
+              prevAddresses[results[i].address] = { };
             }
-            prevAddresses[totalrep.rows[i].value.address].cases = [{
-              id: totalrep.rows[i].value.ecd_id,
-              inspector: totalrep.rows[i].value.inspector,
-              opendate: totalrep.rows[i].value.opendate,
-              action: totalrep.rows[i].value.action,
-              closedate: totalrep.rows[i].value.closedate,
-              cause: totalrep.rows[i].value.reason
+            prevAddresses[results[i].address].cases = [{
+              id: results[i].ecd_id,
+              inspector: results[i].inspectcodes,
+              opendate: results[i].opendate,
+              action: results[i].action,
+              closedate: results[i].closedate,
+              cause: results[i].reason
             }];
           }
         }
@@ -570,7 +526,7 @@ var init = exports.init = function (config) {
 		    if(isNaN(1 * prevAddresses[address].cases[pt].closedate) || !prevAddresses[address].cases[pt].closedate){
 		      opencase = true;
 		    }
-		    kmlplacemarks += '<h4>Case ' + prevAddresses[address].cases[pt].id + '</h4><b>Opened:</b> ' + prevAddresses[address].cases[pt].opendate + '<br><b>Closed:</b> ' + prevAddresses[address].cases[pt].closedate + '<br><b>Inspection Code:</b> ' + prevAddresses[address].cases[pt].inspector + '<br><b>Action:</b> ' + prevAddresses[address].cases[pt].action + '<br><b>Cause:</b> ' + prevAddresses[address].cases[pt].cause;
+		    kmlplacemarks += '<h4>Case ' + prevAddresses[address].cases[pt].id + '</h4><b>Opened:</b> ' + prevAddresses[address].cases[pt].opendate + '<br><b>Closed:</b> ' + prevAddresses[address].cases[pt].closedate + '<br><b>Inspection Code:</b> ' + prevAddresses[address].cases[pt].inspectcodes + '<br><b>Action:</b> ' + prevAddresses[address].cases[pt].action + '<br><b>Cause:</b> ' + prevAddresses[address].cases[pt].cause;
 		  }
 		  kmlplacemarks += '</div>]]></description>\n';
 		  if(opencase){
@@ -716,43 +672,40 @@ var init = exports.init = function (config) {
   });
   
   app.get('/311/requests/*.json', function(req, res){
-    var service_id = req.url.substring( req.url.indexOf("/requests/") + 10, req.url.indexOf(".") );
-    var sendurl = 'http://nickd.iriscouch.com:5984/cases/' + id;
-    var requestOptions = {
-      'uri': sendurl,
-    };
-    request(requestOptions, function (err, response, body) {
+    var case_id = req.url.substring( req.url.indexOf("/requests/") + 10, req.url.indexOf(".") );
+    client.query('SELECT * FROM ' + TEST_TABLE + ' WHERE ecd_id = \'' + case_id.replace('\'','\\\'') + '\'', function(err, results, fields){
+
       var tstamp = function(t){
         return t.substring(0,4) + "-" + t.substring(4,6) + "-" + t.substring(6,8) + "T12:00:00-04:00";
       };
-      body = JSON.parse(body);
+
       // straightforward mapping of values to Open311 API
       var threeobj = {
-        "service_request_id": body._id,
+        "service_request_id": results[0].id,
         "status_notes": null,
         "agency_responsible": "Macon ECD",
         "service_notice": null,
-        "address": body.address.replace(',',' '),
-        "address_id": body.address,
-        "lat": body.loc[0],
-        "long": body.loc[1]
+        "address": results[0].cleanaddress,
+        "address_id": results[0].address,
+        "lat": results[0].latitude,
+        "long": results[0].longitude
       };
         
       // calculate and format additional values for Open311 API output
-      threeobj["requested_datetime"] = tstamp( body.opendate );
-      if(body.closedate.length == 8){
+      threeobj["requested_datetime"] = tstamp( results[0].opendate );
+      if(results[0].closedate.length == 8){
         threeobj["status"] = "closed";
-        threeobj["service_name"] = body.action;
-        threeobj["description"] = "Case closed with " + body.action + " by " + body.inspector;
-        threeobj["updated_datetime"] = tstamp( body.closedate );
+        threeobj["service_name"] = results[0].action;
+        threeobj["description"] = "Case closed with " + results[0].action + " with outcome " + results[0].inspectcodes;
+        threeobj["updated_datetime"] = tstamp( results[0].closedate );
         // expected_datetime
         threeobj["service_code"] = "2";
       }
       else{
         threeobj["status"] = "open";
         threeobj["service_name"] = "Undetermined";
-        threeobj["description"] = "Case opened by " + body.reason;
-        threeobj["updated_datetime"] = tstamp( body.opendate );
+        threeobj["description"] = "Case opened by " + results[0].reason;
+        threeobj["updated_datetime"] = tstamp( results[0].opendate );
         // expected_datetime
         threeobj["service_code"] = "1";
       }
@@ -761,7 +714,7 @@ var init = exports.init = function (config) {
   });
 
   app.get('/311/requests.json', function(req, res){
-    var sendurl;
+    var querystring = 'SELECT * FROM ' + TEST_TABLE;
     if(req.query['service_request_id'] && req.query['service_request_id'].length){
       // this query asks for multiple service requests by their id
       // any other parameters in the URL are ignored
@@ -803,48 +756,49 @@ var init = exports.init = function (config) {
       if((req.query['status'] && req.query['status'].length)||(req.query['service_code'] && req.query['service_code'].length)){
         if((req.query['status'] && req.query['status'] == "open")||(req.query['service_code'] && req.query['service_code'] == "1")){
           // show only the open cases
-          sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/isopendate/_view/isopendate?descending=true&limit=1000&startkey=' + printDate(endkey) + startkey;
+          querystring += " WHERE closedate = '' AND opendate > '" + printDate(endkey) + startkey + "' SORT BY opendate DESC LIMIT 1000";
+          //sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/isopendate/_view/isopendate?descending=true&limit=1000&startkey=' + printDate(endkey) + startkey;
         }
         else{
           // show only the closed cases
-          sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/closedate/_view/closedate?descending=true&limit=1000&endkey=' + printDate(endkey) + startkey;
+          querystring += " WHERE closedate != '' AND opendate > '" + printDate(endkey) + startkey + "' SORT BY opendate DESC LIMIT 1000";
+          //sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/closedate/_view/closedate?descending=true&limit=1000&endkey=' + printDate(endkey) + startkey;
         }
       }
       else{
         // show all reports
-        sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/opendate/_view/opendate?descending=true&limit=1000&endkey=' + printDate(endkey) + startkey;
+        querystring += " WHERE opendate > '" + printDate(endkey) + startkey + "' SORT BY opendate DESC LIMIT 1000";
+        //sendurl = 'http://nickd.iriscouch.com:5984/cases/_design/opendate/_view/opendate?descending=true&limit=1000&endkey=' + printDate(endkey) + startkey;
       }
     }
     // common request and output of returned docs
-    if(req.query['showme'] == 'url'){
+    /*if(req.query['showme'] == 'url'){
       res.send(sendurl);
       return;
-    }
-    var requestOptions = {
-      'uri': sendurl,
-    };
-    request(requestOptions, function (err, response, body) {
+    }*/
+
+    client.query(querystring, function(err, results, fields){
       var outobjs = [ ];
       var tstamp = function(t){
         return t.substring(0,4) + "-" + t.substring(4,6) + "-" + t.substring(6,8) + "T12:00:00-04:00";
       };
-      if(req.query['showme'] == 'json'){
-        res.send(body);
+      /*if(req.query['showme'] == 'json'){
+        res.send(results);
         return;
-      }
-      body = JSON.parse(body);
-      for(var r=0;r<body.rows.length;r++){
-        var rowdata = body.rows[r].doc || body.rows[r].value;
+      }*/
+
+      for(var r=0;r<results.length;r++){
+        var rowdata = results[r];
         // straightforward mapping of values to Open311 API
         var threeobj = {
-          "service_request_id": rowdata._id,
+          "service_request_id": rowdata.id,
           "status_notes": null,
           "agency_responsible": "Macon ECD",
           "service_notice": null,
-          "address": rowdata.address.replace(',',' '),
+          "address": rowdata.cleanaddress,
           "address_id": rowdata.address,
-          "lat": rowdata.loc[0],
-          "long": rowdata.loc[1]
+          "lat": rowdata.latitude,
+          "long": rowdata.longitude
         };
         
         // calculate and format additional values for Open311 API output
@@ -852,7 +806,7 @@ var init = exports.init = function (config) {
         if(rowdata.closedate.length == 8){
           threeobj["status"] = "closed";
           threeobj["service_name"] = rowdata.action;
-          threeobj["description"] = "Case closed with " + rowdata.action + " by " + rowdata.inspector;
+          threeobj["description"] = "Case closed with " + rowdata.action + " and " + rowdata.inspectcodes;
           threeobj["updated_datetime"] = tstamp( rowdata.closedate );
           // service_code
           // expected_datetime          
