@@ -25,16 +25,16 @@ if(typeof console === 'undefined' || !console || !console.log){
 }
 function showRecent(){
   jQuery.getJSON("/recentopen", function(opened){
-    for(var i=0;i<opened.rows.length;i++){
+    for(var i=0;i<opened.length;i++){
       var li = document.createElement("li");
-      li.innerHTML = '<a href="/statuscombine.html?address=' + cleanAddress(opened.rows[i].value.address) + '" style="text-transform:capitalize;">' + cleanAddress(opened.rows[i].value.address) + ' - ' + opened.rows[i].value.action + '</a>';
+      li.innerHTML = '<a href="/statuscombine.html?address=' + opened[i].cleanaddress + '" style="text-transform:capitalize;">' + opened[i].cleanaddress + ' - ' + opened[i].action + '</a>';
       document.getElementById("recently_opened").appendChild(li);
     }
   });
   jQuery.getJSON("/recentclose", function(closed){
-    for(var i=0;i<closed.rows.length;i++){
+    for(var i=0;i<closed.length;i++){
       var li = document.createElement("li");
-      li.innerHTML = '<a href="/statuscombine.html?address=' + cleanAddress(closed.rows[i].value.address) + '" style="text-transform:capitalize;">' + cleanAddress(closed.rows[i].value.address) + ' - ' + closed.rows[i].value.action + '</a>';
+      li.innerHTML = '<a href="/statuscombine.html?address=' + closed[i].cleanaddress + '" style="text-transform:capitalize;">' + closed[i].cleanaddress + ' - ' + closed[i].action + '</a>';
       document.getElementById("recently_closed").appendChild(li);
     }
   });

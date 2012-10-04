@@ -99,37 +99,37 @@ function markerByStatus(notsobad, stillopen, pt){
 }
 function casesToAddresses(b){
   var pa = {};
-  for(i=0;i<b.rows.length;i++){
-    if(pa[b.rows[i].value.address]){
+  for(i=0;i<b.length;i++){
+    if(pa[b[i].address]){
       // already thinking about this address
-      if(!pa[b.rows[i].value.address].lat && b.rows[i].value.loc){
-        pa[b.rows[i].value.address].lat = b.rows[i].value.loc[0] * 1.0;
-        pa[b.rows[i].value.address].lng = b.rows[i].value.loc[1] * 1.0;
+      if(!pa[b[i].address].lat && b[i].latitude){
+        pa[b[i].address].lat = b[i].latitude * 1.0;
+        pa[b[i].address].lng = b[i].longitude * 1.0;
       }
-      pa[b.rows[i].value.address].cases.push({
-        id: b.rows[i].value.ecd_id,
-        inspector: b.rows[i].value.inspector,
-        opendate: b.rows[i].value.opendate,
-        action: b.rows[i].value.action,
-        closedate: b.rows[i].value.closedate
+      pa[b[i].address].cases.push({
+        id: b[i].ecd_id,
+        inspectcodes: b[i].inspectcodes,
+        opendate: b[i].opendate,
+        action: b[i].action,
+        closedate: b[i].closedate
       });
     }
     else{
-      if(b.rows[i].value.loc){
-        pa[b.rows[i].value.address] = {
-          lat: b.rows[i].value.loc[0] * 1.0,
-          lng: b.rows[i].value.loc[1] * 1.0
+      if(b[i].latitude){
+        pa[b[i].address] = {
+          lat: b[i].latitude * 1.0,
+          lng: b[i].longitude * 1.0
         };
       }
       else{
-        pa[b.rows[i].value.address] = { };
+        pa[b[i].address] = { };
       }
-      pa[b.rows[i].value.address].cases = [{
-        id: b.rows[i].value.ecd_id,
-        inspector: b.rows[i].value.inspector,
-        opendate: b.rows[i].value.opendate,
-        action: b.rows[i].value.action,
-        closedate: b.rows[i].value.closedate
+      pa[b[i].address].cases = [{
+        id: b[i].ecd_id,
+        inspectcodes: b[i].inspectcodes,
+        opendate: b[i].opendate,
+        action: b[i].action,
+        closedate: b[i].closedate
       }];
     }
   }
@@ -158,30 +158,30 @@ function initMe(){
   jQuery("#surveylink")[0].href = b;
   jQuery.getJSON(b,function(b){
     $("#loadanim").css({ display: "none" });
-    if(b.rows.length){
+    if(b.length){
       var e, f, g;
-      for(i=0;i<b.rows.length;i++){
-        if(b.rows[i].value.loc){
-          e=b.rows[i].value.loc[0] * 1.0;
-          f=b.rows[i].value.loc[1] * 1.0;
+      for(i=0;i<b.length;i++){
+        if(b[i].latitude){
+          e=b[i].latitude * 1.0;
+          f=b[i].longitude * 1.0;
           //map.addLayer(new L.Marker(new L.LatLng(e,f)));
         }
-        if(b.rows[i].value.major){
+        if(b[i].major){
           listNote("Major Damage");
         }
-        if(b.rows[i].value.minor){
+        if(b[i].minor){
           listNote("Minor Damage");
         }
-        if(b.rows[i].value.secure){
+        if(b[i].secure){
           listNote("Secure");
         }
         else{
           listNote("Not Secure");
         }
-        if(b.rows[i].value.burned){
+        if(b[i].burned){
           listNote("Burned");
         }
-        if(b.rows[i].value.boarded){
+        if(b[i].boarded){
           listNote("Boarded");
         }
       }
@@ -206,18 +206,18 @@ function initMe(){
   jQuery.getJSON(b,function(b){
     $("#loadanim").css({ display: "none" });
     jQuery("#kmllink")[0].href = '/export.kml?address=' + surveyAddress;
-    if(b.rows.length){
+    if(b.length){
       prevAddresses = casesToAddresses(b);
       
       $.each(prevAddresses, function(address, addinfo){
         var notsobad = true;
         var stillopen = false;
-        var sortedCases = prevAddresses[address].cases.sort( function(a,b){ return b.id * 1 - a.id * 1; } );
+        var sortedCases = prevAddresses[address].cases.sort( function(a,b){ return b.ecd_id * 1 - a.ecd_id * 1; } );
         var j = '<h3>'+address.split(',')[0]+" "+address.split(',')[1]+"</h3><ul>";
         for(var i=0; i < sortedCases.length; i++){
           var sc = sortedCases[i];
           var resolution;
-          j += "<li>"+ getInspection(sc.inspector) + ". Case opened "+ parseStamp(sc.opendate) + ".";
+          j += "<li>"+ getInspection(sc.inspectcodes) + ". Case opened "+ parseStamp(sc.opendate) + ".";
           if(sc.closedate.length > 5){
             j += " Resolved with " + sc.action + " on " + parseStamp(sc.closedate) + "</li>";
             resolution = "<tr><td><span class='arrow'></span></td><td class='status'>" + sc.action + "</td><td><table class='table-nolines'><tr><td class='date'>" + parseStamp(sc.closedate) + "</td><td>Case closed</td></tr></table></td></tr>"
@@ -232,7 +232,7 @@ function initMe(){
             notsobad = false;
           }
           
-          $(".cases").append("<div class='case'><div class='case-history'><div class='case-number'><h4>Case Details for " + sc.id + "</h4><div class='clearfix'></div></div><table class='table table-condensed timeline'><tbody><tr><td><span class='arrow'></span></td><td class='status'>Inspected</td><td><table class='table-nolines'><tr><td class='date'>" + parseStamp(sc.opendate) + "</td><td>" + getInspection(sc.inspector) + "</td></tr></table></td></tr>" + resolution + "</tbody></table></div></div>");
+          $(".cases").append("<div class='case'><div class='case-history'><div class='case-number'><h4>Case Details for " + sc.id + "</h4><div class='clearfix'></div></div><table class='table table-condensed timeline'><tbody><tr><td><span class='arrow'></span></td><td class='status'>Inspected</td><td><table class='table-nolines'><tr><td class='date'>" + parseStamp(sc.opendate) + "</td><td>" + getInspection(sc.inspectcodes) + "</td></tr></table></td></tr>" + resolution + "</tbody></table></div></div>");
         }
         $(".cases").append("<div class='clearfix'></div><div class='case'></div>");
         j+="</ul>";

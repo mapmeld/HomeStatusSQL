@@ -315,7 +315,7 @@ var init = exports.init = function (config) {
       else{
         // JSON API / main site
         res.setHeader('Content-Type', 'application/json');
-        res.send(body);
+        res.send(results);
       }
     });
   });
