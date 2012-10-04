@@ -5,11 +5,10 @@
  */
  
 // Poang framework
-var auth = require('./auth')
-    , express = require('express')
-    , mongoose = require('mongoose')
-    , mongoose_auth = require('mongoose-auth')
-    , mongoStore = require('connect-mongo')(express)
+var express = require('express')
+    //, mongoose = require('mongoose')
+    //, mongoose_auth = require('mongoose-auth')
+    //, mongoStore = require('connect-mongo')(express)
     , routes = require('./routes')
     , middleware = require('./middleware')
     
@@ -17,6 +16,19 @@ var auth = require('./auth')
     , http = require('http')
     , url = require('url')
     , request = require('request')
+
+// adding MySQL support
+    , mysql = require('mysql')
+    , TEST_DATABASE = "codeenf"
+    , TEST_TABLE = "cases"
+    , client = mysql.createClient({
+      user: 'root',
+      password: '',
+      host: 'localhost',
+      port: '3306',
+      database: 'codeenf'
+    })
+    
     ;
 
 var HOUR_IN_MILLISECONDS = 3600000;
@@ -26,10 +38,10 @@ var init = exports.init = function (config) {
   
   // TODO: remove MongoDB storing sessions or cap collection
   // TODO: should MongoDB store EveryAuth logins?
-  var db_uri = process.env.MONGOLAB_URI || process.env.MONGODB_URI || config.default_db_uri;
+  //var db_uri = process.env.MONGOLAB_URI || process.env.MONGODB_URI || config.default_db_uri;
 
-  mongoose.connect(db_uri);
-  session_store = new mongoStore({url: db_uri});
+  //mongoose.connect(db_uri);
+  //session_store = new mongoStore({url: db_uri});
 
   // Express server setup
   var app = express.createServer();
@@ -44,7 +56,7 @@ var init = exports.init = function (config) {
     app.use(express.methodOverride());
     app.use(express.session({secret: 'top secret', store: session_store,
       cookie: {maxAge: HOUR_IN_MILLISECONDS}}));
-    app.use(mongoose_auth.middleware());
+    //app.use(mongoose_auth.middleware());
     app.use(express.static(__dirname + '/public'));
     app.use(app.router);
 
@@ -148,6 +160,17 @@ var init = exports.init = function (config) {
       res.send( body );
     });
   }); */
+  
+  app.get('/sqltest', function(req, res){
+    client.query('SELECT * FROM ' + TEST_TABLE, function(err, results, fields) {
+      if(err){
+        throw err;
+      }
+      res.send(results);
+      //res.send(fields);
+      //client.end();
+    });
+  });
   
   // Code Enforcement Case History URLs
   app.get('/keydb', function(req, res){
@@ -858,7 +881,7 @@ var init = exports.init = function (config) {
     res.render('doesnotexist',404);
   });
 
-  mongoose_auth.helpExpress(app);
+  //mongoose_auth.helpExpress(app);
 
   return app;
 };

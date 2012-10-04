@@ -1,6 +1,6 @@
-# About HousePointer
+# About HomeStatusSQL
 
-This is an app experimenting with CouchDB to store housing data. Check [openblight](https://github.com/codeforamerica/openblight) for more information on that project.
+Code for America's <a href="http://github.com/codeforamerica/blightstatus">BlightStatus project</a> for City of Macon, Georgia. Backend technology ported to a Node.js server and a MySQL database
 
 ### Homepage
 <img src="http://i.imgur.com/ZRfTW.png"/>
@@ -35,37 +35,9 @@ This is an app experimenting with CouchDB to store housing data. Check [openblig
 
 # About the Database
 
-## CouchDB - NoSQL database
+## MySQL
 
-[CouchDB](http://couchdb.apache.org/) is an open source (Apache license), NoSQL database designed around web technologies. It uses JSON to store data, JavaScript as its query language using MapReduce, and HTTP for a REST API.
-
-CouchDB does not store data and relationships in tables. Instead, each database is a collection of independent documents. Each document maintains its own data and self-contained schema.
-
-This project uses CouchDB for several reasons:
-<ul>
-  <li>Schema-less document structure lets local groups and new apps contribute data without overwriting your records.</li>
-  <li>Geospatial index for easy use in maps and mobile apps</li>
-  <li>Sync data between local and cloud databases</li>
-  <li>Sync data between your database and mobile devices</li>
-</ul>
-
-Sources: http://guide.couchdb.org/draft/why.html and http://en.wikipedia.org/wiki/CouchDB
-
-## IrisCouch
-
-[IrisCouch](http://www.iriscouch.com/) hosts your CouchDB database on their servers, and includes:
-<ul>
-<li>Futon admin panel</li>
-<li>GeoCouch geospatial data system to store latitude and longitude</li>
-<li>pingquery_couchdb plugin for monitoring</li>
-</ul>
-
-IrisCouch's [pricing system](http://www.iriscouch.com/service) does not charge for hosting until an application receives heavy usage or stores gigabytes of data.
-
-<strong>Avoid lock-in</strong>: We recommend that cities use CouchDB's built-in data syncing to keep a local back-up of their data.
-So why use IrisCouch at all? We recommend that you keep the public view of your database "in the cloud" so you can handle jumps in traffic, local power and network outages, and other unpredictable events.
-
-<a href="http://www.kennethdonaldson.net/couchdb/read-only-couchdb">Follow these directions</a> to make your IrisCouch instance read-only by anonymous users.
+MySQL is a free and open-source database which uses the standard SQL language to retrieve data. MySQL was used to make HomeStatusSQL compatible with current and future city IT standards.
 
 # About Poang Framework
 
@@ -81,25 +53,16 @@ For more details, please see Steve's [blog post](http://blog.beyondfog.com/?p=22
  
 1) Do a git clone:
 
-    git clone git@github.com:mapmeld/housepointer.git
+    git clone git@github.com:mapmeld/HomeStatusSQL.git
     
 2) cd into the project directory and then install the necessary node modules:
 
     npm install -d
 
-3) start up MongoDB if it's not already running:
-  
-    mongod --noprealloc --nojournal
+3) start up your MySQL database, and set up a table with data
+
+    Instructions draft: https://gist.github.com/3835623
     
 4) start the node process:
 
     node app.js
-
-## Deploy to Heroku
-
-    heroku create APP_NAME -s cedar
-    git push heroku master
-
-After you have created a new app on Heroku and pushed the code via git, you will need to use the Heroku Toolbelt from your command line to add the free MongoLab starter addon:
-
-    heroku addons:add mongolab:starter --app [your_app_name]
