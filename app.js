@@ -172,6 +172,13 @@ var init = exports.init = function (config) {
     });
   });*/
   
+  app.post('/addrecord', function(req, res){
+    console.log(req.body.closedate);
+    client.query('INSERT INTO cases (address, cleanaddress, streetname, action, opendate, closedate, ecd_id, inspectcodes, reason, latitude, longitude, neighborhood) VALUES("' + req.body.address + '", "' + req.body.cleanaddress + '", "' + req.body.streetname + '", "' + req.body.action + '", "' + req.body.opendate + '", "' + req.body.closedate + '", "' + req.body.ecd_id + '", "' + req.body.inspectcodes + '", "' + req.body.reason + '", ' + req.body.latitude + ', ' + req.body.longitude + ', "' + req.body.neighborhood + '")', function(err, results, fields){
+      res.send({});
+    });
+  });
+  
   // Code Enforcement Case History URLs
   app.get('/keydb', function(req, res){
     // Request a house's code enforcement history by its original address code (formats vary, looks like " 1200,Sample St,  Macon,  GA  31212")
