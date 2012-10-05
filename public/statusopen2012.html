@@ -105,16 +105,16 @@ function findRoad(){
   var geolink = "/geo?status=open&bbox=" + southwest.lat + "," + southwest.lng + "," + northeast.lat + "," + northeast.lng;
   jQuery.getJSON(geolink, function(b){
     $("#loadanim").css({ display: "none" });
-    if(b.rows.length){
+    if(b.length){
       // sort addresses by street name, and then again by number
-      b.rows.sort(function(a,b){
-        if(a.value.address.split(",")[1] == b.value.address.split(",")[1]){
+      b.sort(function(a,b){
+        if(a.address.split(",")[1] == b.address.split(",")[1]){
           // streets match, sort by number
-          return a.value.address.split(',')[0] * 1 - b.value.address.split(',')[0] * 1;
+          return a.address.split(',')[0] * 1 - b.address.split(',')[0] * 1;
         }
         else{
           // streets don't match
-          if(b.value.address.split(",")[1] > a.value.address.split(",")[1]){
+          if(b.address.split(",")[1] > a.address.split(",")[1]){
             return -1;
           }
           else{
@@ -132,30 +132,30 @@ function findRoad(){
       markers = [ ];
       prevAddresses = { };
       // store cases in address objects
-      for(i=0;i<b.rows.length;i++){
-        var e=b.rows[i].value.loc[0] * 1.0,
-          f=b.rows[i].value.loc[1] * 1.0;
-        if(prevAddresses[b.rows[i].value.address]){
+      for(i=0;i<b.length;i++){
+        var e=b[i].loc[0] * 1.0,
+          f=b[i].loc[1] * 1.0;
+        if(prevAddresses[b[i].address]){
           // already thinking about this address
-          prevAddresses[b.rows[i].value.address].cases.push({
-            id: b.rows[i].value.ecd_id,
-            inspector: b.rows[i].value.inspector,
-            opendate: b.rows[i].value.opendate,
-            action: b.rows[i].value.action,
-            closedate: b.rows[i].value.closedate
+          prevAddresses[b[i].address].cases.push({
+            id: b[i].ecd_id,
+            inspectcodes: b[i].inspectcodes,
+            opendate: b[i].opendate,
+            action: b[i].action,
+            closedate: b[i].closedate
           });
         }
         else{
-          prevAddresses[b.rows[i].value.address] = {
-            lat: b.rows[i].value.loc[0] * 1.0,
-            lng: b.rows[i].value.loc[1] * 1.0
+          prevAddresses[b[i].address] = {
+            lat: b[i].loc[0] * 1.0,
+            lng: b[i].loc[1] * 1.0
           };
-          prevAddresses[b.rows[i].value.address].cases = [{
-            id: b.rows[i].value.ecd_id,
-            inspector: b.rows[i].value.inspector,
-            opendate: b.rows[i].value.opendate,
-            action: b.rows[i].value.action,
-            closedate: b.rows[i].value.closedate
+          prevAddresses[b[i].address].cases = [{
+            id: b[i].ecd_id,
+            inspectcodes: b[i].inspectcodes,
+            opendate: b[i].opendate,
+            action: b[i].action,
+            closedate: b[i].closedate
           }];
         }
       }
@@ -178,7 +178,7 @@ function findRoad(){
         // make a list of cases
         for(var i=0;i<sortedCases.length;i++){
           var sc = sortedCases[i];
-          j += "<li>" + getInspection(sc.inspector) + ". Case opened "+ parseStamp(sc.opendate) + ".";
+          j += "<li>" + getInspection(sc.inspectcodes) + ". Case opened "+ parseStamp(sc.opendate) + ".";
           if(sc.closedate.length > 5){
             j += " Resolved with " + sc.action + " on " + parseStamp(sc.closedate) + "</li>";
           }
