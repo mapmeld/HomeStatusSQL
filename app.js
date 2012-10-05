@@ -464,7 +464,18 @@ var init = exports.init = function (config) {
 
     var querystring = 'SELECT * FROM ' + TEST_TABLE + ' WHERE latitude < ' + north + ' AND latitude > ' + south + ' AND longitude < ' + east + ' AND longitude > ' + west;
     if(req.query["status"] == "open"){
-      querystring += ' AND closedate = \'\'';
+      var now = new Date();
+      var cutoffdate = new Date(now - 280 * 24 * 60 * 60 * 1000);
+      var cutoffmonth = cutoffdate.getMonth() + 1;
+      if(cutoffmonth < 10){
+        cutoffday = "0" + cutoffmonth;
+      }
+      var cutoffday = cutoffdate.getDate();
+      if(cutoffday < 10){
+        cutoffday = "0" + cutoffday;
+      }
+      var cutoffslug = cutoffdate.getFullYear() + "" + cutoffmonth + "" + cutoffday;
+      querystring += ' AND closedate = \'\' AND opendate > ' + cutoffslug;
     }
     
     client.query(querystring, function(err, results, fields){

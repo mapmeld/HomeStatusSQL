@@ -27,12 +27,13 @@
   <!-- Mobile viewport optimized: h5bp.com/viewport -->
   <meta content='width=device-width' name='viewport'>
   <script type="text/javascript">
-var map, markers;
+var map;
+var markers = [ ];
 var prevAddresses = { };
 if(typeof console === 'undefined' || !console || !console.log){
   console = { log: function(e){ } };
 }
-function gup(nm){nm=nm.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");var rxS="[\\?&]"+nm+"=([^&#]*)";var rx=new RegExp(rxS);var rs=rx.exec(window.location.href);if(!rs){return null;}else{return rs[1];}}
+function gup(nm){nm=nm.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");var rxS="[\\?&]"+nm+"=([^&#]*)";var rx=new RegExp(rxS);var rs=rx.exec(window.latitudeation.href);if(!rs){return null;}else{return rs[1];}}
 function parseStamp(tstamp){
   var d = new Date(tstamp.substring(4,6) + "/" + tstamp.substring(6) + "/" + tstamp.substring(0,4));
   var monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -89,13 +90,11 @@ function initMe(){
     ptcount=0;
   map.setView(new L.LatLng(e,f),g);
   
-  map.on('moveend', findRoad);
-  findRoad();
+  map.on('moveend', updateCaseList);
+  updateCaseList();
 }
-function findRoad(){
-  // no cases on searched road
-  // check OpenStreetMap for a street, zoom to that bbox, and search
-  // http://nominatim.openstreetmap.org/search?q=2nd%20ave,+macon,+ga&format=json
+function updateCaseList(){
+  // search map viewport
 
   $("#loadanim").css({ display: "block" });
   var zoomBounds = map.getBounds();
@@ -106,6 +105,7 @@ function findRoad(){
   jQuery.getJSON(geolink, function(b){
     $("#loadanim").css({ display: "none" });
     if(b.length){
+      $("#resultbar").html("");
       // sort addresses by street name, and then again by number
       b.sort(function(a,b){
         if(a.address.split(",")[1] == b.address.split(",")[1]){
@@ -124,7 +124,7 @@ function findRoad(){
       });
 
       // clear existing markers
-      if(markers){
+      if(markers.length){
         for(var m=0;m<markers.length;m++){
           map.removeLayer(markers[m]);
         }
@@ -133,8 +133,8 @@ function findRoad(){
       prevAddresses = { };
       // store cases in address objects
       for(i=0;i<b.length;i++){
-        var e=b[i].loc[0] * 1.0,
-          f=b[i].loc[1] * 1.0;
+        var e=b[i].latitude * 1.0,
+          f=b[i].longitude * 1.0;
         if(prevAddresses[b[i].address]){
           // already thinking about this address
           prevAddresses[b[i].address].cases.push({
@@ -147,8 +147,8 @@ function findRoad(){
         }
         else{
           prevAddresses[b[i].address] = {
-            lat: b[i].loc[0] * 1.0,
-            lng: b[i].loc[1] * 1.0
+            lat: b[i].latitude * 1.0,
+            lng: b[i].longitude * 1.0
           };
           prevAddresses[b[i].address].cases = [{
             id: b[i].ecd_id,
