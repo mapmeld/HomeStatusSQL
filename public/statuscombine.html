@@ -205,7 +205,7 @@ function initMe(){
   jQuery("#caseslink")[0].href = b;
   jQuery.getJSON(b,function(b){
     $("#loadanim").css({ display: "none" });
-    jQuery("#kmllink")[0].href = '/export.kml?address=' + surveyAddress;
+    jQuery("#kmllink")[0].href = '/export.kml?address=' + surveyAddress + "&nl=true";
     if(b.length){
       prevAddresses = casesToAddresses(b);
       

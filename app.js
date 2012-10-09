@@ -228,13 +228,21 @@ var init = exports.init = function (config) {
     }
 
     client.query('SELECT * FROM ' + TEST_TABLE + ' WHERE streetname = \'' + street.replace('\'','\\\'') + '\'', function(err, results, fields){
-      if(req.query["fmt"] == "kml"){
+      if(req.url.indexOf("kml") > -1){
         // KML API for mapping mash-ups
         res.setHeader('Content-Type', 'application/kml');
 
         var kmlintro = '<?xml version="1.0" encoding="UTF-8"?>\n';
         kmlintro += '<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">\n'
         kmlintro += '<Document>\n	<name>Macon Housing API</name>\n';
+        if(req.query["nl"] == "true"){
+          var kmllink = '    <NetworkLink>\n      <name>Housing Data Link</name>\n      <visibility>1</visibility>\n      <open>1</open>\n      <description>Keeps your housing data up to date!</description>\n      <refreshVisibility>0</refreshVisibility>\n      <flyToView>1</flyToView>\n      <Link>\n';
+          kmllink += '        <href>http://' + req.headers.host + req.url.replace('&nl=true','&amp;nl=false') +  '</href>\n';
+          kmllink += '      </Link>\n    </NetworkLink>\n';
+          var kmlend = '</Document>\n</kml>';
+          res.send(kmlintro + kmllink + kmlend);
+          return;
+        }
         kmlintro += '	<Style id="OpenCase">\n		<IconStyle>\n			<scale>1.1</scale>\n			<Icon>\n				<href>http://homestatus.herokuapp.com/images/macon-marker-01.png</href>\n			</Icon>\n			<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>\n		</IconStyle>\n		<BalloonStyle>\n			<text>$[description]</text>\n		</BalloonStyle>\n	</Style>\n';
         kmlintro += '	<Style id="NoViolations">\n		<IconStyle>\n			<scale>1.1</scale>\n			<Icon>\n				<href>http://homestatus.herokuapp.com/images/macon-marker-03.png</href>\n			</Icon>\n			<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>\n		</IconStyle>\n		<BalloonStyle>\n			<text>$[description]</text>\n		</BalloonStyle>\n	</Style>\n';
         kmlintro += '	<Style id="PastViolations">\n		<IconStyle>\n			<scale>1.1</scale>\n			<Icon>\n				<href>http://homestatus.herokuapp.com/images/macon-marker-02.png</href>\n			</Icon>\n			<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>\n		</IconStyle>\n		<BalloonStyle>\n			<text>$[description]</text>\n		</BalloonStyle>\n	</Style>\n';
@@ -330,7 +338,7 @@ var init = exports.init = function (config) {
   // Combined KML file for Code Enforcement, Survey
   app.get('/export.kml', function(req, res){
     if(req.query['streetname']){
-      res.redirect('/searchdb.kml?fmt=kml&streetname=' + req.query['streetname']);
+      res.redirect('/searchdb.kml?streetname=' + req.query['streetname'] + "&nl=" + req.query['nl']);
       return;
     }
     var street = req.query['address'];
@@ -356,6 +364,14 @@ var init = exports.init = function (config) {
 
         res.setHeader('Content-Type', 'application/kml');
         var kmlintro = '<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">\n<Document>\n	<name>Macon Housing API</name>\n';
+        if(req.query["nl"] == "true"){
+          var kmllink = '    <NetworkLink>\n      <name>Housing Data Link</name>\n      <visibility>1</visibility>\n      <open>1</open>\n      <description>Keeps your housing data up to date!</description>\n      <refreshVisibility>0</refreshVisibility>\n      <flyToView>1</flyToView>\n      <Link>\n';
+          kmllink += '        <href>http://' + req.headers.host + req.url.replace('&nl=true','&amp;nl=false') +  '</href>\n';
+          kmllink += '      </Link>\n    </NetworkLink>\n';
+          var kmlend = '</Document>\n</kml>';
+          res.send(kmlintro + kmllink + kmlend);
+          return;
+        }
         kmlintro += '	<Style id="OpenCase">\n		<IconStyle>\n			<scale>1.1</scale>\n			<Icon>\n				<href>http://homestatus.herokuapp.com/images/macon-marker-01.png</href>\n			</Icon>\n			<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>\n		</IconStyle>\n		<BalloonStyle>\n			<text>$[description]</text>\n		</BalloonStyle>\n	</Style>\n';
         kmlintro += '	<Style id="NoViolations">\n		<IconStyle>\n			<scale>1.1</scale>\n			<Icon>\n				<href>http://homestatus.herokuapp.com/images/macon-marker-03.png</href>\n			</Icon>\n			<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>\n		</IconStyle>\n		<BalloonStyle>\n			<text>$[description]</text>\n		</BalloonStyle>\n	</Style>\n';
         kmlintro += '	<Style id="PastViolations">\n		<IconStyle>\n			<scale>1.1</scale>\n			<Icon>\n				<href>http://homestatus.herokuapp.com/images/macon-marker-02.png</href>\n			</Icon>\n			<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>\n		</IconStyle>\n		<BalloonStyle>\n			<text>$[description]</text>\n		</BalloonStyle>\n	</Style>\n';
@@ -479,10 +495,18 @@ var init = exports.init = function (config) {
     }
     
     client.query(querystring, function(err, results, fields){
-      if(req.query["fmt"] == "kml"){
+      if(req.url.indexOf("kml") > -1){
         // KML API for mapping mash-ups
         res.setHeader('Content-Type', 'application/kml');
         var kmlintro = '<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">\n<Document>\n	<name>Macon Housing API</name>\n'
+        if(req.query["nl"] == "true"){
+          var kmllink = '    <NetworkLink>\n      <name>Housing Data Link</name>\n      <visibility>1</visibility>\n      <open>1</open>\n      <description>Keeps your housing data up to date!</description>\n      <refreshVisibility>0</refreshVisibility>\n      <flyToView>1</flyToView>\n      <Link>\n';
+          kmllink += '        <href>http://' + req.headers.host + req.url.replace('&nl=true','&amp;nl=false') +  '</href>\n';
+          kmllink += '      </Link>\n    </NetworkLink>\n';
+          var kmlend = '</Document>\n</kml>';
+          res.send(kmlintro + kmllink + kmlend);
+          return;
+        }
         kmlintro += '	<Style id="OpenCase">\n		<IconStyle>\n			<scale>1.1</scale>\n			<Icon>\n				<href>http://homestatus.herokuapp.com/images/macon-marker-01.png</href>\n			</Icon>\n			<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>\n		</IconStyle>\n		<BalloonStyle>\n			<text>$[description]</text>\n		</BalloonStyle>\n	</Style>\n';
         kmlintro += '	<Style id="NoViolations">\n		<IconStyle>\n			<scale>1.1</scale>\n			<Icon>\n				<href>http://homestatus.herokuapp.com/images/macon-marker-03.png</href>\n			</Icon>\n			<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>\n		</IconStyle>\n		<BalloonStyle>\n			<text>$[description]</text>\n		</BalloonStyle>\n	</Style>\n';
         kmlintro += '	<Style id="PastViolations">\n		<IconStyle>\n			<scale>1.1</scale>\n			<Icon>\n				<href>http://homestatus.herokuapp.com/images/macon-marker-02.png</href>\n			</Icon>\n			<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>\n		</IconStyle>\n		<BalloonStyle>\n			<text>$[description]</text>\n		</BalloonStyle>\n	</Style>\n';

@@ -69,6 +69,8 @@ body(data-action='index', data-controller='home')
                           span(style="font-family:'Courier New';") http://homestatus.herokuapp.com
                           br
                           span No points will be returned if the street or house has no data from 2009-2012.
+                          br
+                          span Add &nl=true to get an auto-updating KML Network Link for Google Earth
 
                     tr
                       td(style="padding:15px 0px;")
@@ -81,6 +83,7 @@ body(data-action='index', data-controller='home')
                         ul(style="font-family:'Courier New';margin:20px;")
                           li /export.kml?streetname=Pio Nono Ave
                           li /export.kml?streetname=Smith St
+                          li /export.kml?streetname=Smith St&nl=true
                         
                     tr
                       td(style="padding:15px 0px;")
@@ -90,8 +93,9 @@ body(data-action='index', data-controller='home')
                       td(colspan="2")
                         span Send a bounding box using latitude and longitude limits.
                         ul(style="font-family:'Courier New';margin:20px;")
-                          li /geo.kml?bbox=SOUTH,WEST,NORTH,EAST&fmt=kml
-                          li /geo.kml?bbox=32.833985,-83.668541,32.837032,-83.663971&fmt=kml
+                          li /geo.kml?bbox=SOUTH,WEST,NORTH,EAST
+                          li /geo.kml?bbox=32.833985,-83.668541,32.837032,-83.663971
+                          li /geo.kml?bbox=32.833985,-83.668541,32.837032,-83.663971&nl=true
         
                     tr
                       td(style="padding:15px 0px;")
@@ -102,8 +106,9 @@ body(data-action='index', data-controller='home')
                       td(colspan="2")
                         span Send a bounding box using latitude and longitude limits.
                         ul(style="font-family:'Courier New';margin:20px;")
-                          li /geo.kml?status=open&bbox=SOUTH,WEST,NORTH,EAST&fmt=kml
-                          li /geo.kml?status=open&bbox=32.839897,-83.652649,32.847108,-83.633938&fmt=kml
+                          li /geo.kml?status=open&bbox=SOUTH,WEST,NORTH,EAST
+                          li /geo.kml?status=open&bbox=32.839897,-83.652649,32.847108,-83.633938
+                          li /geo.kml?status=open&bbox=32.839897,-83.652649,32.847108,-83.633938&nl=true
 
                     tr
                       td(style="padding:15px 0px;")
@@ -114,6 +119,7 @@ body(data-action='index', data-controller='home')
                         span Send an address in a format such as 700 Poplar St. Abbreviate words such as Street, Avenue, and Lane.
                         ul(style="font-family:'Courier New';margin:20px;")
                           li /export.kml?address=700 Poplar St
+                          li /export.kml?address=700 Poplar St&nl=true
 
       .row-fluid
         .span10.main
