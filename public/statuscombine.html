@@ -143,6 +143,7 @@ function initMe(){
   var baseMapLayer = new L.TileLayer(tileURL, {maxZoom: 18, attribution: attribution});
 
   map = new L.Map('map', { zoomControl: false, panControl: false });
+  map.attributionControl.setPrefix('');
   //L.control.pan().addTo(map);
   L.control.zoom().addTo(map);
 
