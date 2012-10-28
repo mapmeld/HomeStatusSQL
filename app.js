@@ -237,7 +237,7 @@ var init = exports.init = function (config) {
         kmlintro += '<Document>\n	<name>Macon Housing API</name>\n';
         if(req.query["nl"] == "true"){
           var kmllink = '    <NetworkLink>\n      <name>Housing Data Link</name>\n      <visibility>1</visibility>\n      <open>1</open>\n      <description>Keeps your housing data up to date!</description>\n      <refreshVisibility>0</refreshVisibility>\n      <flyToView>1</flyToView>\n      <Link>\n';
-          kmllink += '        <href>http://' + req.headers.host + req.url.replace('&nl=true','&amp;nl=false') +  '</href>\n';
+          kmllink += '        <href>http://' + req.headers.host + req.url.replace('nl=true','nl=false') +  '</href>\n';
           kmllink += '      </Link>\n    </NetworkLink>\n';
           var kmlend = '</Document>\n</kml>';
           res.send(kmlintro + kmllink + kmlend);
@@ -304,7 +304,7 @@ var init = exports.init = function (config) {
 		    if(isNaN(1 * prevAddresses[address].cases[pt].closedate) || !prevAddresses[address].cases[pt].closedate){
 		      opencase = true;
 		    }
-		    kmlplacemarks += '<h4>Case ' + prevAddresses[address].cases[pt].id + '</h4><b>Opened:</b> ' + prevAddresses[address].cases[pt].opendate + '<br><b>Closed:</b> ' + prevAddresses[address].cases[pt].closedate + '<br><b>Inspection Code:</b> ' + prevAddresses[address].cases[pt].inspectcodes + '<br><b>Action:</b> ' + prevAddresses[address].cases[pt].action + '<br><b>Cause:</b> ' + prevAddresses[address].cases[pt].cause;
+		    kmlplacemarks += '<h4>Case ' + prevAddresses[address].cases[pt].id + '</h4><b>Opened:</b> ' + prevAddresses[address].cases[pt].opendate + '<br><b>Closed:</b> ' + prevAddresses[address].cases[pt].closedate + '<br><b>Inspection Code:</b> ' + prevAddresses[address].cases[pt].inspectcodes + '<br><b>Action:</b> ' + prevAddresses[address].cases[pt].action.replace("BIC","Brought into Compliance") + '<br><b>Cause:</b> ' + prevAddresses[address].cases[pt].cause;
 		  }
 		  kmlplacemarks += '</div>]]></description>\n';
 		  if(opencase){
@@ -366,7 +366,7 @@ var init = exports.init = function (config) {
         var kmlintro = '<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">\n<Document>\n	<name>Macon Housing API</name>\n';
         if(req.query["nl"] == "true"){
           var kmllink = '    <NetworkLink>\n      <name>Housing Data Link</name>\n      <visibility>1</visibility>\n      <open>1</open>\n      <description>Keeps your housing data up to date!</description>\n      <refreshVisibility>0</refreshVisibility>\n      <flyToView>1</flyToView>\n      <Link>\n';
-          kmllink += '        <href>http://' + req.headers.host + req.url.replace('&nl=true','&amp;nl=false') +  '</href>\n';
+          kmllink += '        <href>http://' + req.headers.host + req.url.replace('nl=true','nl=false') +  '</href>\n';
           kmllink += '      </Link>\n    </NetworkLink>\n';
           var kmlend = '</Document>\n</kml>';
           res.send(kmlintro + kmllink + kmlend);
@@ -501,7 +501,7 @@ var init = exports.init = function (config) {
         var kmlintro = '<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">\n<Document>\n	<name>Macon Housing API</name>\n'
         if(req.query["nl"] == "true"){
           var kmllink = '    <NetworkLink>\n      <name>Housing Data Link</name>\n      <visibility>1</visibility>\n      <open>1</open>\n      <description>Keeps your housing data up to date!</description>\n      <refreshVisibility>0</refreshVisibility>\n      <flyToView>1</flyToView>\n      <Link>\n';
-          kmllink += '        <href>http://' + req.headers.host + req.url.replace('&nl=true','&amp;nl=false') +  '</href>\n';
+          kmllink += '        <href>http://' + req.headers.host + req.url.replace('nl=true','nl=false') +  '</href>\n';
           kmllink += '      </Link>\n    </NetworkLink>\n';
           var kmlend = '</Document>\n</kml>';
           res.send(kmlintro + kmllink + kmlend);
@@ -568,7 +568,7 @@ var init = exports.init = function (config) {
 		    if(isNaN(1 * prevAddresses[address].cases[pt].closedate) || !prevAddresses[address].cases[pt].closedate){
 		      opencase = true;
 		    }
-		    kmlplacemarks += '<h4>Case ' + prevAddresses[address].cases[pt].id + '</h4><b>Opened:</b> ' + prevAddresses[address].cases[pt].opendate + '<br><b>Closed:</b> ' + prevAddresses[address].cases[pt].closedate + '<br><b>Inspection Code:</b> ' + prevAddresses[address].cases[pt].inspectcodes + '<br><b>Action:</b> ' + prevAddresses[address].cases[pt].action + '<br><b>Cause:</b> ' + prevAddresses[address].cases[pt].cause;
+		    kmlplacemarks += '<h4>Case ' + prevAddresses[address].cases[pt].id + '</h4><b>Opened:</b> ' + prevAddresses[address].cases[pt].opendate + '<br><b>Closed:</b> ' + prevAddresses[address].cases[pt].closedate + '<br><b>Inspection Code:</b> ' + prevAddresses[address].cases[pt].inspectcodes + '<br><b>Action:</b> ' + prevAddresses[address].cases[pt].action.replace("BIC","Brought into Compliance") + '<br><b>Cause:</b> ' + prevAddresses[address].cases[pt].cause;
 		  }
 		  kmlplacemarks += '</div>]]></description>\n';
 		  if(opencase){

@@ -87,6 +87,7 @@ function streetNameThenNumber(a,b){
 function casesToAddresses(b){
   var prevAddresses = {};
   for(i=0;i<b.length;i++){
+    b[i].address = b[i].address.split(",")[0] + "," + b[i].address.split(",")[1];
     if(prevAddresses[b[i].address]){
       // already thinking about this address
       if(!prevAddresses[b[i].address].lat && b[i].latitude){
@@ -230,7 +231,13 @@ function initMe(){
           var sc = sortedCases[i];
           j += "<li>" + getInspection(sc.inspectcodes) + ". Case opened "+ parseStamp(sc.opendate) + ".";
           if(sc.closedate.length > 5){
-            j += " Resolved with " + sc.action + " on " + parseStamp(sc.closedate) + "</li>";
+            if(sc.action.toLowerCase() == "bic"){
+              j += "Brought into Compliance";
+            }
+            else{
+              j += " Resolved with " + sc.action;
+            }
+            j += " on " + parseStamp(sc.closedate) + "</li>";
           }
           else{
             j += " Case remains open.";
@@ -345,7 +352,13 @@ function findRoad(){
               var sc = sortedCases[i];
               j += "<li>"+ getInspection(sc.inspectcodes) + ". Case opened "+ parseStamp(sc.opendate) + ".";
               if(sc.closedate.length > 5){
-                j += " Resolved with " + sc.action + " on " + parseStamp(sc.closedate) + "</li>";
+                if(sc.action.toLowerCase() == "bic"){
+                  j += "Brought into Compliance";
+                }
+                else{
+                  j += " Resolved with " + sc.action;
+                }
+                j += " on " + parseStamp(sc.closedate) + "</li>";
               }
               else{
                 j += " Case remains open.";
@@ -435,12 +448,14 @@ ul#resultbar{
               </li>
             </ul>-->
             <ul class='nav top-links'>
+              <!--
               <li>
                 <a href="/pages/about">About</a>
               </li>
               <li>
                 <a href="/pages/help">Help</a>
               </li>
+              -->
             </ul>
             <ul class='nav top-search'>
               <li>

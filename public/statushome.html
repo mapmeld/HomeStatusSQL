@@ -27,14 +27,14 @@ function showRecent(){
   jQuery.getJSON("/recentopen", function(opened){
     for(var i=0;i<opened.length;i++){
       var li = document.createElement("li");
-      li.innerHTML = '<a href="/statuscombine.html?address=' + opened[i].cleanaddress + '" style="text-transform:capitalize;">' + opened[i].cleanaddress + ' - ' + opened[i].action + '</a>';
+      li.innerHTML = '<a href="/statuscombine.html?address=' + opened[i].cleanaddress + '" style="text-transform:capitalize;">' + opened[i].cleanaddress + ' - ' + (opened[i].action.replace("BIC","Brought into Compliance") || "Open Case") + '</a>';
       document.getElementById("recently_opened").appendChild(li);
     }
   });
   jQuery.getJSON("/recentclose", function(closed){
     for(var i=0;i<closed.length;i++){
       var li = document.createElement("li");
-      li.innerHTML = '<a href="/statuscombine.html?address=' + closed[i].cleanaddress + '" style="text-transform:capitalize;">' + closed[i].cleanaddress + ' - ' + closed[i].action + '</a>';
+      li.innerHTML = '<a href="/statuscombine.html?address=' + closed[i].cleanaddress + '" style="text-transform:capitalize;">' + closed[i].cleanaddress + ' - ' + (closed[i].action.replace("BIC","Brought into Compliance") || "Open Case") + '</a>';
       document.getElementById("recently_closed").appendChild(li);
     }
   });
@@ -70,12 +70,14 @@ jQuery(document).ready(showRecent);
               </li>
             </ul>-->
             <ul class='nav top-links'>
+              <!--
               <li>
                 <a href="/pages/about">About</a>
               </li>
               <li>
                 <a href="/pages/help">Help</a>
               </li>
+              -->
             </ul>
             <ul class='nav top-search'>
               <li>
@@ -171,7 +173,7 @@ jQuery(document).ready(showRecent);
           <h3>Partners</h3>
           <p>
             <a href='http://codeforamerica.org'>
-              <img alt="Codeforamerica" src="http://commons.codeforamerica.org//sites/all/themes/civiccommons/images/codeforamerica.png" />
+              <img alt="Codeforamerica" src="http://commons.codeforamerica.org/sites/all/themes/civiccommons/images/codeforamerica.png" />
             </a>
           </p>
           <p>

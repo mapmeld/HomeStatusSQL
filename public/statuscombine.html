@@ -100,6 +100,7 @@ function markerByStatus(notsobad, stillopen, pt){
 function casesToAddresses(b){
   var pa = {};
   for(i=0;i<b.length;i++){
+    b[i].address = b[i].address.split(",")[0] + "," + b[i].address.split(",")[1];
     if(pa[b[i].address]){
       // already thinking about this address
       if(!pa[b[i].address].lat && b[i].latitude){
@@ -220,8 +221,14 @@ function initMe(){
           var resolution;
           j += "<li>"+ getInspection(sc.inspectcodes) + ". Case opened "+ parseStamp(sc.opendate) + ".";
           if(sc.closedate.length > 5){
-            j += " Resolved with " + sc.action + " on " + parseStamp(sc.closedate) + "</li>";
-            resolution = "<tr><td><span class='arrow'></span></td><td class='status'>" + sc.action + "</td><td><table class='table-nolines'><tr><td class='date'>" + parseStamp(sc.closedate) + "</td><td>Case closed</td></tr></table></td></tr>"
+            if(sc.action.toLowerCase() == "bic"){
+              j += "Brought into Compliance";
+            }
+            else{
+              j += " Resolved with " + sc.action;
+            }
+            j += " on " + parseStamp(sc.closedate) + "</li>";
+            resolution = "<tr><td><span class='arrow'></span></td><td class='status'>" + sc.action.replace("BIC","Brought into Compliance") + "</td><td><table class='table-nolines'><tr><td class='date'>" + parseStamp(sc.closedate) + "</td><td>Case closed</td></tr></table></td></tr>"
           }
           else{
             j += " Case remains open.";
