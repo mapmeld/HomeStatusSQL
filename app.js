@@ -281,8 +281,7 @@ var init = exports.init = function (config) {
               inspector: results[i].inspectcodes,
               opendate: results[i].opendate,
               action: results[i].action,
-              closedate: results[i].closedate,
-              cause: results[i].reason
+              closedate: results[i].closedate
             }];
           }
         }
@@ -392,7 +391,7 @@ var init = exports.init = function (config) {
             if(isNaN( 1 * results[r].closedate) || !results[r].closedate){
               opencase = true;
             }
-            kmlplacemarks += '<h4>Case ' + results[r].ecd_id + '</h4><b>Opened:</b> ' + results[r].opendate + '<br><b>Closed:</b> ' + results[r].closedate + '<br><b>Inspection Code:</b> ' + results[r].inspectcodes + '<br><b>Cause:</b> ' + results[r].reason;
+            kmlplacemarks += '<h4>Case ' + results[r].ecd_id + '</h4><b>Opened:</b> ' + results[r].opendate + '<br><b>Closed:</b> ' + results[r].closedate + '<br><b>Inspection Code:</b> ' + results[r].inspectcodes;
           }
         }
         /*if(surveybody.rows.length){
@@ -545,8 +544,7 @@ var init = exports.init = function (config) {
               inspector: results[i].inspectcodes,
               opendate: results[i].opendate,
               action: results[i].action,
-              closedate: results[i].closedate,
-              cause: results[i].reason
+              closedate: results[i].closedate
             }];
           }
         }
@@ -746,7 +744,7 @@ var init = exports.init = function (config) {
       else{
         threeobj["status"] = "open";
         threeobj["service_name"] = "Undetermined";
-        threeobj["description"] = "Case opened by " + results[0].reason;
+        threeobj["description"] = "Case opened";
         threeobj["updated_datetime"] = tstamp( results[0].opendate );
         // expected_datetime
         threeobj["service_code"] = "1";
@@ -856,7 +854,7 @@ var init = exports.init = function (config) {
         else{
           threeobj["status"] = "open";
           threeobj["service_name"] = "Undetermined";
-          threeobj["description"] = "Case opened by " + rowdata.reason;
+          threeobj["description"] = "Case opened";
           threeobj["updated_datetime"] = tstamp( rowdata.opendate );
           // service_code
           // expected_datetime
