@@ -173,8 +173,25 @@ var init = exports.init = function (config) {
   });*/
   
   app.post('/addrecord', function(req, res){
-    console.log(req.body.closedate);
-    client.query('INSERT INTO cases (address, cleanaddress, streetname, action, opendate, closedate, ecd_id, inspectcodes, reason, latitude, longitude, neighborhood) VALUES("' + req.body.address + '", "' + req.body.cleanaddress + '", "' + req.body.streetname + '", "' + req.body.action + '", "' + req.body.opendate + '", "' + req.body.closedate + '", "' + req.body.ecd_id + '", "' + req.body.inspectcodes + '", "' + req.body.reason + '", ' + req.body.latitude + ', ' + req.body.longitude + ', "' + req.body.neighborhood + '")', function(err, results, fields){
+    //console.log(req.body.closedate);
+    client.query('SELECT * FROM ' + TEST_TABLE + ' WHERE ecd_id = "' + req.body.ecd_id + '"', function(err, results, fields) {
+      if(results.length){
+        // updating the case, not actually a new case
+        client.query('UPDATE ' + TEST_TABLE + ' SET action="' + req.body.action + '", closedate="' + req.body.closedate + '", inspectcodes="' + req.body.inspectcodes + '", reason="' + req.body.reason + '" WHERE ecd_id="' + req.body.ecd_id + '"', function(err, results, fields){
+          res.send({'newcase': false});
+        });
+      }
+      else{
+        client.query('INSERT INTO ' + TEST_TABLE + ' (address, cleanaddress, streetname, action, opendate, closedate, ecd_id, inspectcodes, reason, latitude, longitude, neighborhood) VALUES("' + req.body.address + '", "' + req.body.cleanaddress + '", "' + req.body.streetname + '", "' + req.body.action + '", "' + req.body.opendate + '", "' + req.body.closedate + '", "' + req.body.ecd_id + '", "' + req.body.inspectcodes + '", "' + req.body.reason + '", ' + req.body.latitude + ', ' + req.body.longitude + ', "' + req.body.neighborhood + '")', function(err, results, fields){
+          res.send({'newcase': true});
+        });
+      }
+    });
+  });
+
+  app.post('/updaterecord', function(req, res){
+    //console.log(req.body.closedate);
+    client.query('UPDATE ' + TEST_TABLE + ' SET action="' + req.body.action + '", closedate="' + req.body.closedate + '", inspectcodes="' + req.body.inspectcodes + '", reason="' + req.body.reason + '" WHERE ecd_id="' + req.body.ecd_id + '"', function(err, results, fields){
       res.send({});
     });
   });
