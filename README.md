@@ -1,5 +1,7 @@
 # About HomeStatusSQL
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/mapmeld/HomeStatusSQL.svg)](https://greenkeeper.io/)
+
 Code for America's <a href="http://github.com/codeforamerica/blightstatus">BlightStatus project</a> for City of Macon, Georgia. Backend technology ported to a Node.js server and a MySQL database
 
 ### Homepage
